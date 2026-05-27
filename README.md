@@ -1,0 +1,385 @@
+# 🛒 Nova Cart — Full-Stack E-Commerce Application
+
+> A modern, production-ready e-commerce platform built with **FastAPI** (async backend) and **React + TypeScript** (frontend), backed by **PostgreSQL** and fully containerized with **Docker**.
+
+---
+
+## 📋 Table of Contents
+
+- [Project Overview](#-project-overview)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Backend — FastAPI](#-backend--fastapi)
+  - [Backend File Overview](#backend-file-overview)
+  - [API Endpoints](#api-endpoints)
+  - [Database Models](#database-models)
+- [Frontend — React + TypeScript](#-frontend--react--typescript)
+  - [Frontend File Overview](#frontend-file-overview)
+  - [Pages & Routes](#pages--routes)
+- [Getting Started — Local Development](#-getting-started--local-development)
+- [Getting Started — Docker (Recommended)](#-getting-started--docker-recommended)
+- [Environment Variables](#-environment-variables)
+- [Features](#-features)
+
+---
+
+## 📦 Project Overview
+
+**Nova Cart** is a full-stack e-commerce web application that demonstrates:
+- User registration & JWT-based authentication
+- Product catalogue browsing with category filtering
+- Shopping cart management (add, update, remove items)
+- Checkout with real-time stock validation and atomic order creation
+- Order history for customers
+- Full Admin Dashboard for product and order management
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+| Technology | Version | Purpose |
+|---|---|---|
+| Python | 3.11 | Core language |
+| FastAPI | 0.110.0 | Web framework (async) |
+| SQLAlchemy (async) | 2.0.28 | ORM & database layer |
+| asyncpg | 0.29.0 | Async PostgreSQL driver |
+| Pydantic v2 | 2.6.4 | Data validation & schemas |
+| pydantic-settings | 2.2.1 | Configuration management |
+| Alembic | 1.13.1 | Database migrations |
+| passlib[bcrypt] | 1.7.4 | Password hashing |
+| python-jose | 3.3.0 | JWT token creation & verification |
+| Uvicorn | 0.28.0 | ASGI server |
+
+### Frontend
+| Technology | Version | Purpose |
+|---|---|---|
+| React | 18.2.0 | UI library |
+| TypeScript | 5.2.2 | Type-safe JavaScript |
+| Vite | 5.1.6 | Build tool & dev server |
+| React Router DOM | 6.22.3 | Client-side routing |
+| Axios | 1.6.8 | HTTP client |
+| Tailwind CSS | 3.4.1 | Utility-first CSS framework |
+| Lucide React | 0.363.0 | Icon library |
+
+### Infrastructure
+| Technology | Purpose |
+|---|---|
+| PostgreSQL 15 | Primary relational database |
+| Docker + Docker Compose | Containerization & orchestration |
+| Nginx | Frontend static file serving (production) |
+
+---
+
+## 📁 Project Structure
+
+```
+Nova_Cart/
+├── docker-compose.yml          # Orchestrates all 3 services (db, backend, frontend)
+│
+├── backend/
+│   ├── Dockerfile              # Python 3.11 slim image
+│   ├── alembic.ini             # Alembic migrations config
+│   ├── requirements.txt        # Python dependencies
+│   └── app/
+│       ├── __init__.py
+│       ├── main.py             # FastAPI app entry point, lifespan, CORS, routers
+│       ├── config.py           # Settings via pydantic-settings (.env support)
+│       ├── database.py         # Async engine, session factory, init_db()
+│       ├── models.py           # SQLAlchemy ORM models (User, Product, Cart, Order, OrderItem)
+│       ├── schemas.py          # Pydantic v2 request/response schemas
+│       ├── auth.py             # JWT creation, password hashing, user dependencies
+│       ├── seed.py             # Mock data seeder (products + admin user)
+│       └── routers/
+│           ├── __init__.py
+│           ├── auth.py         # POST /api/auth/register, POST /api/auth/token
+│           ├── products.py     # GET /api/products, GET /api/products/{id}
+│           ├── cart.py         # GET/POST/DELETE /api/cart (auth required)
+│           └── orders.py       # POST/GET /api/orders (auth required)
+│           └── admin.py        # Admin-only product & order management
+│
+└── frontend/
+    ├── Dockerfile              # Multi-stage: Node build → Nginx serve
+    ├── nginx.conf              # Nginx config for SPA routing
+    ├── index.html              # HTML entry point
+    ├── package.json            # npm scripts & dependencies
+    ├── vite.config.ts          # Vite + React plugin config
+    ├── tailwind.config.js      # Tailwind CSS configuration
+    ├── tsconfig.json           # TypeScript compiler options
+    └── src/
+        ├── main.tsx            # React DOM root render
+        ├── App.tsx             # Root component, BrowserRouter, all route definitions
+        ├── index.css           # Global styles + Tailwind directives
+        ├── vite-env.d.ts       # Vite environment type declarations
+        ├── context/
+        │   ├── AuthContext.tsx # Global auth state (user, token, login, logout)
+        │   └── CartContext.tsx # Global cart state (items, add, remove, clear)
+        ├── services/
+        │   └── api.ts          # Axios instance with base URL & auth interceptor
+        ├── components/
+        │   ├── Navbar.tsx      # Top navigation bar with auth & cart state
+        │   ├── ProtectedRoute.tsx  # Redirects unauthenticated users to /login
+        │   └── AdminRoute.tsx  # Redirects non-admins away from admin pages
+        └── pages/
+            ├── Home.tsx            # Product catalogue with category filters
+            ├── ProductDetails.tsx  # Single product view, add-to-cart
+            ├── Cart.tsx            # Shopping cart, quantity control, checkout
+            ├── Orders.tsx          # Customer order history
+            ├── Login.tsx           # Login form (email + password)
+            ├── Register.tsx        # User registration form
+            └── AdminDashboard.tsx  # Admin: manage products & update order statuses
+```
+
+---
+
+## ⚙️ Backend — FastAPI
+
+### Backend File Overview
+
+| File | Responsibility |
+|---|---|
+| [`main.py`](backend/app/main.py) | FastAPI app creation, CORS middleware, router registration, lifespan events (DB init + seeding) |
+| [`config.py`](backend/app/config.py) | Application settings loaded from environment variables or `.env` file |
+| [`database.py`](backend/app/database.py) | Async SQLAlchemy engine, session factory (`AsyncSessionLocal`), `get_db` dependency, `init_db()` |
+| [`models.py`](backend/app/models.py) | ORM table definitions: `User`, `Product`, `Cart`, `Order`, `OrderItem` |
+| [`schemas.py`](backend/app/schemas.py) | Pydantic v2 schemas for request validation and response serialization |
+| [`auth.py`](backend/app/auth.py) | `create_access_token()`, `verify_password()`, `get_password_hash()`, `get_current_user()`, `get_current_admin()` |
+| [`seed.py`](backend/app/seed.py) | Seeds the database with sample products and a default admin account on first startup |
+| [`routers/auth.py`](backend/app/routers/auth.py) | User registration and login endpoints |
+| [`routers/products.py`](backend/app/routers/products.py) | Public product listing and detail endpoints |
+| [`routers/cart.py`](backend/app/routers/cart.py) | Authenticated cart CRUD endpoints |
+| [`routers/orders.py`](backend/app/routers/orders.py) | Checkout (atomic) and order history endpoints |
+| [`routers/admin.py`](backend/app/routers/admin.py) | Admin-only product and order management endpoints |
+
+---
+
+### API Endpoints
+
+All endpoints are prefixed with `/api`.
+
+#### 🔐 Authentication — `/api/auth`
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/auth/register` | Public | Register a new user |
+| `POST` | `/api/auth/token` | Public | Login & get JWT access token |
+
+#### 🛍️ Products — `/api/products`
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/products` | Public | List all products |
+| `GET` | `/api/products/{id}` | Public | Get single product details |
+
+#### 🛒 Cart — `/api/cart`
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/cart` | 🔒 User | Get current user's cart items |
+| `POST` | `/api/cart/items` | 🔒 User | Add or update a cart item (with stock check) |
+| `DELETE` | `/api/cart/items/{product_id}` | 🔒 User | Remove an item from cart |
+
+#### 📦 Orders — `/api/orders`
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/orders` | 🔒 User | Checkout: create order, deduct stock, clear cart (atomic transaction) |
+| `GET` | `/api/orders` | 🔒 User | Get order history for current user |
+
+#### 🔧 Admin — `/api/admin`
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/admin/products` | 🔑 Admin | Create a new product |
+| `PUT` | `/api/admin/products/{id}` | 🔑 Admin | Update an existing product |
+| `DELETE` | `/api/admin/products/{id}` | 🔑 Admin | Delete a product |
+| `GET` | `/api/admin/orders` | 🔑 Admin | View all customer orders |
+| `PUT` | `/api/admin/orders/{id}/status` | 🔑 Admin | Update an order's status |
+
+> 📖 Interactive API docs are available at: **`http://localhost:8000/docs`** (Swagger UI)
+
+---
+
+### Database Models
+
+```
+users
+  └── id (UUID PK), email, hashed_password, full_name, is_admin, created_at
+
+products
+  └── id (UUID PK), name, description, price, stock, image_url, category
+
+carts
+  └── id (UUID PK), user_id (FK → users), product_id (FK → products), quantity
+
+orders
+  └── id (UUID PK), user_id (FK → users), total_amount, status, created_at
+
+order_items
+  └── id (UUID PK), order_id (FK → orders), product_id (FK → products), quantity, price
+```
+
+---
+
+## 🎨 Frontend — React + TypeScript
+
+### Frontend File Overview
+
+| File/Folder | Responsibility |
+|---|---|
+| [`src/main.tsx`](frontend/src/main.tsx) | React app entry point, mounts `<App />` to DOM |
+| [`src/App.tsx`](frontend/src/App.tsx) | Root component: wraps app in `AuthProvider`, `CartProvider`, defines all routes |
+| [`src/index.css`](frontend/src/index.css) | Global CSS, Tailwind base/components/utilities imports |
+| [`src/context/AuthContext.tsx`](frontend/src/context/AuthContext.tsx) | Global auth state — stores JWT token, user info; exposes `login()`, `logout()` |
+| [`src/context/CartContext.tsx`](frontend/src/context/CartContext.tsx) | Global cart state — synced with backend; exposes `addItem()`, `removeItem()`, `clearCart()` |
+| [`src/services/api.ts`](frontend/src/services/api.ts) | Axios instance with `baseURL` set; request interceptor auto-attaches `Authorization: Bearer <token>` |
+| [`src/components/Navbar.tsx`](frontend/src/components/Navbar.tsx) | Responsive navigation bar showing auth status, cart item count, and admin link |
+| [`src/components/ProtectedRoute.tsx`](frontend/src/components/ProtectedRoute.tsx) | Route guard — redirects to `/login` if user is not authenticated |
+| [`src/components/AdminRoute.tsx`](frontend/src/components/AdminRoute.tsx) | Route guard — redirects to `/` if user is not an admin |
+
+---
+
+### Pages & Routes
+
+| Route | Page | Access | Description |
+|---|---|---|---|
+| `/` | [`Home.tsx`](frontend/src/pages/Home.tsx) | Public | Product catalogue with category filter chips and product cards |
+| `/product/:id` | [`ProductDetails.tsx`](frontend/src/pages/ProductDetails.tsx) | Public | Full product info, stock badge, "Add to Cart" button |
+| `/login` | [`Login.tsx`](frontend/src/pages/Login.tsx) | Public | Email/password login form |
+| `/register` | [`Register.tsx`](frontend/src/pages/Register.tsx) | Public | User registration form (name, email, password) |
+| `/cart` | [`Cart.tsx`](frontend/src/pages/Cart.tsx) | 🔒 Auth | Cart items list, quantity control, order total, checkout button |
+| `/orders` | [`Orders.tsx`](frontend/src/pages/Orders.tsx) | 🔒 Auth | Customer's full order history with items and status badges |
+| `/admin/dashboard` | [`AdminDashboard.tsx`](frontend/src/pages/AdminDashboard.tsx) | 🔑 Admin | Tabs for product management (CRUD) and all orders management |
+
+---
+
+## 🚀 Getting Started — Local Development
+
+### Prerequisites
+- Python 3.11+
+- Node.js 20+
+- PostgreSQL 15 running locally
+
+### 1. Backend Setup
+
+```bash
+cd backend
+
+# Create & activate virtual environment
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS/Linux
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure the database (edit config.py or create .env)
+# DATABASE_URL=postgresql+asyncpg://postgres:<password>@localhost:5432/novacart
+
+# Run the backend server
+uvicorn app.main:app --reload
+```
+
+> Backend will auto-create tables and seed data on first startup.
+> API docs available at: **http://localhost:8000/docs**
+
+### 2. Frontend Setup
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+> Frontend runs at: **http://localhost:5173**
+
+---
+
+## 🐳 Getting Started — Docker (Recommended)
+
+Run the entire stack (PostgreSQL + Backend + Frontend) with one command:
+
+```bash
+# From the project root
+docker-compose up --build
+```
+
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:8000 |
+| API Docs | http://localhost:8000/docs |
+| PostgreSQL | localhost:5432 |
+
+To stop all services:
+```bash
+docker-compose down
+```
+
+To reset database data:
+```bash
+docker-compose down -v
+```
+
+---
+
+## 🔧 Environment Variables
+
+Create a `.env` file in the `backend/` directory:
+
+```env
+DATABASE_URL=postgresql+asyncpg://postgres:<password>@localhost:5432/novacart
+JWT_SECRET=your-very-strong-secret-key-here
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=1440
+```
+
+> ⚠️ **Never commit real secrets to version control.** The values in `config.py` are defaults for local development only.
+
+---
+
+## ✅ Features
+
+### Customer Features
+- 🔐 Register & Login with JWT authentication (token persisted in localStorage)
+- 🏠 Browse all products with category filtering
+- 🔍 View detailed product pages with stock availability
+- 🛒 Add products to cart, adjust quantities, remove items
+- 💳 Checkout with atomic transaction (stock validated & deducted, cart cleared)
+- 📦 View full order history with status tracking
+
+### Admin Features
+- ➕ Create new products with name, price, stock, category, and image URL
+- ✏️ Edit existing product details
+- 🗑️ Delete products
+- 👁️ View all customer orders across the platform
+- 🔄 Update order statuses (Pending → Shipped → Delivered)
+
+### Technical Highlights
+- ⚡ Fully **async** backend (FastAPI + SQLAlchemy async + asyncpg)
+- 🔒 Secure password hashing with **bcrypt**
+- 🪙 **JWT** with role claims (`is_admin`) for fine-grained access control
+- 🔄 Atomic **checkout transactions** with `SELECT FOR UPDATE` locking to prevent race conditions
+- 📄 Auto-generated **Swagger/OpenAPI** documentation
+- 🐳 Full **Docker Compose** setup for one-command deployment
+- 🎨 Responsive dark-themed UI built with **Tailwind CSS**
+
+---
+
+## 👤 Default Admin Account
+
+After first startup (or docker-compose up), a seeded admin account is available:
+
+| Field | Value |
+|---|---|
+| Email | `admin@novacart.com` |
+| Password | `admin123` |
+
+> ⚠️ Change this password in production.
+
+---
+
+## 📄 License
+
+This project is built for demonstration and office presentation purposes.
+
+© 2026 Nova Cart — Built with ❤️ using FastAPI & React

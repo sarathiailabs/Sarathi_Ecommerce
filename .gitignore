@@ -1,0 +1,81 @@
+# ----------------------------------------------------------------------
+# IDEs and Editors
+# ----------------------------------------------------------------------
+.vscode/
+.idea/
+.cursor/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ----------------------------------------------------------------------
+# OS generated files
+# ----------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ----------------------------------------------------------------------
+# Backend (Python/FastAPI/SQLAlchemy)
+# ----------------------------------------------------------------------
+backend/__pycache__/
+backend/*.py[cod]
+backend/*$py.class
+backend/venv/
+backend/.venv/
+backend/env/
+backend/.pytest_cache/
+backend/.coverage
+backend/htmlcov/
+backend/alembic.ini
+*.sqlite3
+*.db
+
+# ----------------------------------------------------------------------
+# Frontend (Node.js/React/Vite)
+# ----------------------------------------------------------------------
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.eslintcache
+frontend/.stylelintcache
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# ----------------------------------------------------------------------
+# Environment Variables & Secrets
+# ----------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# ----------------------------------------------------------------------
+# Logs and Databases
+# ----------------------------------------------------------------------
+logs/
+*.log
+*.sqlite
+*.db
+
+# ----------------------------------------------------------------------
+# Misc
+# ----------------------------------------------------------------------
+coverage/
+node_modules/
+dist/
+build/
