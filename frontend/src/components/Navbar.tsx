@@ -1,12 +1,14 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, LogOut, LayoutDashboard, LogIn } from 'lucide-react'
+import { ShoppingCart, LogOut, LayoutDashboard, LogIn, Search } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
+import { useSearch } from '../context/SearchContext'
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, isAdmin, logout } = useAuth()
   const { cartCount } = useCart()
+  const { searchQuery, setSearchQuery } = useSearch()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -35,6 +37,20 @@ export const Navbar: React.FC = () => {
               <Link to="/orders" className="hover:text-purple-400 transition-colors duration-200">My Orders</Link>
             </>
           )}
+        </div>
+
+        {/* Search Bar (Desktop) */}
+        <div className="flex-1 max-w-md mx-4 lg:mx-8 hidden md:block">
+          <div className="relative group">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-400 transition-colors duration-200" />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-slate-900/50 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm text-slate-200 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 placeholder:text-slate-500 transition-all duration-300"
+            />
+          </div>
         </div>
 
         {/* Action Controls */}
@@ -84,6 +100,20 @@ export const Navbar: React.FC = () => {
               <span>Login</span>
             </Link>
           )}
+        </div>
+      </div>
+
+      {/* Search Bar (Mobile) */}
+      <div className="md:hidden mt-4">
+        <div className="relative group">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-400 transition-colors duration-200" />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-slate-900/50 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm text-slate-200 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 placeholder:text-slate-500 transition-all duration-300"
+          />
         </div>
       </div>
     </nav>

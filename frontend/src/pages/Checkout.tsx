@@ -338,7 +338,7 @@ export const Checkout: React.FC = () => {
       }
     }
 
-  
+
 
 
 
@@ -567,7 +567,7 @@ export const Checkout: React.FC = () => {
   // ─── Payment Step ──────────────────────────────────────────────────────────
   const paymentOptions = [
     { id: 'card' as PaymentMethod, label: 'Credit / Debit / ATM Card', icon: CreditCard, badge: 'Up to 5% cashback', available: true },
-    { id: 'cod' as PaymentMethod, label: 'Cash on Delivery', icon: Banknote, badge: '+$6 handling fee', available: true },
+    { id: 'cod' as PaymentMethod, label: 'Cash on Delivery', icon: Banknote, badge: '+₹6 handling fee', available: true },
     { id: 'upi' as PaymentMethod, label: 'UPI', icon: Smartphone, badge: '2% cashback', available: true },
     { id: 'wallet' as PaymentMethod, label: 'Gift Card / Wallet', icon: Gift, badge: null, available: false },
   ]

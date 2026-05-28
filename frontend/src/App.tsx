@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
+import { SearchProvider } from './context/SearchContext'
 
 // Components
 import { Navbar } from './components/Navbar'
@@ -26,6 +27,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
+          <SearchProvider>
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="flex-grow">
@@ -82,6 +84,7 @@ function App() {
             {/* Footer */}
             <Footer />
           </div>
+          </SearchProvider>
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

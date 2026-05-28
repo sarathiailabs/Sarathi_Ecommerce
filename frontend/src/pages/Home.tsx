@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ShoppingCart, Eye, Tag } from 'lucide-react'
 import api from '../services/api'
 import { useCart, Product } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
+import { useSearch } from '../context/SearchContext'
 
 export const Home: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([])
@@ -15,6 +16,7 @@ export const Home: React.FC = () => {
 
   const { addToCart } = useCart()
   const { isAuthenticated } = useAuth()
+  const { searchQuery } = useSearch()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -63,9 +65,21 @@ export const Home: React.FC = () => {
     }
   }
 
-  const filteredProducts = selectedCategory === 'All'
-    ? products
-    : products.filter(p => p.category === selectedCategory)
+  const filteredProducts = useMemo(() => {
+    return products.filter((p) => {
+      const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
+      if (!matchesCategory) return false;
+
+      if (!searchQuery) return true;
+
+      const lowerQuery = searchQuery.toLowerCase();
+      return (
+        p.name.toLowerCase().includes(lowerQuery) ||
+        p.category.toLowerCase().includes(lowerQuery) ||
+        p.description.toLowerCase().includes(lowerQuery)
+      );
+    });
+  }, [products, selectedCategory, searchQuery]);
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-10">
@@ -132,7 +146,9 @@ export const Home: React.FC = () => {
         </div>
       ) : filteredProducts.length === 0 ? (
         <div className="text-center py-20 glass rounded-3xl border border-white/5">
-          <p className="text-slate-400 font-medium">No products found in this category.</p>
+          <p className="text-slate-400 font-medium">
+            {searchQuery ? 'No products found matching your search.' : 'No products found in this category.'}
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
