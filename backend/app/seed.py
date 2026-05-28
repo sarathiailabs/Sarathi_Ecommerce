@@ -17,7 +17,7 @@ async def seed_data():
             admin = User(
                 email="admin@example.com",
                 full_name="System Administrator",
-                hashed_password=get_password_hash("AdminSecurePassword123!"),
+                hashed_password=get_password_hash("Admin123@"),
                 is_admin=True
             )
             db.add(admin)
@@ -60,7 +60,7 @@ async def seed_data():
                     description="Handcrafted top-grain leather wallet with RFID blocking technology, card slots, and an ultra-thin pocket profile.",
                     price=Decimal("45.00"),
                     stock=120,
-                    image_url="https://images.unsplash.com/photo-1627124112126-89d132822f46?w=500&q=80",
+                    image_url="/wallet.png",
                     category="Accessories"
                 ),
                 Product(

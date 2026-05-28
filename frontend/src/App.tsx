@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext'
 
 // Components
 import { Navbar } from './components/Navbar'
+import { Footer } from './components/Footer'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { AdminRoute } from './components/AdminRoute'
 
@@ -75,9 +76,7 @@ function App() {
             </main>
             
             {/* Footer */}
-            <footer className="border-t border-white/5 py-8 text-center text-xs text-slate-500 bg-slate-950">
-              <p>© {new Date().getFullYear()} NovaCart. Designed for premium demonstration purposes.</p>
-            </footer>
+            <Footer />
           </div>
         </CartProvider>
       </AuthProvider>
