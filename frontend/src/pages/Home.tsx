@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, Eye, Tag } from 'lucide-react'
+import { ShoppingCart, Eye } from 'lucide-react'
 import api from '../services/api'
 import { useCart, Product } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useSearch } from '../context/SearchContext'
+import { HeroSlider } from '../components/HeroSlider'
 
 export const Home: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([])
@@ -82,29 +83,11 @@ export const Home: React.FC = () => {
   }, [products, selectedCategory, searchQuery]);
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-900/40 via-indigo-950/20 to-slate-950 border border-purple-500/10 p-8 md:p-12 mb-12 flex flex-col md:flex-row items-center justify-between gap-8">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(139,92,246,0.15),transparent_50%)] pointer-events-none"></div>
-        <div className="max-w-xl space-y-4">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
-            <Tag size={12} />
-            Exclusive Tech & Essentials
-          </span>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
-            Discover the Next Generation of <span className="bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">Smart Living</span>
-          </h1>
-          <p className="text-slate-400 text-sm md:text-base leading-relaxed">
-            Curated mock catalog containing modern high-end gadgets, custom lifestyle products, and premium accessories, prepared for demonstration.
-          </p>
-        </div>
-        <div className="flex-shrink-0 animate-pulse-slow">
-          <div className="w-48 h-48 rounded-2xl bg-gradient-to-tr from-purple-500 to-indigo-600 opacity-20 blur-xl absolute"></div>
-          <div className="relative w-44 h-44 rounded-2xl border border-white/10 glass-premium flex items-center justify-center">
-            <ShoppingCart size={64} className="text-purple-400" />
-          </div>
-        </div>
-      </div>
+    <div>
+      {/* ── Hero Slider ── */}
+      <HeroSlider />
+
+      <div className="max-w-7xl mx-auto px-6 pb-10 pt-2">
 
       {/* Toast Alert */}
       {errorMsg && (
@@ -226,6 +209,7 @@ export const Home: React.FC = () => {
           ))}
         </div>
       )}
+      </div>
     </div>
   )
 }
