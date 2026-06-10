@@ -1,0 +1,9 @@
+customer_type,budget_range,family_size,purchase_timeline,usage_type,recommended_segment,intent_score,next_action
+First Time Buyer,0-8 Lakh,1-3,0-30 Days,City,Hatchback,90,Vehicle Recommendation
+First Time Buyer,8-12 Lakh,3-5,0-30 Days,Family,SUV,95,Vehicle Recommendation
+Family Buyer,10-15 Lakh,5-7,0-30 Days,Family Trips,MPV,95,Vehicle Recommendation
+Business Owner,10-15 Lakh,1-5,0-90 Days,Business,SUV,85,Vehicle Recommendation
+Upgrade Buyer,12-20 Lakh,3-5,0-60 Days,Premium Usage,Premium SUV,92,Vehicle Recommendation
+Explorer,Any,Any,6+ Months,Research,Unknown,40,Schedule Callback
+Budget Conscious,0-10 Lakh,3-5,0-90 Days,Daily Commute,Hatchback,75,Vehicle Recommendation
+Large Family,8-15 Lakh,6-8,0-60 Days,Family,MPV,92,Vehicle Recommendation

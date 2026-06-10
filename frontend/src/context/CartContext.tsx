@@ -24,6 +24,8 @@ interface CartContextType {
   cartCount: number
   cartTotal: number
   loading: boolean
+  isCartDrawerOpen: boolean
+  setCartDrawerOpen: (isOpen: boolean) => void
   addToCart: (productId: string, quantity: number) => Promise<void>
   removeFromCart: (productId: string) => Promise<void>
   updateQuantity: (productId: string, quantity: number) => Promise<void>
@@ -37,6 +39,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { isAuthenticated } = useAuth()
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [isCartDrawerOpen, setCartDrawerOpen] = useState<boolean>(false)
 
   const loadCart = async () => {
     if (!isAuthenticated) {
@@ -78,6 +81,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       quantity,
     })
     await loadCart()
+    setCartDrawerOpen(true)
   }
 
   const removeFromCart = async (productId: string) => {
@@ -114,6 +118,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         cartCount,
         cartTotal,
         loading,
+        isCartDrawerOpen,
+        setCartDrawerOpen,
         addToCart,
         removeFromCart,
         updateQuantity,

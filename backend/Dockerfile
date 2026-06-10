@@ -20,4 +20,4 @@ RUN chmod +x start.sh || true
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "alembic upgrade head || python -c 'import asyncio; from app.database import init_db; asyncio.run(init_db())' && python app/seed.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "alembic upgrade head || python -c 'import asyncio; from app.database import init_db; asyncio.run(init_db())' && python -m app.seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"]

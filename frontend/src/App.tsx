@@ -5,10 +5,16 @@ import { CartProvider } from './context/CartContext'
 
 // Components
 import { Navbar } from './components/Navbar'
+import { Footer } from './components/Footer'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { AdminRoute } from './components/AdminRoute'
+import { AIAssistant } from './components/AIAssistant'
+import { CartDrawer } from './components/CartDrawer'
+import { Wishlist } from './components/Wishlist'
+import { Returns } from './components/Returns'
+import { ProductSearch } from './components/ProductSearch'
 
-// Pages
+// Pages — Core
 import { Home } from './pages/Home'
 import { ProductDetails } from './pages/ProductDetails'
 import { Cart } from './pages/Cart'
@@ -17,6 +23,14 @@ import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { AdminDashboard } from './pages/AdminDashboard'
 import { Checkout } from './pages/Checkout'
+import { DeliveryDashboard } from './pages/DeliveryDashboard'
+import { SellerDashboard } from './pages/SellerDashboard'
+
+// Pages — Phase 1 New
+import { ForgotPassword } from './pages/ForgotPassword'
+import { ResetPassword } from './pages/ResetPassword'
+import { OrderDetail } from './pages/OrderDetail'
+import { NotFound } from './pages/NotFound'
 
 function App() {
   return (
@@ -27,57 +41,59 @@ function App() {
             <Navbar />
             <main className="flex-grow">
               <Routes>
-                {/* Public routes */}
+                {/* ── Public routes ─────────────────────────────── */}
                 <Route path="/" element={<Home />} />
                 <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/search" element={<ProductSearch />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/404" element={<NotFound />} />
 
-                {/* Customer routes */}
-                <Route
-                  path="/cart"
-                  element={
-                    <ProtectedRoute>
-                      <Cart />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/checkout"
-                  element={
-                    <ProtectedRoute>
-                      <Checkout />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/orders"
-                  element={
-                    <ProtectedRoute>
-                      <Orders />
-                    </ProtectedRoute>
-                  }
-                />
+                {/* ── Customer routes ────────────────────────────── */}
+                <Route path="/cart" element={
+                  <ProtectedRoute><Cart /></ProtectedRoute>
+                } />
+                <Route path="/checkout" element={
+                  <ProtectedRoute><Checkout /></ProtectedRoute>
+                } />
+                <Route path="/orders" element={
+                  <ProtectedRoute><Orders /></ProtectedRoute>
+                } />
+                <Route path="/orders/:id" element={
+                  <ProtectedRoute><OrderDetail /></ProtectedRoute>
+                } />
+                <Route path="/wishlist" element={
+                  <ProtectedRoute><Wishlist /></ProtectedRoute>
+                } />
+                <Route path="/returns" element={
+                  <ProtectedRoute><Returns /></ProtectedRoute>
+                } />
 
-                {/* Admin routes */}
-                <Route
-                  path="/admin/dashboard"
-                  element={
-                    <AdminRoute>
-                      <AdminDashboard />
-                    </AdminRoute>
-                  }
-                />
+                {/* ── Delivery Partner routes ────────────────────── */}
+                <Route path="/delivery/dashboard" element={
+                  <ProtectedRoute><DeliveryDashboard /></ProtectedRoute>
+                } />
 
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to="/" replace />} />
+                {/* ── Shop Owner routes ──────────────────────────── */}
+                <Route path="/seller/dashboard" element={
+                  <ProtectedRoute><SellerDashboard /></ProtectedRoute>
+                } />
+
+                {/* ── Admin routes ───────────────────────────────── */}
+                <Route path="/admin/dashboard" element={
+                  <AdminRoute><AdminDashboard /></AdminRoute>
+                } />
+
+                {/* ── 404 fallback ───────────────────────────────── */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
-            
-            {/* Footer */}
-            <footer className="border-t border-white/5 py-8 text-center text-xs text-slate-500 bg-slate-950">
-              <p>© {new Date().getFullYear()} NovaCart. Designed for premium demonstration purposes.</p>
-            </footer>
+
+            <Footer />
+            <AIAssistant />
+            <CartDrawer />
           </div>
         </CartProvider>
       </AuthProvider>

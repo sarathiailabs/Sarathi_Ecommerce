@@ -4,6 +4,7 @@ import api from '../services/api'
 interface UserProfile {
   email: string
   is_admin: boolean
+  role?: string
   full_name?: string
 }
 
@@ -12,9 +13,11 @@ interface AuthContextType {
   user: UserProfile | null
   isAuthenticated: boolean
   isAdmin: boolean
+  isShopOwner: boolean
+  isDeliveryPartner: boolean
   loading: boolean
   login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string, fullName: string) => Promise<void>
+  register: (email: string, password: string, fullName: string, role?: string) => Promise<void>
   logout: () => void
 }
 
@@ -50,6 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser({
           email: decoded.sub,
           is_admin: decoded.is_admin || false,
+          role: decoded.role || 'customer',
           full_name: storedUser ? JSON.parse(storedUser).full_name : undefined
         })
       } else {
@@ -90,6 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const userProfile: UserProfile = {
       email: decoded.sub,
       is_admin: decoded.is_admin || false,
+      role: decoded.role || 'customer',
       full_name: email.split('@')[0], // Fallback name
     }
     
@@ -98,11 +103,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(userProfile)
   }
 
-  const register = async (email: string, password: string, fullName: string) => {
+  const register = async (email: string, password: string, fullName: string, role = 'customer') => {
     await api.post('/auth/register', {
       email,
       password,
       full_name: fullName,
+      role,
     })
   }
 
@@ -120,6 +126,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user,
         isAuthenticated: !!token,
         isAdmin: !!user?.is_admin,
+        isShopOwner: user?.role === 'shop_owner',
+        isDeliveryPartner: user?.role === 'delivery_partner',
         loading,
         login,
         register,

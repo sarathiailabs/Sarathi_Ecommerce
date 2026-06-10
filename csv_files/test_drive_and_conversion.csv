@@ -1,0 +1,9 @@
+scenario,response,next_action
+Customer Wants Test Drive,Book available slot,Create Booking
+Customer Busy,Schedule Callback,Callback Tool
+Customer Wants Showroom Visit,Schedule Visit,CRM Update
+Customer Wants Brochure,Send WhatsApp Brochure,WhatsApp Tool
+Customer Wants Pricing,Provide Approximate Price,Continue Conversation
+Customer Comparing Brands,Offer Test Drive,Increase Conversion
+Customer Needs Family Discussion,Schedule Follow Up,Callback Tool
+Customer Ready To Buy,Assign Sales Advisor,CRM Update

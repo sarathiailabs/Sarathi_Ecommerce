@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, Edit2, Trash2, Package, ShoppingCart as OrderIcon, X, RefreshCw } from 'lucide-react'
+import { Plus, Edit2, Trash2, Package, ShoppingCart as OrderIcon, X, RefreshCw, BarChart2 } from 'lucide-react'
 import api from '../services/api'
+import { AdminAnalytics } from '../components/AdminAnalytics'
 
 interface Product {
   id: string
@@ -35,7 +36,7 @@ interface Order {
 }
 
 export const AdminDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'inventory' | 'orders'>('inventory')
+  const [activeTab, setActiveTab] = useState<'analytics' | 'inventory' | 'orders'>('analytics')
   
   // Inventory state
   const [products, setProducts] = useState<Product[]>([])
@@ -66,20 +67,21 @@ export const AdminDashboard: React.FC = () => {
   const fetchData = async () => {
     setLoading(true)
     try {
-      if (activeTab === 'inventory') {
-        const response = await api.get('/products')
-        setProducts(response.data.map((p: any) => ({
-          ...p,
-          price: Number(p.price),
-          stock: Number(p.stock)
-        })))
-      } else {
-        const response = await api.get('/admin/orders')
-        setOrders(response.data.map((o: any) => ({
-          ...o,
-          total_amount: Number(o.total_amount)
-        })))
-      }
+      const [prodRes, orderRes] = await Promise.all([
+        api.get('/products'),
+        api.get('/admin/orders')
+      ])
+      
+      setProducts(prodRes.data.map((p: any) => ({
+        ...p,
+        price: Number(p.price),
+        stock: Number(p.stock)
+      })))
+      
+      setOrders(orderRes.data.map((o: any) => ({
+        ...o,
+        total_amount: Number(o.total_amount)
+      })))
     } catch (error: any) {
       showNotification('Failed to fetch data: ' + (error.response?.data?.detail || error.message), true)
     } finally {
@@ -89,7 +91,7 @@ export const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     fetchData()
-  }, [activeTab])
+  }, [])
 
   // Create Product handler
   const handleCreateProduct = async (e: React.FormEvent) => {
@@ -172,13 +174,13 @@ export const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
       {/* Toast Alert */}
       {notification && (
-        <div className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl border shadow-xl backdrop-blur-lg flex items-center gap-2 ${
+        <div className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl border-3 border-[#1D1C1A] shadow-[4px_4px_0px_0px_#1D1C1A] flex items-center gap-2 font-black uppercase tracking-wider text-xs ${
           notification.isError
-            ? 'border-red-500/30 bg-red-950/90 text-red-200'
-            : 'border-purple-500/30 bg-purple-950/90 text-purple-200'
+            ? 'bg-[#E1392A] text-white'
+            : 'bg-[#FAF6EE] text-[#1D1C1A]'
         }`}>
           <span>{notification.text}</span>
         </div>
@@ -187,18 +189,29 @@ export const AdminDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">Admin Console</h1>
-          <p className="text-xs text-slate-400">Manage catalog inventory, prices, stock levels and customer orders.</p>
+          <h1 className="text-3xl font-black text-[#1D1C1A] uppercase tracking-tight">Admin Console</h1>
+          <p className="text-xs text-[#615E59] font-black uppercase tracking-wider mt-1">Manage catalog inventory, prices, stock levels and customer orders.</p>
         </div>
 
         {/* Tab switchers */}
-        <div className="flex gap-2 bg-slate-900 border border-white/5 rounded-xl p-1">
+        <div className="flex gap-2 bg-white border-3 border-[#1D1C1A] rounded-2xl p-1.5 shadow-[3px_3px_0px_0px_#1D1C1A]">
+          <button
+            onClick={() => setActiveTab('analytics')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
+              activeTab === 'analytics'
+                ? 'bg-[#F5B025] text-[#1D1C1A] border-2 border-[#1D1C1A] shadow-[2px_2px_0px_0px_#1D1C1A]'
+                : 'text-[#1D1C1A]/60 hover:text-[#1D1C1A] hover:bg-[#FAF6EE]'
+            }`}
+          >
+            <BarChart2 size={14} />
+            Analytics
+          </button>
           <button
             onClick={() => setActiveTab('inventory')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
               activeTab === 'inventory'
-                ? 'bg-purple-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#F5B025] text-[#1D1C1A] border-2 border-[#1D1C1A] shadow-[2px_2px_0px_0px_#1D1C1A]'
+                : 'text-[#1D1C1A]/60 hover:text-[#1D1C1A] hover:bg-[#FAF6EE]'
             }`}
           >
             <Package size={14} />
@@ -206,10 +219,10 @@ export const AdminDashboard: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveTab('orders')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 ${
               activeTab === 'orders'
-                ? 'bg-purple-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-[#F5B025] text-[#1D1C1A] border-2 border-[#1D1C1A] shadow-[2px_2px_0px_0px_#1D1C1A]'
+                : 'text-[#1D1C1A]/60 hover:text-[#1D1C1A] hover:bg-[#FAF6EE]'
             }`}
           >
             <OrderIcon size={14} />
@@ -220,19 +233,21 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Main Section */}
       {loading ? (
-        <div className="glass rounded-2xl p-8 flex items-center justify-center min-h-[300px]">
-          <RefreshCw className="animate-spin text-purple-500" size={32} />
+        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-8 flex items-center justify-center min-h-[300px] shadow-[4px_4px_0px_0px_#1D1C1A]">
+          <RefreshCw className="animate-spin text-[#E1392A]" size={32} />
         </div>
+      ) : activeTab === 'analytics' ? (
+        <AdminAnalytics orders={orders} products={products} />
       ) : activeTab === 'inventory' ? (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <Package size={18} className="text-purple-400" />
+            <h2 className="text-xl font-black text-[#1D1C1A] uppercase tracking-tight flex items-center gap-2">
+              <Package size={18} className="text-[#E1392A]" />
               Products List ({products.length})
             </h2>
             <button
               onClick={() => setIsCreateOpen(true)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/10 transition-all duration-200"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl btn-primary text-xs font-black uppercase tracking-wider"
             >
               <Plus size={14} />
               Add Product
@@ -240,10 +255,10 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Inventory Table */}
-          <div className="glass rounded-2xl overflow-hidden border border-white/5 overflow-x-auto">
+          <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl shadow-[4px_4px_0px_0px_#1D1C1A] overflow-hidden overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
-                <tr className="bg-slate-900/60 text-xs font-bold text-slate-400 uppercase border-b border-white/5">
+                <tr className="bg-[#FAF6EE] text-xs font-black text-[#1D1C1A] uppercase border-b-3 border-[#1D1C1A]">
                   <th className="py-4 px-6">Product</th>
                   <th className="py-4 px-6">Category</th>
                   <th className="py-4 px-6">Price</th>
@@ -251,42 +266,42 @@ export const AdminDashboard: React.FC = () => {
                   <th className="py-4 px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-sm text-slate-300">
+              <tbody className="divide-y divide-[#1D1C1A]/10 text-sm text-[#1D1C1A]">
                 {products.map((product) => (
-                  <tr key={product.id} className="hover:bg-white/5 transition-colors">
+                  <tr key={product.id} className="hover:bg-[#FAF6EE]/50 transition-colors">
                     <td className="py-4 px-6 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-900 border border-white/5 flex-shrink-0">
+                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#FAF6EE] border-2 border-[#1D1C1A] flex-shrink-0 flex items-center justify-center">
                         <img src={product.image_url} alt={product.name} className="object-cover w-full h-full" />
                       </div>
                       <div>
-                        <div className="font-bold text-slate-200 line-clamp-1">{product.name}</div>
-                        <div className="text-[10px] text-slate-450 line-clamp-1">{product.id}</div>
+                        <div className="font-black text-[#1D1C1A] line-clamp-1 uppercase tracking-tight">{product.name}</div>
+                        <div className="text-[9px] font-mono text-[#615E59] tracking-wider">{product.id}</div>
                       </div>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-900 border border-white/5 text-slate-400">
+                      <span className="px-2.5 py-0.5 rounded-md text-[9px] font-black uppercase bg-[#FAF6EE] text-[#1D1C1A] border-2 border-[#1D1C1A]">
                         {product.category}
                       </span>
                     </td>
-                    <td className="py-4 px-6 font-semibold text-slate-200">
+                    <td className="py-4 px-6 font-black text-[#1D1C1A]">
                       ₹{product.price.toFixed(2)}
                     </td>
                     <td className="py-4 px-6">
-                      <span className={`font-bold ${product.stock > 10 ? 'text-emerald-450' : 'text-amber-400'}`}>
+                      <span className={`font-black uppercase text-xs ${product.stock > 10 ? 'text-emerald-600' : 'text-[#E1392A]'}`}>
                         {product.stock}
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right space-x-2">
                       <button
                         onClick={() => setEditingProduct(product)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-purple-400 hover:bg-purple-500/10 transition-all duration-200"
+                        className="p-2 border-2 border-transparent hover:border-[#1D1C1A] hover:bg-[#F5B025]/20 text-[#1D1C1A] rounded-xl transition-all"
                         title="Edit Product"
                       >
                         <Edit2 size={14} />
                       </button>
                       <button
                         onClick={() => handleDeleteProduct(product.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
+                        className="p-2 border-2 border-transparent hover:border-[#1D1C1A] hover:bg-[#E1392A]/10 text-[#E1392A] rounded-xl transition-all"
                         title="Delete Product"
                       >
                         <Trash2 size={14} />
@@ -300,58 +315,63 @@ export const AdminDashboard: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          <h2 className="text-xl font-bold text-white flex items-center gap-2">
-            <OrderIcon size={18} className="text-purple-400" />
+          <h2 className="text-xl font-black text-[#1D1C1A] uppercase tracking-tight flex items-center gap-2">
+            <OrderIcon size={18} className="text-[#E1392A]" />
             Global Customer Orders ({orders.length})
           </h2>
 
           {orders.length === 0 ? (
-            <div className="text-center py-20 glass rounded-3xl border border-white/5">
-              <p className="text-slate-400 font-medium">No customer orders found.</p>
+            <div className="text-center py-20 bg-white border-3 border-[#1D1C1A] rounded-3xl shadow-[4px_4px_0px_0px_#1D1C1A]">
+              <p className="text-[#615E59] font-black uppercase text-sm">No customer orders found.</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-5">
               {orders.map((order) => (
-                <div key={order.id} className="glass rounded-2xl border border-white/5 overflow-hidden">
+                <div key={order.id} className="bg-white border-3 border-[#1D1C1A] rounded-2xl shadow-[4px_4px_0px_0px_#1D1C1A] overflow-hidden hover:shadow-[5px_5px_0px_0px_#1D1C1A] transition-all">
                   {/* Order Header */}
-                  <div className="bg-slate-900/60 px-6 py-4 border-b border-white/5 flex flex-wrap gap-4 items-center justify-between">
-                    <div className="flex flex-wrap gap-6 text-xs text-slate-400">
+                  <div className="bg-[#FAF6EE] px-6 py-4 border-b-3 border-[#1D1C1A] flex flex-wrap gap-4 items-center justify-between">
+                    <div className="flex flex-wrap gap-6 text-xs text-[#615E59]">
                       <div>
-                        <span>Order ID:</span>
-                        <div className="font-mono text-slate-200 font-bold mt-1">{order.id}</div>
+                        <span className="text-[10px] font-black uppercase tracking-wider">Order ID:</span>
+                        <div className="font-mono text-[#1D1C1A] font-black mt-1 text-xs">{order.id}</div>
                       </div>
                       <div>
-                        <span>User Profile:</span>
-                        <div className="text-slate-200 font-semibold mt-1">{order.user?.email || 'Customer'}</div>
+                        <span className="text-[10px] font-black uppercase tracking-wider">User Profile:</span>
+                        <div className="text-[#1D1C1A] font-black mt-1 text-xs">{order.user?.email || 'Customer'}</div>
                       </div>
                       <div>
-                        <span>Amount Charged:</span>
-                        <div className="text-purple-400 font-bold mt-1">₹{order.total_amount.toFixed(2)}</div>
+                        <span className="text-[10px] font-black uppercase tracking-wider">Amount Charged:</span>
+                        <div className="text-[#E1392A] font-black mt-1 text-sm">₹{order.total_amount.toFixed(2)}</div>
                       </div>
                     </div>
 
                     {/* Order Status Selector */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-450 font-medium">Status:</span>
-                      <select
-                        value={order.status}
-                        onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
-                        className="bg-slate-900 text-xs font-bold border border-white/10 rounded-lg py-1.5 px-3 text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
-                      >
-                        <option value="Pending">Pending</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                      </select>
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#615E59]">Status:</span>
+                      <div className="relative">
+                        <select
+                          value={order.status}
+                          onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
+                          className="bg-white text-xs font-black uppercase tracking-wider border-2 border-[#1D1C1A] rounded-xl py-1.5 px-3 text-[#1D1C1A] focus:outline-none appearance-none cursor-pointer pr-8 shadow-xs"
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Shipped">Shipped</option>
+                          <option value="Delivered">Delivered</option>
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#1D1C1A]">
+                          ▼
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   {/* Order Items */}
-                  <div className="p-6 bg-slate-950/20 divide-y divide-white/5">
+                  <div className="p-6 bg-white divide-y-2 divide-[#1D1C1A]/10">
                     {order.items.map((item) => (
                       <div key={item.id} className="py-2.5 first:pt-0 last:pb-0 flex items-center justify-between text-xs">
-                        <span className="font-medium text-slate-300">{item.product?.name || 'Deleted Product'}</span>
-                        <span className="text-slate-400">
-                          Qty: <span className="font-bold text-slate-200">{item.quantity}</span> @ ₹{item.price.toFixed(2)}
+                        <span className="font-black text-[#1D1C1A] uppercase tracking-tight">{item.product?.name || 'Deleted Product'}</span>
+                        <span className="text-[#615E59] font-black uppercase tracking-wider text-[10px]">
+                          Qty: <span className="font-black text-[#1D1C1A]">{item.quantity}</span> @ ₹{item.price.toFixed(2)}
                         </span>
                       </div>
                     ))}
@@ -366,44 +386,44 @@ export const AdminDashboard: React.FC = () => {
       {/* --- CREATE PRODUCT MODAL --- */}
       {isCreateOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="glass rounded-3xl w-full max-w-lg border border-white/10 p-8 shadow-2xl relative space-y-6">
+          <div className="bg-white border-3 border-[#1D1C1A] rounded-3xl w-full max-w-lg p-8 shadow-[6px_6px_0px_0px_#1D1C1A] relative space-y-6 animate-scale-in">
             <button
               onClick={() => setIsCreateOpen(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="absolute top-4 right-4 p-1.5 border-2 border-transparent hover:border-[#1D1C1A] rounded-lg text-[#1D1C1A] bg-[#FAF6EE] transition-all"
             >
               <X size={18} />
             </button>
 
-            <h3 className="text-2xl font-extrabold text-white">Create New Product</h3>
+            <h3 className="text-2xl font-black uppercase tracking-tight text-[#1D1C1A]">Create New Product</h3>
 
             <form onSubmit={handleCreateProduct} className="space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-400">Product Name</label>
+                <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Product Name</label>
                 <input
                   type="text"
                   required
                   value={newProduct.name}
                   onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
                   placeholder="e.g. Wireless Headset"
-                  className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold placeholder-slate-400 focus:outline-none focus:bg-[#FAF6EE] transition-all"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-400">Description</label>
+                <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Description</label>
                 <textarea
                   required
                   value={newProduct.description}
                   onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
                   placeholder="Product features and specs..."
                   rows={3}
-                  className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors resize-none"
+                  className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold placeholder-slate-400 focus:outline-none focus:bg-[#FAF6EE] transition-all resize-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">Price (₹)</label>
+                  <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Price (₹)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -411,42 +431,42 @@ export const AdminDashboard: React.FC = () => {
                     value={newProduct.price}
                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
                     placeholder="99.99"
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold placeholder-slate-400 focus:outline-none focus:bg-[#FAF6EE] transition-all"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">Stock Count</label>
+                  <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Stock Count</label>
                   <input
                     type="number"
                     required
                     value={newProduct.stock}
                     onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
                     placeholder="100"
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold placeholder-slate-400 focus:outline-none focus:bg-[#FAF6EE] transition-all"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">Category</label>
+                  <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Category</label>
                   <input
                     type="text"
                     required
                     value={newProduct.category}
                     onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
                     placeholder="Electronics, Home, etc."
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold placeholder-slate-400 focus:outline-none focus:bg-[#FAF6EE] transition-all"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">Image URL</label>
+                  <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Image URL</label>
                   <input
                     type="url"
                     value={newProduct.image_url}
                     onChange={(e) => setNewProduct({ ...newProduct, image_url: e.target.value })}
                     placeholder="Unsplash image link..."
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold placeholder-slate-400 focus:outline-none focus:bg-[#FAF6EE] transition-all"
                   />
                 </div>
               </div>
@@ -454,7 +474,7 @@ export const AdminDashboard: React.FC = () => {
               <button
                 type="submit"
                 disabled={actionLoading}
-                className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-650/10 transition-all duration-200"
+                className="w-full py-3.5 rounded-xl btn-primary text-xs font-black uppercase tracking-widest disabled:opacity-60"
               >
                 {actionLoading ? 'Creating Product...' : 'Create Product'}
               </button>
@@ -466,81 +486,81 @@ export const AdminDashboard: React.FC = () => {
       {/* --- EDIT PRODUCT MODAL --- */}
       {editingProduct && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="glass rounded-3xl w-full max-w-lg border border-white/10 p-8 shadow-2xl relative space-y-6">
+          <div className="bg-white border-3 border-[#1D1C1A] rounded-3xl w-full max-w-lg p-8 shadow-[6px_6px_0px_0px_#1D1C1A] relative space-y-6 animate-scale-in">
             <button
               onClick={() => setEditingProduct(null)}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="absolute top-4 right-4 p-1.5 border-2 border-transparent hover:border-[#1D1C1A] rounded-lg text-[#1D1C1A] bg-[#FAF6EE] transition-all"
             >
               <X size={18} />
             </button>
 
-            <h3 className="text-2xl font-extrabold text-white">Edit Product</h3>
+            <h3 className="text-2xl font-black uppercase tracking-tight text-[#1D1C1A]">Edit Product</h3>
 
             <form onSubmit={handleUpdateProduct} className="space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-400">Product Name</label>
+                <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Product Name</label>
                 <input
                   type="text"
                   required
                   value={editingProduct.name}
                   onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold outline-none focus:bg-[#FAF6EE] transition-all"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-400">Description</label>
+                <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Description</label>
                 <textarea
                   required
                   value={editingProduct.description}
                   onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors resize-none"
+                  className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold outline-none focus:bg-[#FAF6EE] transition-all resize-none"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">Price (₹)</label>
+                  <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Price (₹)</label>
                   <input
                     type="number"
                     step="0.01"
                     required
                     value={editingProduct.price}
                     onChange={(e) => setEditingProduct({ ...editingProduct, price: Number(e.target.value) })}
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold outline-none focus:bg-[#FAF6EE] transition-all"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">Stock Count</label>
+                  <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Stock Count</label>
                   <input
                     type="number"
                     required
                     value={editingProduct.stock}
                     onChange={(e) => setEditingProduct({ ...editingProduct, stock: Number(e.target.value) })}
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold outline-none focus:bg-[#FAF6EE] transition-all"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">Category</label>
+                  <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Category</label>
                   <input
                     type="text"
                     required
                     value={editingProduct.category}
                     onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold outline-none focus:bg-[#FAF6EE] transition-all"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-400">Image URL</label>
+                  <label className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Image URL</label>
                   <input
                     type="url"
                     value={editingProduct.image_url}
                     onChange={(e) => setEditingProduct({ ...editingProduct, image_url: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-slate-900 border border-white/10 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-2.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold outline-none focus:bg-[#FAF6EE] transition-all"
                   />
                 </div>
               </div>
@@ -548,7 +568,7 @@ export const AdminDashboard: React.FC = () => {
               <button
                 type="submit"
                 disabled={actionLoading}
-                className="w-full py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-650/10 transition-all duration-200"
+                className="w-full py-3.5 rounded-xl btn-primary text-xs font-black uppercase tracking-widest disabled:opacity-60"
               >
                 {actionLoading ? 'Updating Product...' : 'Update Product'}
               </button>

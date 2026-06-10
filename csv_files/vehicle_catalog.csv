@@ -1,0 +1,8 @@
+vehicle_name,segment,price_range,mileage,seating,best_for,fuel_type,transmission,safety_rating,key_benefit
+Swift,Hatchback,6.5-9.5 Lakh,24 kmpl,5,City Driving,Petrol,CVT/Manual,High,Excellent Mileage
+Baleno,Hatchback,7-10 Lakh,22 kmpl,5,Premium Hatchback,Petrol,CVT/Manual,High,Premium Interior
+Fronx,SUV,8-13 Lakh,21 kmpl,5,Young Professionals,Petrol,CVT/Manual,High,Stylish SUV
+Brezza,SUV,10-15 Lakh,18 kmpl,5,Family SUV,Petrol,Automatic/Manual,High,Strong Resale Value
+Ertiga,MPV,9-14 Lakh,20 kmpl,7,Large Families,Petrol/CNG,Automatic/Manual,High,7 Seater Comfort
+XL6,MPV,12-16 Lakh,20 kmpl,6,Premium Family,Petrol,Automatic/Manual,High,Premium MPV
+Grand Vitara,SUV,11-20 Lakh,27 kmpl Hybrid,5,Premium SUV,Hybrid,Automatic,High,Hybrid Technology

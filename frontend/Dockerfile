@@ -5,11 +5,11 @@ WORKDIR /frontend
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
-RUN npm run build
+RUN npm run build -- --outDir dist 2>&1 || (echo "Build failed, showing error details:" && exit 1)
 
 # Production Stage
 FROM nginx:stable-alpine

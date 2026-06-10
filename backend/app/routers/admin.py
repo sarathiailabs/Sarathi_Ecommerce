@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload
 from app.database import get_db
 from app.models import Product, Order, OrderItem, User
 from app.schemas import ProductCreate, ProductResponse, ProductUpdate, OrderResponse, OrderStatusUpdate
-from app.auth import get_current_admin
+from app.core.dependencies import get_current_admin
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
