@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
+<<<<<<< HEAD
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Lock, Eye, EyeOff, CheckCircle, AlertCircle, Zap, ShieldCheck } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+=======
+import { Link, useSearchParams } from 'react-router-dom'
+import { Lock, Save, AlertCircle, CheckCircle2 } from 'lucide-react'
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
 import api from '../services/api'
 
 export const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams()
+<<<<<<< HEAD
   const navigate = useNavigate()
 
   // Token comes from URL ?token= (as sent in reset email or dev token box)
@@ -27,22 +33,58 @@ export const ResetPassword: React.FC = () => {
     }
     if (newPassword.length < 6) {
       setError('Password must be at least 6 characters')
+=======
+  const token = searchParams.get('token')
+  
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [successMsg, setSuccessMsg] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErrorMsg(null)
+    setSuccessMsg(null)
+
+    if (!token) {
+      setErrorMsg('Invalid or missing reset token. Please request a new link.')
+      return
+    }
+
+    if (newPassword !== confirmPassword) {
+      setErrorMsg('Passwords do not match.')
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
       return
     }
 
     setSubmitting(true)
+<<<<<<< HEAD
     try {
       await api.post('/auth/reset-password', { token, new_password: newPassword })
       setSuccess(true)
       setTimeout(() => navigate('/login'), 3000)
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Reset failed. The token may be expired or already used.')
+=======
+
+    try {
+      const response = await api.post('/auth/reset-password', {
+        token,
+        new_password: newPassword,
+        confirm_password: confirmPassword
+      })
+      setSuccessMsg(response.data.message || 'Password successfully reset. You can now log in.')
+    } catch (err: any) {
+      setErrorMsg(err.response?.data?.detail || 'An error occurred. Please try again or request a new link.')
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
+<<<<<<< HEAD
     <div data-page="reset-password" className="min-h-[calc(100vh-130px)] flex items-center justify-center px-6 py-16 bg-[#FAF6EE]">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -199,6 +241,88 @@ export const ResetPassword: React.FC = () => {
           </>
         )}
       </motion.div>
+=======
+    <div className="max-w-md mx-auto px-6 py-20 flex flex-col justify-center min-h-[80vh]">
+      <div className="glass rounded-3xl p-8 border border-white/5 space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(139,92,246,0.1),transparent_50%)] pointer-events-none"></div>
+        
+        {/* Header */}
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-extrabold text-white">Create New Password</h1>
+          <p className="text-xs text-slate-400">
+            Enter your new password below.
+          </p>
+        </div>
+
+        {/* Messages */}
+        {errorMsg && (
+          <div className="flex items-center gap-2 p-4 rounded-xl border border-red-500/20 bg-red-950/40 text-red-200 text-xs">
+            <AlertCircle size={16} className="flex-shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        {successMsg && (
+          <div className="flex flex-col gap-4 p-4 rounded-xl border border-green-500/20 bg-green-950/40 text-green-200 text-xs">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 size={16} className="flex-shrink-0" />
+              <span>{successMsg}</span>
+            </div>
+            <Link to="/login" className="text-center py-2 bg-green-500/20 rounded-lg font-bold hover:bg-green-500/30 transition-colors">
+              Go to Login
+            </Link>
+          </div>
+        )}
+
+        {/* Form */}
+        {!successMsg && (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-355">New Password</label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  <Lock size={16} />
+                </span>
+                <input
+                  type="password"
+                  required
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-900/60 border border-white/10 rounded-xl text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-355">Confirm New Password</label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  <Lock size={16} />
+                </span>
+                <input
+                  type="password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-900/60 border border-white/10 rounded-xl text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-600/10 hover:shadow-purple-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <Save size={16} />
+              {submitting ? 'Resetting...' : 'Reset Password'}
+            </button>
+          </form>
+        )}
+      </div>
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
     </div>
   )
 }

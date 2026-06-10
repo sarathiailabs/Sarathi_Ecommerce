@@ -860,3 +860,64 @@ nav.sticky {
 .star-filled {
   color: #F5B025 !important;
 }
+
+/* ─── Hero Slider ──────────────────────────────────────── */
+
+/* Hide default Swiper arrows & bullets (we use custom ones) */
+.hero-swiper .swiper-button-next,
+.hero-swiper .swiper-button-prev,
+.hero-swiper .swiper-pagination {
+  display: none !important;
+}
+
+/* Autoplay progress bar animation */
+@keyframes hero-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.hero-progress-bar {
+  animation: hero-progress 4.5s linear forwards;
+}
+
+/* Floating product image on active slide */
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50%       { transform: translateY(-12px) rotate(1deg); }
+}
+
+.hero-slide-image {
+  animation: hero-float 5s ease-in-out infinite;
+}
+
+/* Slide-in text animation */
+@keyframes hero-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.swiper-slide-active .hero-text-animate {
+  animation: hero-slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Stagger children of active slide */
+.swiper-slide-active .hero-text-animate:nth-child(1) { animation-delay: 0.05s; }
+.swiper-slide-active .hero-text-animate:nth-child(2) { animation-delay: 0.15s; }
+.swiper-slide-active .hero-text-animate:nth-child(3) { animation-delay: 0.25s; }
+.swiper-slide-active .hero-text-animate:nth-child(4) { animation-delay: 0.35s; }
+.swiper-slide-active .hero-text-animate:nth-child(5) { animation-delay: 0.45s; }
+
+/* Ensure fade effect works correctly */
+.hero-swiper.swiper-fade .swiper-slide {
+  pointer-events: none;
+}
+.hero-swiper.swiper-fade .swiper-slide-active {
+  pointer-events: auto;
+}
+

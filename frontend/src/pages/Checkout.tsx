@@ -338,6 +338,13 @@ export const Checkout: React.FC = () => {
       }
     }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
     setPaymentErrors(errors)
 
     return Object.values(errors).every((e) => e === '')
@@ -571,9 +578,15 @@ export const Checkout: React.FC = () => {
 
   // ─── Payment Step ──────────────────────────────────────────────────────────
   const paymentOptions = [
+<<<<<<< HEAD
     { id: 'card' as PaymentMethod, label: 'Credit / Debit Card', icon: CreditCard, badge: 'Up to 5% cashback', available: true },
     { id: 'cod' as PaymentMethod, label: 'Cash on Delivery', icon: Banknote, badge: '+$6 handling fee', available: true },
     { id: 'upi' as PaymentMethod, label: 'UPI (GPay / PhonePe / PayTM)', icon: Smartphone, badge: '2% cashback', available: true },
+=======
+    { id: 'card' as PaymentMethod, label: 'Credit / Debit / ATM Card', icon: CreditCard, badge: 'Up to 5% cashback', available: true },
+    { id: 'cod' as PaymentMethod, label: 'Cash on Delivery', icon: Banknote, badge: '+₹6 handling fee', available: true },
+    { id: 'upi' as PaymentMethod, label: 'UPI', icon: Smartphone, badge: '2% cashback', available: true },
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
     { id: 'wallet' as PaymentMethod, label: 'Gift Card / Wallet', icon: Gift, badge: null, available: false },
   ]
 

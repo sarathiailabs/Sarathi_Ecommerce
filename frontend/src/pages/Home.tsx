@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
@@ -8,9 +9,16 @@ import {
   ArrowRight, Sparkles, Package
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+=======
+import React, { useState, useEffect, useMemo } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ShoppingCart, Eye } from 'lucide-react'
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
 import api from '../services/api'
 import { useCart, Product } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
+import { useSearch } from '../context/SearchContext'
+import { HeroSlider } from '../components/HeroSlider'
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   All: <Sparkles size={14} />,
@@ -92,7 +100,12 @@ export const Home: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')
 
   const { addToCart } = useCart()
+<<<<<<< HEAD
   const { user, isAuthenticated, isAdmin, isShopOwner, isDeliveryPartner } = useAuth()
+=======
+  const { isAuthenticated } = useAuth()
+  const { searchQuery } = useSearch()
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
@@ -170,6 +183,7 @@ export const Home: React.FC = () => {
     }
   }
 
+<<<<<<< HEAD
   const toggleWishlist = (productId: string) => {
     setWishlist(prev => {
       const next = new Set(prev)
@@ -345,6 +359,30 @@ export const Home: React.FC = () => {
           </div>
         </div>
       </section>
+=======
+  const filteredProducts = useMemo(() => {
+    return products.filter((p) => {
+      const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
+      if (!matchesCategory) return false;
+
+      if (!searchQuery) return true;
+
+      const lowerQuery = searchQuery.toLowerCase();
+      return (
+        p.name.toLowerCase().includes(lowerQuery) ||
+        p.category.toLowerCase().includes(lowerQuery) ||
+        p.description.toLowerCase().includes(lowerQuery)
+      );
+    });
+  }, [products, selectedCategory, searchQuery]);
+
+  return (
+    <div>
+      {/* ── Hero Slider ── */}
+      <HeroSlider />
+
+      <div className="max-w-7xl mx-auto px-6 pb-10 pt-2">
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
 
       {/* ========== TILTED POLAROID LIFESTYLE GRID (SECOND SCREENSHOT) ========== */}
       <section className="bg-[#FAF6EE] py-14 border-b-3 border-[#1D1C1A] overflow-hidden">
@@ -354,12 +392,64 @@ export const Home: React.FC = () => {
             <h2 className="text-3xl sm:text-5xl font-black uppercase text-[#1D1C1A] mt-3">CURATED FOR YOUR CRAVING</h2>
           </div>
 
+<<<<<<< HEAD
           {/* Polaroid Deck: Skewed, tilted retro photos next to each other */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-6 pt-4">
             
             {/* Polaroid Card 1: Left */}
             <div className="polaroid-card w-72 rotate-[-4deg]">
               <div className="w-full aspect-square border-3 border-[#1D1C1A] overflow-hidden rounded-lg bg-slate-100">
+=======
+      {/* Category Tabs */}
+      <div className="flex flex-wrap gap-2.5 mb-10 pb-2 border-b border-white/5">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            className={`px-4.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 border ${selectedCategory === cat
+              ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-600/20 scale-[1.02]'
+              : 'bg-slate-900/60 border-white/5 text-slate-400 hover:text-white hover:bg-slate-800/40'
+              }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Products Grid */}
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="glass rounded-2xl p-4 animate-pulse space-y-4">
+              <div className="aspect-square rounded-xl bg-slate-800/40"></div>
+              <div className="h-4 bg-slate-800/40 rounded w-2/3"></div>
+              <div className="h-3 bg-slate-800/40 rounded w-1/2"></div>
+              <div className="flex justify-between items-center pt-2">
+                <div className="h-5 bg-slate-800/40 rounded w-1/3"></div>
+                <div className="h-9 bg-slate-800/40 rounded w-1/3"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : filteredProducts.length === 0 ? (
+        <div className="text-center py-20 glass rounded-3xl border border-white/5">
+          <p className="text-slate-400 font-medium">
+            {searchQuery ? 'No products found matching your search.' : 'No products found in this category.'}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProducts.map((product) => (
+            <div
+              key={product.id}
+              className="glass rounded-2xl overflow-hidden hover:border-purple-500/30 group transition-all duration-300 flex flex-col"
+            >
+              {/* Product Image */}
+              <Link
+                to={`/product/${product.id}`}
+                className="relative aspect-square overflow-hidden bg-slate-900 flex items-center justify-center border-b border-white/5 block"
+              >
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
                 <img
                   src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=400&q=80"
                   alt="Retro Audio"
@@ -743,6 +833,7 @@ export const Home: React.FC = () => {
             )}
           </div>
         </div>
+<<<<<<< HEAD
       </section>
 
       {/* Elegant Toast (Light theme) */}
@@ -765,6 +856,10 @@ export const Home: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+=======
+      )}
+      </div>
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
     </div>
   )
 }

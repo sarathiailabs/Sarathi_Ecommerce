@@ -61,7 +61,49 @@ export const Login: React.FC = () => {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/15">
               <Zap size={20} className="text-white-force" fill="white" />
             </div>
+<<<<<<< HEAD
             <span className="text-xl font-extrabold text-slate-800 tracking-tight">Prathazon</span>
+=======
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="flex justify-between items-center">
+              <label className="text-xs font-semibold text-slate-355">Password</label>
+              <Link to="/forgot-password" className="text-xs text-purple-400 hover:underline">
+                Forgot Password?
+              </Link>
+            </div>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                <Lock size={16} />
+              </span>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full pl-10 pr-4 py-3 bg-slate-900/60 border border-white/10 rounded-xl text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-600/10 hover:shadow-purple-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
+          >
+            <LogIn size={16} />
+            {submitting ? 'Signing in...' : 'Sign In'}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <div className="text-center text-xs text-slate-400 pt-2 border-t border-white/5">
+          Don't have an account?{' '}
+          <Link to="/register" className="text-purple-400 hover:underline font-semibold">
+            Create Account
+>>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
           </Link>
 
           <h2 className="text-4xl font-extrabold text-slate-900 leading-tight mb-4">
