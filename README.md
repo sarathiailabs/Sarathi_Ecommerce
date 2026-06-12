@@ -1,6 +1,6 @@
 # 🛒 Nova Cart — Full-Stack E-Commerce Application
 
-> A modern, production-ready e-commerce platform built with **FastAPI** (async backend) and **React + TypeScript** (frontend), backed by **PostgreSQL** and fully containerized with **Docker**.
+> A modern, production-ready e-commerce platform built with **Express** (Node.js backend) and **React + TypeScript** (frontend), backed by **Supabase** and fully containerized with **Docker**.
 
 ---
 
@@ -9,10 +9,9 @@
 - [Project Overview](#-project-overview)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
-- [Backend — FastAPI](#-backend--fastapi)
+- [Backend — Express](#-backend--express)
   - [Backend File Overview](#backend-file-overview)
   - [API Endpoints](#api-endpoints)
-  - [Database Models](#database-models)
 - [Frontend — React + TypeScript](#-frontend--react--typescript)
   - [Frontend File Overview](#frontend-file-overview)
   - [Pages & Routes](#pages--routes)
@@ -40,16 +39,13 @@
 ### Backend
 | Technology | Version | Purpose |
 |---|---|---|
-| Python | 3.11 | Core language |
-| FastAPI | 0.110.0 | Web framework (async) |
-| SQLAlchemy (async) | 2.0.28 | ORM & database layer |
-| asyncpg | 0.29.0 | Async PostgreSQL driver |
-| Pydantic v2 | 2.6.4 | Data validation & schemas |
-| pydantic-settings | 2.2.1 | Configuration management |
-| Alembic | 1.13.1 | Database migrations |
-| passlib[bcrypt] | 1.7.4 | Password hashing |
-| python-jose | 3.3.0 | JWT token creation & verification |
-| Uvicorn | 0.28.0 | ASGI server |
+| Node.js | >=18.0.0 | Runtime environment |
+| Express | 4.19.2 | Web framework |
+| Supabase JS | 2.43.4 | Database client & logic |
+| bcryptjs | 2.4.3 | Password hashing |
+| jsonwebtoken | 9.0.2 | JWT token creation & verification |
+| morgan | 1.10.0 | HTTP request logger |
+| uuid | 9.0.1 | UUID generation |
 
 ### Frontend
 | Technology | Version | Purpose |
@@ -65,7 +61,7 @@
 ### Infrastructure
 | Technology | Purpose |
 |---|---|
-| PostgreSQL 15 | Primary relational database |
+| Supabase | Cloud hosted Relational PostgreSQL database & backend services |
 | Docker + Docker Compose | Containerization & orchestration |
 | Nginx | Frontend static file serving (production) |
 
@@ -75,28 +71,33 @@
 
 ```
 Nova_Cart/
-├── docker-compose.yml          # Orchestrates all 3 services (db, backend, frontend)
+├── docker-compose.yml          # Orchestrates backend & frontend services
 │
 ├── backend/
-│   ├── Dockerfile              # Python 3.11 slim image
-│   ├── alembic.ini             # Alembic migrations config
-│   ├── requirements.txt        # Python dependencies
-│   └── app/
-│       ├── __init__.py
-│       ├── main.py             # FastAPI app entry point, lifespan, CORS, routers
-│       ├── config.py           # Settings via pydantic-settings (.env support)
-│       ├── database.py         # Async engine, session factory, init_db()
-│       ├── models.py           # SQLAlchemy ORM models (User, Product, Cart, Order, OrderItem)
-│       ├── schemas.py          # Pydantic v2 request/response schemas
-│       ├── auth.py             # JWT creation, password hashing, user dependencies
-│       ├── seed.py             # Mock data seeder (products + admin user)
-│       └── routers/
-│           ├── __init__.py
-│           ├── auth.py         # POST /api/auth/register, POST /api/auth/token
-│           ├── products.py     # GET /api/products, GET /api/products/{id}
-│           ├── cart.py         # GET/POST/DELETE /api/cart (auth required)
-│           └── orders.py       # POST/GET /api/orders (auth required)
-│           └── admin.py        # Admin-only product & order management
+│   ├── Dockerfile              # Node.js alpine image
+│   ├── package.json            # Node dependencies and scripts
+│   ├── src/
+│   │   ├── app.js              # Express app entry point
+│   │   ├── config/
+│   │   │   └── settings.js     # Settings and configuration loader
+│   │   ├── db/
+│   │   │   └── supabase.js     # Supabase client setup
+│   │   ├── middleware/
+│   │   │   ├── auth.js         # JWT auth middleware
+│   │   │   ├── error.js        # Global error handling middleware
+│   │   │   └── tracking.js     # X-Request-ID & X-Response-Time tracker
+│   │   ├── routes/
+│   │   │   ├── auth.js         # /api/auth/* endpoints
+│   │   │   ├── products.js     # /api/products/* endpoints
+│   │   │   ├── cart.js         # /api/cart/* endpoints
+│   │   │   └── orders.js       # /api/orders/* endpoints
+│   │   ├── controllers/
+│   │   │   ├── authController.js
+│   │   │   ├── productController.js
+│   │   │   ├── cartController.js
+│   │   │   └── orderController.js
+│   │   └── utils/
+│   │       └── seed.js         # Mock data seeder (Supabase DB seeder)
 │
 └── frontend/
     ├── Dockerfile              # Multi-stage: Node build → Nginx serve
@@ -110,7 +111,6 @@ Nova_Cart/
         ├── main.tsx            # React DOM root render
         ├── App.tsx             # Root component, BrowserRouter, all route definitions
         ├── index.css           # Global styles + Tailwind directives
-        ├── vite-env.d.ts       # Vite environment type declarations
         ├── context/
         │   ├── AuthContext.tsx # Global auth state (user, token, login, logout)
         │   └── CartContext.tsx # Global cart state (items, add, remove, clear)
@@ -132,24 +132,18 @@ Nova_Cart/
 
 ---
 
-## ⚙️ Backend — FastAPI
+## ⚙️ Backend — Express
 
 ### Backend File Overview
 
-| File | Responsibility |
+| File/Folder | Responsibility |
 |---|---|
-| [`main.py`](backend/app/main.py) | FastAPI app creation, CORS middleware, router registration, lifespan events (DB init + seeding) |
-| [`config.py`](backend/app/config.py) | Application settings loaded from environment variables or `.env` file |
-| [`database.py`](backend/app/database.py) | Async SQLAlchemy engine, session factory (`AsyncSessionLocal`), `get_db` dependency, `init_db()` |
-| [`models.py`](backend/app/models.py) | ORM table definitions: `User`, `Product`, `Cart`, `Order`, `OrderItem` |
-| [`schemas.py`](backend/app/schemas.py) | Pydantic v2 schemas for request validation and response serialization |
-| [`auth.py`](backend/app/auth.py) | `create_access_token()`, `verify_password()`, `get_password_hash()`, `get_current_user()`, `get_current_admin()` |
-| [`seed.py`](backend/app/seed.py) | Seeds the database with sample products and a default admin account on first startup |
-| [`routers/auth.py`](backend/app/routers/auth.py) | User registration and login endpoints |
-| [`routers/products.py`](backend/app/routers/products.py) | Public product listing and detail endpoints |
-| [`routers/cart.py`](backend/app/routers/cart.py) | Authenticated cart CRUD endpoints |
-| [`routers/orders.py`](backend/app/routers/orders.py) | Checkout (atomic) and order history endpoints |
-| [`routers/admin.py`](backend/app/routers/admin.py) | Admin-only product and order management endpoints |
+| [`src/app.js`](backend/src/app.js) | Express app creation, CORS middleware, router registration, lifespan startup database seeding |
+| [`src/config/settings.js`](backend/src/config/settings.js) | Settings loaded from environment variables |
+| [`src/db/supabase.js`](backend/src/db/supabase.js) | Supabase client initialization |
+| [`src/routes/`](backend/src/routes/) | Route controllers mounting points |
+| [`src/controllers/`](backend/src/controllers/) | Route request/response handler logic |
+| [`src/utils/seed.js`](backend/src/utils/seed.js) | Seeds the database with sample products, reviews, and customer/admin users |
 
 ---
 
@@ -161,7 +155,10 @@ All endpoints are prefixed with `/api`.
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
 | `POST` | `/api/auth/register` | Public | Register a new user |
-| `POST` | `/api/auth/token` | Public | Login & get JWT access token |
+| `POST` | `/api/auth/login` | Public | Login via JSON & get JWT access token |
+| `POST` | `/api/auth/token` | Public | Login via form-data (compat) & get JWT access token |
+| `GET` | `/api/auth/me` | 🔒 User | Get current user's profile |
+| `PUT` | `/api/auth/me` | 🔒 User | Update current user's profile |
 
 #### 🛍️ Products — `/api/products`
 | Method | Endpoint | Auth | Description |
@@ -191,12 +188,11 @@ All endpoints are prefixed with `/api`.
 | `GET` | `/api/admin/orders` | 🔑 Admin | View all customer orders |
 | `PUT` | `/api/admin/orders/{id}/status` | 🔑 Admin | Update an order's status |
 
-> 📖 Interactive API docs are available at: **`http://localhost:8000/docs`** (Swagger UI)
-
 ---
 
-### Database Models
+### Database Schema
 
+All database operations run against Supabase tables:
 ```
 users
   └── id (UUID PK), email, hashed_password, full_name, is_admin, created_at
@@ -251,32 +247,31 @@ order_items
 ## 🚀 Getting Started — Local Development
 
 ### Prerequisites
-- Python 3.11+
 - Node.js 20+
-- PostgreSQL 15 running locally
+- Supabase project credentials
 
 ### 1. Backend Setup
 
 ```bash
 cd backend
 
-# Create & activate virtual environment
-python -m venv venv
-venv\Scripts\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
-
 # Install dependencies
-pip install -r requirements.txt
+npm install
 
-# Configure the database (edit config.py or create .env)
-# DATABASE_URL=postgresql+asyncpg://postgres:<password>@localhost:5432/novacart
+# Configure the environment variables by editing or creating a .env file:
+# PORT=8000
+# ENVIRONMENT=development
+# JWT_SECRET=super-secret-key-change-in-production-123456
+# JWT_ALGORITHM=HS256
+# ACCESS_TOKEN_EXPIRE_MINUTES=1440
+# SUPABASE_URL=your-supabase-url
+# SUPABASE_SERVICE_KEY=your-supabase-service-key
 
 # Run the backend server
-uvicorn app.main:app --reload
+npm run dev
 ```
 
-> Backend will auto-create tables and seed data on first startup.
-> API docs available at: **http://localhost:8000/docs**
+> The backend automatically seeds initial data if running in a non-production environment.
 
 ### 2. Frontend Setup
 
@@ -296,7 +291,7 @@ npm run dev
 
 ## 🐳 Getting Started — Docker (Recommended)
 
-Run the entire stack (PostgreSQL + Backend + Frontend) with one command:
+Run the entire stack (Express Backend + Frontend) with one command:
 
 ```bash
 # From the project root
@@ -307,17 +302,10 @@ docker-compose up --build
 |---|---|
 | Frontend | http://localhost:3000 |
 | Backend API | http://localhost:8000 |
-| API Docs | http://localhost:8000/docs |
-| PostgreSQL | localhost:5432 |
 
 To stop all services:
 ```bash
 docker-compose down
-```
-
-To reset database data:
-```bash
-docker-compose down -v
 ```
 
 ---
@@ -327,10 +315,13 @@ docker-compose down -v
 Create a `.env` file in the `backend/` directory:
 
 ```env
-DATABASE_URL=postgresql+asyncpg://postgres:<password>@localhost:5432/novacart
-JWT_SECRET=your-very-strong-secret-key-here
-ALGORITHM=HS256
+PORT=8000
+ENVIRONMENT=development
+JWT_SECRET=super-secret-key-change-in-production-123456
+JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=1440
+SUPABASE_URL=your-supabase-url
+SUPABASE_SERVICE_KEY=your-supabase-service-key
 ```
 
 > ⚠️ **Never commit real secrets to version control.** The values in `config.py` are defaults for local development only.
@@ -355,12 +346,11 @@ ACCESS_TOKEN_EXPIRE_MINUTES=1440
 - 🔄 Update order statuses (Pending → Shipped → Delivered)
 
 ### Technical Highlights
-- ⚡ Fully **async** backend (FastAPI + SQLAlchemy async + asyncpg)
-- 🔒 Secure password hashing with **bcrypt**
-- 🪙 **JWT** with role claims (`is_admin`) for fine-grained access control
-- 🔄 Atomic **checkout transactions** with `SELECT FOR UPDATE` locking to prevent race conditions
-- 📄 Auto-generated **Swagger/OpenAPI** documentation
-- 🐳 Full **Docker Compose** setup for one-command deployment
+- ⚡ **Express + Node.js** async API layer
+- 🔒 Secure password hashing with **bcryptjs**
+- 🪙 **JWT** with role claims for access control
+- 📦 Direct integration with **Supabase** cloud client
+- 🐳 Full **Docker Compose** setup for backend & frontend
 - 🎨 Responsive dark-themed UI built with **Tailwind CSS**
 
 ---

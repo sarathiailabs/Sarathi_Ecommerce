@@ -23,7 +23,7 @@ export const ProductSearch: React.FC = () => {
   const [minRating, setMinRating] = useState(0)
   const [sortBy, setSortBy] = useState('newest')
 
-  const categories = ['Electronics', 'Home & Living', 'Fashion & Accessories', 'Sports & Fitness']
+  const categories = ['Electronics', 'Fashion', 'Home & Kitchen', 'Sports & Fitness', 'Beauty', 'Books']
 
   useEffect(() => {
     fetchProducts()
@@ -101,10 +101,12 @@ export const ProductSearch: React.FC = () => {
               placeholder="Search products..."
               value={searchQuery}
               onChange={handleSearch}
+              data-testid="search-page-input"
               className="w-full px-3 py-2 border border-gray-300 rounded mb-2"
             />
             <button
               type="submit"
+              data-testid="search-page-submit-btn"
               className="w-full bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700"
             >
               Search
@@ -117,6 +119,7 @@ export const ProductSearch: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={handleCategoryChange}
+              data-testid="search-page-category-select"
               className="w-full px-3 py-2 border border-gray-300 rounded"
             >
               <option value="">All Categories</option>
@@ -138,6 +141,7 @@ export const ProductSearch: React.FC = () => {
                   max="500"
                   value={priceRange[0]}
                   onChange={(e) => handlePriceChange('min', Number(e.target.value))}
+                  data-testid="search-page-price-min"
                   className="w-full"
                 />
               </div>
@@ -149,6 +153,7 @@ export const ProductSearch: React.FC = () => {
                   max="500"
                   value={priceRange[1]}
                   onChange={(e) => handlePriceChange('max', Number(e.target.value))}
+                  data-testid="search-page-price-max"
                   className="w-full"
                 />
               </div>
@@ -161,6 +166,7 @@ export const ProductSearch: React.FC = () => {
             <select
               value={minRating}
               onChange={(e) => setMinRating(Number(e.target.value))}
+              data-testid="search-page-rating-select"
               className="w-full px-3 py-2 border border-gray-300 rounded"
             >
               <option value={0}>All Ratings</option>
@@ -176,6 +182,7 @@ export const ProductSearch: React.FC = () => {
             <select
               value={sortBy}
               onChange={handleSortChange}
+              data-testid="search-page-sort-select"
               className="w-full px-3 py-2 border border-gray-300 rounded"
             >
               <option value="newest">Newest</option>
@@ -190,20 +197,24 @@ export const ProductSearch: React.FC = () => {
         {/* Products Grid */}
         <div className="lg:col-span-3">
           {loading ? (
-            <div className="text-center py-8">Loading products...</div>
+            <div data-testid="search-loading-state" className="text-center py-8">Loading products...</div>
           ) : products.length === 0 ? (
-            <div className="text-center py-8 text-gray-600">
+            <div data-testid="search-empty-state" className="text-center py-8 text-gray-600">
               No products found matching your criteria
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div data-testid="search-results-grid" className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {products.map((product) => (
                 <Link key={product.id} to={`/product/${product.id}`}>
-                  <div className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition">
+                  <div data-testid={`search-product-card-${product.id}`} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition">
                     <img
                       src={product.image_url}
                       alt={product.name}
                       className="w-full h-48 object-cover hover:opacity-75 transition"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80';
+                      }}
                     />
                     <div className="p-4">
                       <h3 className="font-semibold truncate">{product.name}</h3>

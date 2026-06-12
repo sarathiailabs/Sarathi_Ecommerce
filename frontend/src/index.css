@@ -52,6 +52,24 @@
   background: linear-gradient(to bottom, rgba(245, 158, 11, 0.7), rgba(234, 88, 12, 0.7));
 }
 
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
 /* ========================================
    GLASSMORPHISM LIGHT VARIANTS
    ======================================== */
@@ -151,6 +169,18 @@
   }
 }
 
+@keyframes slideInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 @keyframes scaleIn {
   from {
     opacity: 0;
@@ -249,6 +279,11 @@
 .animate-slide-in-left {
   animation: slideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.animate-slide-in-bottom {
+  animation: slideInBottom 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 
 .animate-scale-in {
   animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -647,230 +682,123 @@
 }
 
 /* ========================================
-   RETRO-POP & NEO-BRUTALIST EDITION SYSTEM
+   MODERN PREMIUM BRAND SYSTEM
    ======================================== */
 
-/* Body override for warm, beautiful, organic retro background */
 body {
-  background-color: #FAF6EE !important;
-  color: #1D1C1A !important;
-  background-image: none !important;
+  background-color: #F1F3F6;
+  color: #212121;
 }
 
-/* Base text overrides */
-.text-slate-900, .text-slate-800, .text-slate-700, .text-slate-600 {
-  color: #1D1C1A !important;
-}
 
-.text-slate-500, .text-slate-400 {
-  color: #615E59 !important;
-}
-
-/* Background overrides */
-.bg-white, [class~="bg-white/75"], [class~="bg-white/80"], [class~="bg-white/85"], [class~="bg-white/90"], [class~="bg-white/95"] {
-  background-color: #FFFFFF !important;
-  border: 3px solid #1D1C1A !important;
-}
-
-.bg-slate-50, .bg-slate-100, [class~="bg-slate-100/60"] {
-  background-color: #F3ECE0 !important;
-  border: 3px solid #1D1C1A !important;
-}
-
-/* Glass card becomes elegant flat neo-brutalist panel */
-.glass-card {
-  background: #FFFFFF !important;
-  backdrop-filter: none !important;
-  border: 3px solid #1D1C1A !important;
-  box-shadow: 4px 4px 0px 0px #1D1C1A !important;
-  border-radius: 24px !important;
-}
-
-.glass-card:hover {
-  background: #FFFFFF !important;
-  border-color: #1D1C1A !important;
-  box-shadow: 7px 7px 0px 0px #1D1C1A !important;
-  transform: translate(-3px, -3px) !important;
-}
-
-/* Luxury premium pod becomes tactile butterscotch/yellow pod */
-.glass-premium {
-  background: #FAF6EE !important;
-  border: 3px solid #1D1C1A !important;
-  box-shadow: 4px 4px 0px 0px #1D1C1A !important;
-  border-radius: 20px !important;
-}
-
-.glass-premium:hover {
-  box-shadow: 6px 6px 0px 0px #1D1C1A !important;
-  transform: translate(-2px, -2px);
-}
-
-/* Announcement Banner Retro Theme */
-.announcement-banner {
-  background: #E1392A !important;
-  border-bottom: 3px solid #1D1C1A !important;
-}
-
-/* Input Fields styling overrides in Retro Pop theme */
-.input-field {
-  background-color: #FFFFFF !important;
-  color: #1D1C1A !important;
-  border: 3px solid #1D1C1A !important;
-  box-shadow: 3px 3px 0px 0px #1D1C1A !important;
-  border-radius: 12px !important;
-}
-
-.input-field:focus {
-  border-color: #E1392A !important;
-  box-shadow: 5px 5px 0px 0px #1D1C1A !important;
-  transform: translate(-2px, -2px);
-}
-
-.input-field::placeholder {
-  color: #A5A199 !important;
-}
-
-/* Button overrides - Neo-Brutalist Red & Butterscotch */
+/* Custom Flipkart-style primary/secondary overrides */
 .btn-primary {
-  background: #E1392A !important;
-  color: #FFFFFF !important;
-  border: 3px solid #1D1C1A !important;
-  box-shadow: 4px 4px 0px 0px #1D1C1A !important;
-  border-radius: 16px !important;
-  transition: all 0.2s ease !important;
+  @apply bg-[#2874F0] text-white font-semibold rounded-sm shadow-sm transition-all duration-150;
+  border: none !important;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1) !important;
 }
-
 .btn-primary:hover {
-  background: #C92F22 !important;
-  box-shadow: 2px 2px 0px 0px #1D1C1A !important;
-  transform: translate(2px, 2px) !important;
+  @apply bg-[#1e5ecb] scale-[1.01];
 }
-
 .btn-primary * {
   color: #FFFFFF !important;
 }
 
 .btn-secondary {
-  background: #FAF6EE !important;
-  color: #1D1C1A !important;
-  border: 3px solid #1D1C1A !important;
-  box-shadow: 4px 4px 0px 0px #1D1C1A !important;
-  border-radius: 16px !important;
-  transition: all 0.2s ease !important;
+  @apply bg-[#FF9F00] text-white font-semibold rounded-sm shadow-sm transition-all duration-150;
+  border: none !important;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1) !important;
 }
-
 .btn-secondary:hover {
-  background: #F3ECE0 !important;
-  box-shadow: 2px 2px 0px 0px #1D1C1A !important;
-  transform: translate(2px, 2px) !important;
+  @apply bg-[#e68f00] scale-[1.01];
 }
 
-.btn-ghost {
-  color: #1D1C1A !important;
-  border-radius: 12px !important;
+/* Rating badge */
+.rating-badge {
+  @apply bg-[#388E3C] text-white font-bold text-xs px-1.5 py-0.5 rounded-sm flex items-center gap-0.5;
 }
 
-.btn-ghost:hover {
-  background-color: #F3ECE0 !important;
+/* Search bar styling */
+.nav-search-input {
+  @apply w-full pl-4 pr-10 py-2 bg-white text-slate-800 text-sm border-0 focus:outline-none placeholder-slate-400 focus:ring-0;
 }
 
-/* Borders & Dividing lines */
-.border-slate-100, .border-slate-200, .border-slate-300, 
-[class~="border-slate-200/60"], [class~="border-slate-200/80"], 
-[class~="border-slate-100/60"], [class~="border-slate-200/50"], 
-[class~="border-slate-200/40"] {
-  border-color: #1D1C1A !important;
+/* Category Navigation strip */
+.category-strip-item {
+  @apply flex flex-col items-center gap-1.5 text-xs font-semibold text-slate-800 hover:text-[#2874F0] transition-colors cursor-pointer;
+}
+
+/* Standard Premium Glass Cards overrides */
+.glass-card {
+  background: #FFFFFF !important;
+  backdrop-filter: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08) !important;
+  border-radius: 4px !important;
+}
+
+.glass-card:hover {
+  background: #FFFFFF !important;
+  border-color: rgba(40, 116, 240, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+.glass-premium {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08) !important;
+  border-radius: 4px !important;
+}
+
+.input-field {
+  background-color: #FFFFFF !important;
+  color: #212121 !important;
+  border: 1px solid #e0e0e0 !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+}
+
+.input-field:focus {
+  border-color: #2874F0 !important;
+  outline: none !important;
 }
 
 .divider {
-  border-top: 3px solid #1D1C1A !important;
-}
-
-/* Navigation overrides */
-nav.sticky {
-  background-color: #FAF6EE !important;
-  border-bottom: 3px solid #1D1C1A !important;
+  border-top: 1px solid #e0e0e0 !important;
 }
 
 /* Badges styling */
 .badge-pending {
-  background: #F3B23A !important;
-  color: #1D1C1A !important;
-  border: 2px solid #1D1C1A !important;
+  background: #fff9eb !important;
+  color: #ff9f00 !important;
+  border: 1px solid #ffe0b2 !important;
 }
 
 .badge-processing {
-  background: #3A8E7D !important;
-  color: #FFFFFF !important;
-  border: 2px solid #1D1C1A !important;
+  @apply bg-blue-50 text-blue-600 border border-blue-100;
 }
 
 .badge-shipped {
-  background: #9061F9 !important;
-  color: #FFFFFF !important;
-  border: 2px solid #1D1C1A !important;
+  @apply bg-purple-50 text-purple-600 border border-purple-100;
 }
 
 .badge-delivered {
-  background: #4CA794 !important;
-  color: #FFFFFF !important;
-  border: 2px solid #1D1C1A !important;
+  @apply bg-emerald-50 text-emerald-600 border border-emerald-100;
 }
 
 .badge-cancelled {
-  background: #E1392A !important;
-  color: #FFFFFF !important;
-  border: 2px solid #1D1C1A !important;
-}
-
-/* Tilted polaroid lifestyle image cards */
-.polaroid-card {
-  background-color: #FFFFFF !important;
-  border: 3px solid #1D1C1A !important;
-  padding: 12px 12px 24px 12px !important;
-  box-shadow: 6px 6px 0px 0px #1D1C1A !important;
-  transition: all 0.3s ease !important;
-}
-
-.polaroid-card:hover {
-  transform: rotate(0deg) scale(1.05) !important;
-  box-shadow: 8px 8px 0px 0px #1D1C1A !important;
-  z-index: 20;
-}
-
-/* Custom Text Outline Utility for CRAV style overlapping header */
-.text-shadow-stroke {
-  color: #E1392A !important;
-  -webkit-text-stroke: 2px #FFFFFF;
-  text-shadow: 4px 4px 0px #1D1C1A;
-}
-
-/* Handdrawn cute sticker labels */
-.sticker-label {
-  background: #F5B025 !important;
-  color: #1D1C1A !important;
-  border: 3px solid #1D1C1A !important;
-  box-shadow: 3px 3px 0px 0px #1D1C1A !important;
-  font-weight: 900 !important;
-  text-transform: uppercase;
-}
-
-/* Star rating overrides */
-.star-filled {
-  color: #F5B025 !important;
+  @apply bg-red-50 text-red-600 border border-red-100;
 }
 
 /* ─── Hero Slider ──────────────────────────────────────── */
 
-/* Hide default Swiper arrows & bullets (we use custom ones) */
 .hero-swiper .swiper-button-next,
 .hero-swiper .swiper-button-prev,
 .hero-swiper .swiper-pagination {
   display: none !important;
 }
 
-/* Autoplay progress bar animation */
 @keyframes hero-progress {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
@@ -880,21 +808,19 @@ nav.sticky {
   animation: hero-progress 4.5s linear forwards;
 }
 
-/* Floating product image on active slide */
 @keyframes hero-float {
-  0%, 100% { transform: translateY(0px) rotate(-1deg); }
-  50%       { transform: translateY(-12px) rotate(1deg); }
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
 }
 
 .hero-slide-image {
   animation: hero-float 5s ease-in-out infinite;
 }
 
-/* Slide-in text animation */
 @keyframes hero-slide-up {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -903,17 +829,15 @@ nav.sticky {
 }
 
 .swiper-slide-active .hero-text-animate {
-  animation: hero-slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: hero-slide-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Stagger children of active slide */
 .swiper-slide-active .hero-text-animate:nth-child(1) { animation-delay: 0.05s; }
 .swiper-slide-active .hero-text-animate:nth-child(2) { animation-delay: 0.15s; }
 .swiper-slide-active .hero-text-animate:nth-child(3) { animation-delay: 0.25s; }
 .swiper-slide-active .hero-text-animate:nth-child(4) { animation-delay: 0.35s; }
 .swiper-slide-active .hero-text-animate:nth-child(5) { animation-delay: 0.45s; }
 
-/* Ensure fade effect works correctly */
 .hero-swiper.swiper-fade .swiper-slide {
   pointer-events: none;
 }

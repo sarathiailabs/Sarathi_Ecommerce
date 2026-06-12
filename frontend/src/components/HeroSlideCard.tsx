@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ShoppingBag, Zap } from 'lucide-react'
 import { HeroSlide } from '../data/heroSlides'
@@ -9,12 +9,8 @@ interface HeroSlideCardProps {
 }
 
 export const HeroSlideCard: React.FC<HeroSlideCardProps> = ({ slide, isActive }) => {
-  const imageRef = useRef<HTMLImageElement>(null)
-
-  // Removed active image transform animation for a static display
-
   return (
-    <div className="relative w-full h-full overflow-hidden select-none">
+    <div className="relative w-full h-full overflow-hidden select-none bg-slate-50">
       {/* Layered gradient background */}
       <div
         className={`absolute inset-0 bg-gradient-to-br ${slide.gradientFrom} ${slide.gradientVia} ${slide.gradientTo}`}
@@ -28,120 +24,76 @@ export const HeroSlideCard: React.FC<HeroSlideCardProps> = ({ slide, isActive })
         }}
       />
 
-      {/* Top-left ambient glow */}
-      <div
-        className="absolute -top-20 -left-20 w-96 h-96 rounded-full pointer-events-none opacity-30"
-        style={{
-          background: `radial-gradient(circle, ${slide.glowColor}, transparent 70%)`,
-          filter: 'blur(40px)',
-        }}
-      />
-
-      {/* Animated grid / mesh overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
-        }}
-      />
-
       {/* Content wrapper */}
       <div className="relative z-10 h-full flex flex-col md:flex-row items-center justify-between px-6 sm:px-10 lg:px-16 py-8 gap-6">
 
         {/* ── LEFT: Text content ── */}
-        <div className="flex-1 flex flex-col gap-4 md:gap-5 max-w-xl text-center md:text-left">
+        <div className="flex-1 flex flex-col gap-3 md:gap-4 max-w-xl text-center md:text-left">
 
           {/* Badge */}
           <div className="flex justify-center md:justify-start">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/5 text-white border border-white/10 backdrop-blur-sm shadow-inner">
-              <Zap size={11} className={slide.accentColor} />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm text-[10px] font-bold bg-white/80 text-slate-800 border border-slate-200 shadow-xs uppercase tracking-wider">
+              <Zap size={10} className={slide.accentColor} />
               {slide.badge}
             </span>
           </div>
 
           {/* Headline */}
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold text-white leading-tight tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-slate-800 leading-tight tracking-tight">
             {slide.title}{' '}
-            <span
-              className={`${slide.accentColor} bg-clip-text`}
-              style={{
-                backgroundImage: `linear-gradient(135deg, currentColor, rgba(255,255,255,0.8))`,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
+            <span className={slide.accentColor}>
               {slide.titleHighlight}
             </span>
           </h2>
 
           {/* Subtitle */}
-          <p className="text-slate-300/80 text-sm sm:text-base leading-relaxed max-w-md mx-auto md:mx-0">
+          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-md mx-auto md:mx-0 font-medium">
             {slide.subtitle}
           </p>
 
           {/* Category tag */}
           <div className="flex justify-center md:justify-start">
-            <span className="text-[10px] uppercase tracking-widest font-semibold text-slate-500 border-l-2 border-purple-500/50 pl-2">
+            <span className="text-[9px] uppercase tracking-widest font-bold text-slate-400 border-l-2 border-[#2874F0] pl-2">
               {slide.tag} Collection
             </span>
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-1">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
             <Link
               to={slide.ctaLink}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-700/30 hover:shadow-purple-500/40 hover:scale-[1.04] active:scale-[0.97] transition-all duration-200"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-sm text-xs font-bold bg-[#2874F0] hover:bg-[#1e5ecb] text-white shadow-xs transition-colors"
             >
-              <ShoppingBag size={15} />
+              <ShoppingBag size={13} />
               {slide.ctaText}
             </Link>
             <Link
               to={slide.secondaryCtaLink}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-semibold bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 hover:border-white/20 backdrop-blur-sm hover:scale-[1.03] active:scale-[0.97] transition-all duration-200"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-sm text-xs font-bold bg-[#FF9F00] hover:bg-[#e68f00] text-white shadow-xs transition-colors"
             >
               {slide.secondaryCtaText}
-              <ArrowRight size={14} />
+              <ArrowRight size={13} />
             </Link>
           </div>
         </div>
 
         {/* ── RIGHT: Product image ── */}
-        <div className="flex-shrink-0 relative flex items-center justify-center w-56 h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96">
+        <div className="flex-shrink-0 relative flex items-center justify-center w-48 h-48 sm:w-60 sm:h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80">
           {/* Glow disc behind image */}
           <div
-            className="absolute inset-4 rounded-full opacity-50 blur-3xl"
+            className="absolute inset-4 rounded-full opacity-40 blur-3xl"
             style={{ background: slide.glowColor }}
-          />
-
-          {/* Floating ring decoration */}
-          <div
-            className="absolute inset-0 rounded-full border opacity-10"
-            style={{ borderColor: slide.glowColor }}
-          />
-          <div
-            className="absolute inset-8 rounded-full border opacity-5"
-            style={{ borderColor: slide.glowColor }}
           />
 
           {/* Product image */}
           <img
-            ref={imageRef}
             src={slide.image}
             alt={slide.imageAlt}
             loading="eager"
-            className="relative z-10 w-full h-full object-contain drop-shadow-2xl"
-            style={{
-              filter: `drop-shadow(0 20px 40px ${slide.glowColor})`,
-            }}
+            className="relative z-10 w-full h-full object-contain hero-slide-image drop-shadow-lg"
           />
         </div>
       </div>
-
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-slate-950/60 to-transparent pointer-events-none" />
     </div>
   )
 }

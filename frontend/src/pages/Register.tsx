@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Mail, Lock, User as UserIcon, UserPlus, AlertCircle,
-  CheckCircle, Eye, EyeOff, Zap, ArrowRight, Check, X
+  CheckCircle, Eye, EyeOff, ArrowRight, Check, X
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
@@ -79,85 +79,102 @@ export const Register: React.FC = () => {
 
   if (success) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="min-h-[calc(100vh-130px)] flex items-center justify-center px-6 bg-slate-50"
-      >
-        <div className="max-w-md w-full text-center space-y-6 bg-white p-8 rounded-3xl border border-slate-200/60 shadow-xl">
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
-            className="w-24 h-24 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center mx-auto shadow-xl shadow-amber-500/15"
-          >
-            <CheckCircle size={48} className="text-white-force" />
-          </motion.div>
+      <div data-testid="register-success-state" className="min-h-[calc(100vh-130px)] flex items-center justify-center px-6 bg-[#F1F3F6] select-none">
+        <div className="max-w-md w-full text-center space-y-5 bg-white p-8 rounded-sm border border-slate-200 shadow-md">
+          <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-[#388E3C] shadow-sm">
+            <CheckCircle size={32} />
+          </div>
           <div>
-            <h2 className="text-3xl font-extrabold text-slate-800 mb-2">Account Created!</h2>
-            <p className="text-slate-500 text-sm leading-relaxed font-semibold">
-              Welcome to Prathazon, {fullName}! Your account is ready. Redirecting you to sign in...
+            <h2 className="text-xl font-bold text-slate-800">Account Created!</h2>
+            <p className="text-slate-450 text-xs font-semibold leading-relaxed mt-2">
+              Welcome to Sarathi Store, {fullName}! Redirecting to login page...
             </p>
           </div>
-          <Link to="/login" className="btn-primary inline-flex text-sm px-7 py-3.5 w-full">
+          <Link to="/login" data-testid="register-login-btn" className="w-full py-2.5 bg-[#2874F0] hover:bg-[#1e5ecb] text-white text-xs font-bold rounded-sm uppercase tracking-wider block transition-colors shadow-xs">
             Sign In Now
-            <ArrowRight size={16} />
           </Link>
         </div>
-      </motion.div>
+      </div>
     )
   }
 
   return (
-    <div data-page="register" className="min-h-[calc(100vh-130px)] flex bg-[#FAF6EE] border-b-3 border-[#1D1C1A]">
-      {/* LEFT: Form Panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#FAF6EE]">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full max-w-md"
-        >
-          {/* Mobile logo */}
-          <Link to="/" className="lg:hidden flex items-center gap-2.5 mb-8">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center">
-              <Zap size={16} className="text-white-force" fill="white" />
-            </div>
-            <span className="text-lg font-extrabold text-slate-800">Prathazon</span>
-          </Link>
+    <div data-page="register" className="min-h-[calc(100vh-130px)] flex bg-[#F1F3F6] py-8 select-none justify-center items-center">
+      <div className="w-full max-w-4xl bg-white rounded-sm border border-slate-200 shadow-md flex overflow-hidden min-h-[580px]">
+        {/* LEFT: Perks Panel (Flipkart Blue) */}
+        <div className="brand-panel hidden md:flex flex-col w-[38%] bg-[#2874F0] text-white p-10 justify-between relative overflow-hidden">
+          <div className="space-y-6">
+            <Link to="/" className="inline-flex items-center gap-2">
+              <img
+                src="/sarathi-logo.jpg"
+                alt="Sarathi Logo"
+                className="h-10 w-10 object-contain rounded-full border border-white/35 bg-white shadow-md"
+              />
+              <span className="text-lg font-bold text-white">Sarathi Store</span>
+            </Link>
 
-          <div className="mb-8">
-            <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Create Account</h1>
-            <p className="text-slate-500 text-sm font-medium">
-              Already have an account?{' '}
-              <Link to="/login" className="text-amber-600 hover:text-amber-700 font-bold transition-colors">
+            <div className="space-y-2 pt-4">
+              <h2 className="text-2xl font-extrabold leading-snug">Sign Up</h2>
+              <p className="text-slate-200 text-xs font-semibold leading-relaxed">
+                Enjoy early product sales, priority carrier tracking, and secure checkouts.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-3 pt-6">
+            {PERKS.map((perk, i) => (
+              <div key={i} className="bg-white/10 rounded-sm p-3 border border-white/5 text-xs font-semibold leading-snug">
+                {perk}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT: Form Panel */}
+        <div className="flex-1 flex flex-col justify-center px-6 py-6 md:px-12">
+          {/* Mobile brand header */}
+          <div className="md:hidden flex flex-col items-center mb-4">
+            <img
+              src="/sarathi-logo.jpg"
+              alt="Sarathi Logo"
+              className="h-10 w-10 object-contain rounded-full border border-slate-200 bg-white mb-1"
+            />
+            <span className="text-base font-bold text-slate-800">Sarathi Store</span>
+          </div>
+
+          <div className="mb-4">
+            <h1 className="text-xl font-extrabold text-slate-800">Create Account</h1>
+            <p className="text-slate-400 text-xs font-semibold mt-1">
+              Already registered?{' '}
+              <Link to="/login" className="text-[#2874F0] hover:underline font-bold">
                 Sign in instead
               </Link>
             </p>
           </div>
 
-          {/* Error */}
+          {/* Alert Message */}
           <AnimatePresence>
             {errorMsg && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
+                id="register-error-alert"
                 data-testid="register-error-msg"
-                className="flex items-start gap-3 p-4 mb-5 rounded-xl border border-red-200 bg-red-50 text-red-800 text-sm shadow-sm"
+                className="flex items-start gap-2.5 p-3 mb-4 rounded-sm border border-red-200 bg-red-50 text-red-800 text-xs"
               >
-                <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+                <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
                 <span className="font-semibold">{errorMsg}</span>
               </motion.div>
             )}
           </AnimatePresence>
 
-          <form data-testid="register-form" onSubmit={handleSubmit} className="space-y-4">
+          <form data-testid="register-form" onSubmit={handleSubmit} className="space-y-3.5">
             {/* Full Name */}
-            <div className="space-y-1.5">
-              <label htmlFor="register-name" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Full Name</label>
+            <div className="space-y-1">
+              <label htmlFor="register-name" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Full Name</label>
               <div className="relative">
-                <UserIcon size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <UserIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-455 pointer-events-none" />
                 <input
                   id="register-name"
                   data-testid="register-name-input"
@@ -165,17 +182,18 @@ export const Register: React.FC = () => {
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="John Doe"
-                  className="input-field input-with-icon-left shadow-sm"
+                  aria-describedby={errorMsg ? 'register-error-alert' : undefined}
+                  placeholder="enter full name"
+                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
                 />
               </div>
             </div>
 
             {/* Email */}
-            <div className="space-y-1.5">
-              <label htmlFor="register-email" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Email Address</label>
+            <div className="space-y-1">
+              <label htmlFor="register-email" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Address</label>
               <div className="relative">
-                <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-455 pointer-events-none" />
                 <input
                   id="register-email"
                   data-testid="register-email-input"
@@ -183,38 +201,40 @@ export const Register: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="input-field input-with-icon-left shadow-sm"
+                  aria-describedby={errorMsg ? 'register-error-alert' : undefined}
+                  placeholder="enter email address"
+                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
                 />
               </div>
             </div>
 
             {/* Account Role */}
-            <div className="space-y-1.5">
-              <label htmlFor="register-role" className="block text-xs font-black text-[#1D1C1A] uppercase tracking-wider">Account Role</label>
+            <div className="space-y-1">
+              <label htmlFor="register-role" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Account Role</label>
               <div className="relative">
                 <select
                   id="register-role"
                   data-testid="register-role-select"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full px-4 py-3.5 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold placeholder-[#A5A199] outline-none focus:bg-[#FAF6EE] appearance-none cursor-pointer pr-10 shadow-[2px_2px_0px_0px_#1D1C1A]"
+                  aria-describedby={errorMsg ? 'register-error-alert' : undefined}
+                  className="w-full px-3 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 focus:outline-none focus:border-[#2874F0] appearance-none cursor-pointer pr-10"
                 >
                   <option value="customer">Customer / Buyer</option>
                   <option value="shop_owner">Shop Owner / Seller</option>
                   <option value="delivery_partner">Delivery Partner / Carrier</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#1D1C1A] font-bold">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-slate-500 text-[10px]">
                   ▼
                 </div>
               </div>
             </div>
 
             {/* Password */}
-            <div className="space-y-1.5">
-              <label htmlFor="register-password" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Password</label>
+            <div className="space-y-1">
+              <label htmlFor="register-password" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Password</label>
               <div className="relative">
-                <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-450 pointer-events-none" />
                 <input
                   id="register-password"
                   data-testid="register-password-input"
@@ -222,65 +242,52 @@ export const Register: React.FC = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create a strong password"
-                  className="input-field input-with-icon-left input-with-icon-right shadow-sm"
+                  placeholder="create password"
+                  className="w-full pl-9 pr-9 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
                 />
                 <button
                   type="button"
                   data-testid="register-show-password-btn"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
 
-              {/* Strength meter */}
+              {/* Password strength indicators */}
               {password && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="space-y-2"
-                >
+                <div className="space-y-1.5 mt-1">
                   <div className="flex gap-1">
                     {[1, 2, 3, 4].map((i) => (
                       <div
                         key={i}
-                        className={`flex-1 h-1 rounded-full transition-all duration-300 ${
+                        className={`flex-grow h-1 rounded-sm transition-colors duration-200 ${
                           i <= strength.score ? strength.color : 'bg-slate-200'
                         }`}
                       />
                     ))}
                   </div>
-                  {strength.label && (
-                    <p className={`text-xs font-extrabold ${
-                      strength.score <= 1 ? 'text-red-500' :
-                      strength.score === 2 ? 'text-orange-500' :
-                      strength.score === 3 ? 'text-amber-500' : 'text-emerald-600'
-                    }`}>
-                      Password strength: {strength.label}
-                    </p>
-                  )}
-                  <div className="grid grid-cols-2 gap-1.5 pt-0.5">
+                  <div className="grid grid-cols-2 gap-1.5">
                     {PASSWORD_RULES.map((rule) => {
                       const passes = rule.test(password)
                       return (
-                        <div key={rule.label} className={`flex items-center gap-1.5 text-[10px] font-bold ${passes ? 'text-emerald-600' : 'text-slate-400'}`}>
-                          {passes ? <Check size={11} className="text-emerald-500" /> : <X size={11} className="text-slate-300" />}
+                        <div key={rule.label} className={`flex items-center gap-1 text-[9px] font-bold ${passes ? 'text-emerald-600' : 'text-slate-400'}`}>
+                          {passes ? <Check size={10} className="text-emerald-500" /> : <X size={10} className="text-slate-350" />}
                           {rule.label}
                         </div>
                       )
                     })}
                   </div>
-                </motion.div>
+                </div>
               )}
             </div>
 
             {/* Confirm Password */}
-            <div className="space-y-1.5">
-              <label htmlFor="register-confirm-password" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Confirm Password</label>
+            <div className="space-y-1">
+              <label htmlFor="register-confirm-password" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Confirm Password</label>
               <div className="relative">
-                <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-450 pointer-events-none" />
                 <input
                   id="register-confirm-password"
                   data-testid="register-confirm-password-input"
@@ -288,104 +295,40 @@ export const Register: React.FC = () => {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Re-enter your password"
-                  className={`input-field input-with-icon-left input-with-icon-right shadow-sm ${
-                    confirmPassword && password !== confirmPassword ? 'border-red-500 focus:border-red-600' :
-                    confirmPassword && password === confirmPassword ? 'border-emerald-500' : ''
+                  placeholder="re-enter password"
+                  className={`w-full pl-9 pr-9 py-2 border bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0] ${
+                    confirmPassword && password !== confirmPassword ? 'border-red-500 focus:border-red-650' :
+                    confirmPassword && password === confirmPassword ? 'border-emerald-500 focus:border-emerald-600' : 'border-slate-350'
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                 >
-                  {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showConfirm ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
-              {confirmPassword && password !== confirmPassword && (
-                <p className="text-xs text-red-500 flex items-center gap-1 font-bold">
-                  <X size={11} />
-                  Passwords do not match
-                </p>
-              )}
-              {confirmPassword && password === confirmPassword && (
-                <p className="text-xs text-emerald-600 flex items-center gap-1 font-bold">
-                  <Check size={11} />
-                  Passwords match
-                </p>
-              )}
             </div>
 
-            <motion.button
+            <button
               id="register-submit-btn"
               data-testid="register-submit-btn"
               type="submit"
               disabled={submitting}
-              whileTap={{ scale: 0.98 }}
-              className="w-full btn-primary py-4 text-sm disabled:opacity-60 disabled:cursor-wait mt-2"
+              className="w-full py-2.5 bg-[#FF9F00] hover:bg-[#e68f00] text-white text-xs font-bold rounded-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5"
             >
-              <UserPlus size={16} />
-              {submitting ? 'Creating Account...' : 'Create Account'}
-              {!submitting && <ArrowRight size={15} />}
-            </motion.button>
+              <UserPlus size={13} />
+              <span>{submitting ? 'Creating Account...' : 'Register'}</span>
+            </button>
           </form>
 
-          <p className="text-[11px] text-slate-400 text-center mt-5 leading-normal font-semibold">
+          <p className="text-[10px] text-slate-400 text-center mt-4 leading-normal font-semibold">
             By creating an account, you agree to our{' '}
-            <span className="text-slate-500 hover:text-amber-700 cursor-pointer transition-colors font-bold underline">Terms of Service</span>
+            <span className="text-slate-500 hover:underline cursor-pointer">Terms</span>
             {' '}and{' '}
-            <span className="text-slate-500 hover:text-amber-700 cursor-pointer transition-colors font-bold underline">Privacy Policy</span>.
+            <span className="text-slate-500 hover:underline cursor-pointer">Privacy</span>.
           </p>
-        </motion.div>
-      </div>
-
-      {/* RIGHT: Perks Panel */}
-      <div className="brand-panel hidden lg:flex flex-col w-[42%] relative overflow-hidden border-l border-slate-200/60 bg-gradient-to-br from-amber-50/40 via-slate-50 to-slate-100">
-        <div className="absolute top-1/4 right-0 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-amber-600/8 rounded-full blur-3xl" />
-
-        <div className="relative flex flex-col justify-center flex-1 px-12">
-          <div className="mb-10">
-            <span className="text-xs font-extrabold text-amber-600 uppercase tracking-widest bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/50 shadow-sm">Join Today</span>
-            <h2 className="text-4xl font-extrabold text-slate-900 leading-tight mt-4">
-              Get Exclusive<br />
-              <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                Member Benefits
-              </span>
-            </h2>
-            <p className="text-slate-500 text-sm mt-3 leading-relaxed font-semibold">
-              Create your free account and unlock a world of premium shopping privileges.
-            </p>
-          </div>
-
-          <div className="space-y-4 mb-10">
-            {PERKS.map((perk, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 15 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + i * 0.1 }}
-                className="flex items-center gap-4 bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm"
-              >
-                <span className="text-xl">{perk.split(' ')[0]}</span>
-                <span className="text-sm text-slate-700 font-bold">{perk.slice(perk.indexOf(' ') + 1)}</span>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              { value: '50K+', label: 'Members' },
-              { value: '4.9★', label: 'App Rating' },
-              { value: '₹2Cr+', label: 'Savings' },
-            ].map((stat) => (
-              <div key={stat.label} className="bg-white border border-slate-200/80 rounded-2xl p-3 text-center shadow-sm">
-                <div className="text-lg font-extrabold text-amber-600">{stat.value}</div>
-                <div className="text-[10px] text-slate-500 font-bold mt-0.5">{stat.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>

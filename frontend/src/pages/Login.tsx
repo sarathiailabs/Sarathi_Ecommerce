@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Mail, Lock, LogIn, AlertCircle, Eye, EyeOff, Zap, Shield, Star, ArrowRight } from 'lucide-react'
+import { Mail, Lock, LogIn, AlertCircle, Eye, EyeOff, Shield, Star, Zap, ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 
@@ -39,155 +39,88 @@ export const Login: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false)
 
   return (
-    <div data-page="login" data-testid="login-page" className="min-h-[calc(100vh-130px)] flex bg-[#FAF6EE] border-b-3 border-[#1D1C1A]">
-      {/* LEFT: Branding Panel */}
-      <div className="brand-panel hidden lg:flex flex-col w-[45%] relative overflow-hidden border-r border-slate-100 bg-gradient-to-br from-amber-50/50 via-slate-50 to-slate-100">
-        {/* Background */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-amber-400/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/8 rounded-full blur-3xl" />
-        
-        {/* Animated grid */}
-        <div
-          className="absolute inset-0 opacity-[0.015]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(245,158,11,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.5) 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-          }}
-        />
-
-        <div className="relative flex flex-col justify-center flex-1 px-12">
-          {/* Logo */}
-          <Link to="/" className="inline-flex items-center gap-3 mb-14">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/15">
-              <Zap size={20} className="text-white-force" fill="white" />
-            </div>
-<<<<<<< HEAD
-            <span className="text-xl font-extrabold text-slate-800 tracking-tight">Prathazon</span>
-=======
-          </div>
-
-          <div className="space-y-1.5">
-            <div className="flex justify-between items-center">
-              <label className="text-xs font-semibold text-slate-355">Password</label>
-              <Link to="/forgot-password" className="text-xs text-purple-400 hover:underline">
-                Forgot Password?
-              </Link>
-            </div>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
-                <Lock size={16} />
-              </span>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-3 bg-slate-900/60 border border-white/10 rounded-xl text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+    <div data-page="login" data-testid="login-page" className="min-h-[calc(100vh-130px)] flex bg-[#F1F3F6] py-12 select-none justify-center items-center">
+      <div className="w-full max-w-4xl bg-white rounded-sm border border-slate-200 shadow-md flex overflow-hidden min-h-[500px]">
+        {/* LEFT: Branding Panel (Blue Flipkart-like side panel) */}
+        <div className="brand-panel hidden md:flex flex-col w-[40%] bg-[#2874F0] text-white p-10 justify-between relative overflow-hidden">
+          <div className="space-y-6">
+            <Link to="/" className="inline-flex items-center gap-2">
+              <img
+                src="/sarathi-logo.jpg"
+                alt="Sarathi Logo"
+                className="h-10 w-10 object-contain rounded-full border border-white/35 bg-white shadow-md"
               />
+              <span className="text-lg font-bold text-white">Sarathi Store</span>
+            </Link>
+
+            <div className="space-y-2 pt-6">
+              <h2 className="text-2xl font-extrabold leading-snug">Login</h2>
+              <p className="text-slate-200 text-xs font-semibold leading-relaxed">
+                Get access to your Orders, Wishlist and Recommendations.
+              </p>
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full py-3.5 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-600/10 hover:shadow-purple-500/20 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2"
-          >
-            <LogIn size={16} />
-            {submitting ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-
-        {/* Footer */}
-        <div className="text-center text-xs text-slate-400 pt-2 border-t border-white/5">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-purple-400 hover:underline font-semibold">
-            Create Account
->>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
-          </Link>
-
-          <h2 className="text-4xl font-extrabold text-slate-900 leading-tight mb-4">
-            Welcome back to<br />
-            <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-              Elite Shopping
-            </span>
-          </h2>
-          <p className="text-slate-500 leading-relaxed mb-10 text-sm font-medium">
-            Sign in to access your curated product catalog, track orders, and enjoy personalized recommendations.
-          </p>
-
-          {/* Feature list */}
           <div className="space-y-4">
             {FEATURES.map((f, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + i * 0.1 }}
-                className="flex items-center gap-3.5"
-              >
-                <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0">
+              <div key={i} className="flex items-center gap-2.5 text-xs font-bold text-slate-100">
+                <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white flex-shrink-0">
                   {f.icon}
                 </div>
-                <span className="text-sm font-bold text-slate-700">{f.text}</span>
-              </motion.div>
+                <span>{f.text}</span>
+              </div>
             ))}
           </div>
         </div>
-      </div>
 
-      {/* RIGHT: Form Panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#FAF6EE]">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full max-w-md"
-        >
-          {/* Mobile logo */}
-          <Link to="/" className="lg:hidden flex items-center gap-2.5 mb-8">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center">
-              <Zap size={16} className="text-white-force" fill="white" />
-            </div>
-            <span className="text-lg font-extrabold text-slate-800">Prathazon</span>
-          </Link>
+        {/* RIGHT: Form Panel */}
+        <div className="flex-1 flex flex-col justify-center px-6 py-8 md:px-12">
+          {/* Mobile brand logo header */}
+          <div className="md:hidden flex flex-col items-center mb-6">
+            <img
+              src="/sarathi-logo.jpg"
+              alt="Sarathi Logo"
+              className="h-12 w-12 object-contain rounded-full border border-slate-200 bg-white mb-2"
+            />
+            <span className="text-base font-bold text-slate-800">Sarathi Store</span>
+          </div>
 
-          <div className="mb-8">
-            <h1 className="text-3xl font-extrabold text-slate-900 mb-2" data-testid="login-heading">Sign In</h1>
-            <p className="text-slate-500 text-sm font-medium">
-              New to Prathazon?{' '}
-              <Link to="/register" data-testid="login-register-link" className="text-amber-600 hover:text-amber-700 font-bold transition-colors">
+          <div className="mb-6">
+            <h1 className="text-xl font-extrabold text-slate-800" data-testid="login-heading">Sign In</h1>
+            <p className="text-slate-400 text-xs font-semibold mt-1">
+              New to Sarathi Store?{' '}
+              <Link to="/register" data-testid="login-register-link" className="text-[#2874F0] hover:underline">
                 Create a free account
               </Link>
             </p>
           </div>
 
-          {/* Error message in pastel style */}
+          {/* Alert Message */}
           <AnimatePresence>
             {errorMsg && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
+                id="login-error-alert"
                 data-testid="login-error-msg"
                 role="alert"
-                aria-live="assertive"
-                className="flex items-start gap-3 p-4 mb-6 rounded-xl border border-red-200 bg-red-50 text-red-800 text-sm shadow-sm"
+                className="flex items-start gap-2.5 p-3 mb-4 rounded-sm border border-red-200 bg-red-50 text-red-800 text-xs"
               >
-                <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+                <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
                 <span className="font-semibold">{errorMsg}</span>
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* Form */}
-          <form data-testid="login-form" onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
-              <label htmlFor="login-email" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+          <form data-testid="login-form" onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1">
+              <label htmlFor="login-email" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 Email Address
               </label>
               <div className="relative">
-                <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-455 pointer-events-none" />
                 <input
                   id="login-email"
                   name="email"
@@ -195,30 +128,30 @@ export const Login: React.FC = () => {
                   type="email"
                   required
                   autoComplete="email"
-                  title="Enter your registered email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="input-field input-with-icon-left shadow-sm"
+                  aria-describedby={errorMsg ? 'login-error-alert' : undefined}
+                  placeholder="enter email address"
+                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
                 />
               </div>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <label htmlFor="login-password" className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <label htmlFor="login-password" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   Password
                 </label>
                 <Link
                   to="/forgot-password"
                   data-testid="login-forgot-password-link"
-                  className="text-xs text-amber-600 hover:text-amber-700 transition-colors font-bold"
+                  className="text-[10px] text-[#2874F0] hover:underline font-bold"
                 >
-                  Forgot password?
+                  Forgot?
                 </Link>
               </div>
               <div className="relative">
-                <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-455 pointer-events-none" />
                 <input
                   id="login-password"
                   name="password"
@@ -226,27 +159,25 @@ export const Login: React.FC = () => {
                   type={showPassword ? 'text' : 'password'}
                   required
                   autoComplete="current-password"
-                  title="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="input-field input-with-icon-left input-with-icon-right shadow-sm"
+                  aria-describedby={errorMsg ? 'login-error-alert' : undefined}
+                  placeholder="enter password"
+                  className="w-full pl-9 pr-9 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
                 />
                 <button
                   type="button"
                   data-testid="login-show-password-btn"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  title={showPassword ? 'Hide password' : 'Show password'}
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
             </div>
 
-            {/* Remember Me — Checkbox for getByRole('checkbox') practice */}
-            <div className="flex items-center gap-2.5 mt-1">
+            {/* Remember Me */}
+            <div className="flex items-center gap-2 mt-1">
               <input
                 id="remember-me"
                 name="rememberMe"
@@ -254,73 +185,67 @@ export const Login: React.FC = () => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 rounded border-2 border-slate-300 text-amber-500 focus:ring-amber-400 cursor-pointer accent-amber-500"
+                className="w-4 h-4 rounded-sm border-slate-300 text-[#2874F0] focus:ring-0 cursor-pointer"
               />
-              <label htmlFor="remember-me" className="text-xs font-semibold text-slate-500 cursor-pointer select-none">
-                Remember me for 30 days
+              <label htmlFor="remember-me" className="text-[11px] font-semibold text-slate-500 cursor-pointer select-none">
+                Remember me
               </label>
             </div>
 
-            <motion.button
+            <button
               id="login-submit-btn"
               data-testid="login-submit-btn"
               type="submit"
               disabled={submitting}
-              whileTap={{ scale: 0.98 }}
-              className="w-full btn-primary py-4 text-sm disabled:opacity-60 disabled:cursor-wait mt-2"
+              className="w-full py-2.5 bg-[#FF9F00] hover:bg-[#e68f00] text-white text-xs font-bold rounded-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5"
             >
-              <LogIn size={16} />
-              {submitting ? 'Signing in...' : 'Sign In'}
-              {!submitting && <ArrowRight size={15} />}
-            </motion.button>
+              <LogIn size={13} />
+              <span>{submitting ? 'Signing in...' : 'Login'}</span>
+            </button>
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-slate-200/60" />
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Demo Access</span>
-            <div className="flex-1 h-px bg-slate-200/60" />
+          {/* Demo access divider */}
+          <div className="flex items-center gap-2 my-4">
+            <div className="flex-grow h-px bg-slate-100" />
+            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Demo Credentials</span>
+            <div className="flex-grow h-px bg-slate-100" />
           </div>
 
-          {/* Demo credentials as a proper HTML table — for table locator practice */}
-          <div data-testid="demo-credentials-section" className="bg-slate-50 rounded-xl p-4 text-xs border border-slate-200/60 shadow-inner">
-            <p className="font-bold text-slate-700 flex items-center gap-1.5 mb-3">
-              <Shield size={12} className="text-amber-600" />
-              Demo Credentials
-            </p>
+          {/* Demo credentials table */}
+          <div data-testid="demo-credentials-section" className="bg-slate-50 border border-slate-200/60 p-3 rounded-sm text-[10px]">
             <table data-testid="demo-credentials-table" className="w-full text-left">
               <thead>
                 <tr>
-                  <th className="pb-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Role</th>
-                  <th className="pb-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email</th>
-                  <th className="pb-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Password</th>
+                  <th className="pb-1 text-[9px] font-bold text-slate-400 uppercase">Role</th>
+                  <th className="pb-1 text-[9px] font-bold text-slate-400 uppercase">Email</th>
+                  <th className="pb-1 text-[9px] font-bold text-slate-400 uppercase">Password</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr data-testid="demo-row-customer">
-                  <td className="py-1 font-semibold text-slate-600">Customer</td>
-                  <td className="py-1"><span className="text-slate-800 font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200">customer@novacart.com</span></td>
-                  <td className="py-1"><span className="text-slate-800 font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200">customer123</span></td>
+              <tbody className="font-semibold text-slate-600">
+                <tr data-testid="demo-row-customer" className="border-b border-slate-100/30">
+                  <td className="py-1">Customer</td>
+                  <td className="py-1 select-all">customer@novacart.com</td>
+                  <td className="py-1 select-all">customer123</td>
                 </tr>
-                <tr data-testid="demo-row-admin">
-                  <td className="py-1 font-semibold text-slate-600">Admin</td>
-                  <td className="py-1"><span className="text-slate-800 font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200">admin@novacart.com</span></td>
-                  <td className="py-1"><span className="text-slate-800 font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200">admin123</span></td>
+                <tr data-testid="demo-row-admin" className="border-b border-slate-100/30">
+                  <td className="py-1">Admin</td>
+                  <td className="py-1 select-all">admin@novacart.com</td>
+                  <td className="py-1 select-all">admin123</td>
                 </tr>
-                <tr data-testid="demo-row-seller">
-                  <td className="py-1 font-semibold text-slate-600">Seller</td>
-                  <td className="py-1"><span className="text-slate-800 font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200">seller@novacart.com</span></td>
-                  <td className="py-1"><span className="text-slate-800 font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200">seller123</span></td>
+                <tr data-testid="demo-row-seller" className="border-b border-slate-100/30">
+                  <td className="py-1">Seller</td>
+                  <td className="py-1 select-all">seller@novacart.com</td>
+                  <td className="py-1 select-all">seller123</td>
                 </tr>
                 <tr data-testid="demo-row-delivery">
-                  <td className="py-1 font-semibold text-slate-600">Delivery</td>
-                  <td className="py-1"><span className="text-slate-800 font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200">delivery@novacart.com</span></td>
-                  <td className="py-1"><span className="text-slate-800 font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-slate-200">delivery123</span></td>
+                  <td className="py-1">Carrier</td>
+                  <td className="py-1 select-all">delivery@novacart.com</td>
+                  <td className="py-1 select-all">delivery123</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   )

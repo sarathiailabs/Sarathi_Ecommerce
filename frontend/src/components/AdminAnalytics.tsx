@@ -57,10 +57,10 @@ interface AdminAnalyticsProps {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border-2 border-[#1D1C1A] p-3 rounded-xl shadow-[3px_3px_0px_0px_#1D1C1A]">
-        <p className="text-[9px] uppercase tracking-widest font-black text-[#615E59] mb-1">{label}</p>
-        <p className="text-xs font-black text-[#1D1C1A]">
-          {payload[0].name}: <span className="text-[#E1392A]">₹{payload[0].value?.toFixed(2)}</span>
+      <div className="bg-white border border-slate-200 p-3 rounded-sm shadow-sm">
+        <p className="text-[9px] uppercase tracking-widest font-bold text-slate-400 mb-1">{label}</p>
+        <p className="text-xs font-bold text-slate-800">
+          {payload[0].name}: <span className="text-[#2874F0]">₹{payload[0].value?.toFixed(2)}</span>
         </p>
       </div>
     )
@@ -71,9 +71,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const CustomPieTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white border-2 border-[#1D1C1A] p-3 rounded-xl shadow-[3px_3px_0px_0px_#1D1C1A]">
-        <p className="text-xs font-black text-[#1D1C1A]">
-          {payload[0].name}: <span className="text-[#E1392A]">₹{payload[0].value?.toFixed(2)}</span>
+      <div className="bg-white border border-slate-200 p-3 rounded-sm shadow-sm">
+        <p className="text-xs font-bold text-slate-800">
+          {payload[0].name}: <span className="text-[#2874F0]">₹{payload[0].value?.toFixed(2)}</span>
         </p>
       </div>
     )
@@ -137,12 +137,12 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
   }))
 
   const PIE_COLORS = [
-    '#E1392A', // organic red
-    '#F5B025', // butterscotch yellow
-    '#3b82f6', // blue
-    '#10b981', // emerald
+    '#2874F0', // brand blue
+    '#FF9F00', // yellow
+    '#FB641B', // orange
+    '#10b981', // emerald green
     '#a855f7', // purple
-    '#ec4899'  // pink
+    '#64748b'  // slate
   ]
 
   // --- BAR CHART: ORDER STATUS DISTRIBUTION ---
@@ -167,59 +167,59 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {/* Card 1: Total Revenue */}
-        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[5px_5px_0px_0px_#1D1C1A] hover:-translate-y-[1px] transition-all relative overflow-hidden group">
+        <div data-testid="analytics-card-revenue" className="bg-white border border-slate-200 rounded-sm p-5 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
           <div className="flex justify-between items-start">
             <div className="space-y-2">
-              <span className="text-[10px] font-black text-[#615E59] uppercase tracking-widest">Total Revenue</span>
-              <h3 className="text-2xl font-black text-[#1D1C1A] leading-tight">₹{totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Revenue</span>
+              <h3 className="text-2xl font-bold text-slate-800 leading-tight">₹{totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
               <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider flex items-center gap-1">
                 <TrendingUp size={12} />
                 +14.5% from last month
               </p>
             </div>
-            <div className="p-3.5 rounded-2xl bg-[#FAF6EE] border-2 border-[#1D1C1A] text-[#1D1C1A] group-hover:scale-110 transition-transform shadow-xs">
-              <DollarSign size={20} className="text-[#E1392A]" />
+            <div className="p-3.5 rounded-sm bg-blue-50 text-[#2874F0] group-hover:scale-110 transition-transform shadow-xs">
+              <DollarSign size={20} />
             </div>
           </div>
         </div>
 
         {/* Card 2: Total Sales */}
-        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[5px_5px_0px_0px_#1D1C1A] hover:-translate-y-[1px] transition-all relative overflow-hidden group">
+        <div data-testid="analytics-card-sales" className="bg-white border border-slate-200 rounded-sm p-5 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
           <div className="flex justify-between items-start">
             <div className="space-y-2">
-              <span className="text-[10px] font-black text-[#615E59] uppercase tracking-widest">Total Sales</span>
-              <h3 className="text-2xl font-black text-[#1D1C1A] leading-tight">{totalSales}</h3>
-              <p className="text-[10px] text-[#E1392A] font-bold uppercase tracking-wider">Volume processed</p>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Sales</span>
+              <h3 className="text-2xl font-bold text-slate-800 leading-tight">{totalSales}</h3>
+              <p className="text-[10px] text-[#FB641B] font-bold uppercase tracking-wider">Volume processed</p>
             </div>
-            <div className="p-3.5 rounded-2xl bg-[#FAF6EE] border-2 border-[#1D1C1A] text-[#1D1C1A] group-hover:scale-110 transition-transform shadow-xs">
-              <ShoppingBag size={20} className="text-[#E1392A]" />
+            <div className="p-3.5 rounded-sm bg-orange-50 text-[#FB641B] group-hover:scale-110 transition-transform shadow-xs">
+              <ShoppingBag size={20} />
             </div>
           </div>
         </div>
 
         {/* Card 3: Average Order Value */}
-        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[5px_5px_0px_0px_#1D1C1A] hover:-translate-y-[1px] transition-all relative overflow-hidden group">
+        <div data-testid="analytics-card-avg-value" className="bg-white border border-slate-200 rounded-sm p-5 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
           <div className="flex justify-between items-start">
             <div className="space-y-2">
-              <span className="text-[10px] font-black text-[#615E59] uppercase tracking-widest">Avg. Order Value</span>
-              <h3 className="text-2xl font-black text-[#1D1C1A] leading-tight">₹{averageOrderValue.toFixed(2)}</h3>
-              <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider">Average cart value</p>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Avg. Order Value</span>
+              <h3 className="text-2xl font-bold text-slate-800 leading-tight">₹{averageOrderValue.toFixed(2)}</h3>
+              <p className="text-[10px] text-[#2874F0] font-bold uppercase tracking-wider">Average cart value</p>
             </div>
-            <div className="p-3.5 rounded-2xl bg-[#FAF6EE] border-2 border-[#1D1C1A] text-[#1D1C1A] group-hover:scale-110 transition-transform shadow-xs">
-              <TrendingUp size={20} className="text-[#E1392A]" />
+            <div className="p-3.5 rounded-sm bg-blue-50 text-[#2874F0] group-hover:scale-110 transition-transform shadow-xs">
+              <TrendingUp size={20} />
             </div>
           </div>
         </div>
 
         {/* Card 4: Low Stock Warnings */}
-        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[5px_5px_0px_0px_#1D1C1A] hover:-translate-y-[1px] transition-all relative overflow-hidden group">
+        <div data-testid="analytics-card-low-stock" className="bg-white border border-slate-200 rounded-sm p-5 shadow-sm hover:shadow-md transition-all relative overflow-hidden group">
           <div className="flex justify-between items-start">
             <div className="space-y-2">
-              <span className="text-[10px] font-black text-[#615E59] uppercase tracking-widest">Low Stock Alerts</span>
-              <h3 className={`text-2xl font-black leading-tight ${lowStockCount > 0 ? 'text-[#E1392A] animate-pulse' : 'text-[#1D1C1A]'}`}>{lowStockCount}</h3>
-              <p className="text-[10px] text-[#E1392A] font-bold uppercase tracking-wider">Under 10 units</p>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Low Stock Alerts</span>
+              <h3 className={`text-2xl font-bold leading-tight ${lowStockCount > 0 ? 'text-rose-600 animate-pulse' : 'text-slate-800'}`}>{lowStockCount}</h3>
+              <p className="text-[10px] text-rose-500 font-bold uppercase tracking-wider">Under 10 units</p>
             </div>
-            <div className={`p-3.5 rounded-2xl border-2 border-[#1D1C1A] bg-[#FAF6EE] group-hover:scale-110 transition-transform shadow-xs ${lowStockCount > 0 ? 'text-[#E1392A]' : 'text-[#1D1C1A]'}`}>
+            <div className={`p-3.5 rounded-sm shadow-xs transition-transform group-hover:scale-110 ${lowStockCount > 0 ? 'bg-rose-50 text-rose-600' : 'bg-slate-50 text-slate-600'}`}>
               <AlertTriangle size={20} />
             </div>
           </div>
@@ -231,10 +231,10 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* 1. Area Chart: Revenue Trend (Span 2 cols) */}
-        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-6 shadow-[4px_4px_0px_0px_#1D1C1A] flex flex-col justify-between min-h-[380px]">
+        <div data-testid="analytics-chart-trajectory" className="bg-white border border-slate-200 rounded-sm p-6 shadow-xs flex flex-col justify-between min-h-[380px]">
           <div className="mb-4">
-            <h4 className="text-base font-black text-[#1D1C1A] uppercase tracking-wide">Revenue Trajectory</h4>
-            <p className="text-xs font-bold text-[#615E59] uppercase tracking-wider">Total transaction amounts logged daily over the last 30 days.</p>
+            <h4 className="text-base font-bold text-slate-800 uppercase tracking-wide">Revenue Trajectory</h4>
+            <p className="text-xs font-bold text-slate-455 uppercase tracking-wider">Total transaction amounts logged daily over the last 30 days.</p>
           </div>
           
           <div className="w-full h-[280px]">
@@ -242,28 +242,28 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
               <AreaChart data={areaChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#E1392A" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#E1392A" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#2874F0" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#2874F0" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(29,28,26,0.06)" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(226,232,240,0.8)" vertical={false} />
                 <XAxis 
                   dataKey="date" 
                   tickLine={false} 
                   axisLine={false} 
-                  tick={{ fill: '#1D1C1A', fontSize: 10, fontWeight: 700 }} 
+                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: 600 }} 
                 />
                 <YAxis 
                   tickLine={false} 
                   axisLine={false} 
                   tickFormatter={(v) => `₹${v}`}
-                  tick={{ fill: '#1D1C1A', fontSize: 10, fontWeight: 700 }} 
+                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: 600 }} 
                 />
-                <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(225, 57, 42, 0.15)', strokeWidth: 1.5 }} />
+                <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(40, 116, 240, 0.15)', strokeWidth: 1.5 }} />
                 <Area 
                   type="monotone" 
                   dataKey="Revenue" 
-                  stroke="#E1392A" 
+                  stroke="#2874F0" 
                   strokeWidth={3}
                   fillOpacity={1} 
                   fill="url(#colorRevenue)" 
@@ -275,15 +275,15 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
         </div>
 
         {/* 2. Donut Chart: Sales Share by Category */}
-        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-6 shadow-[4px_4px_0px_0px_#1D1C1A] flex flex-col justify-between min-h-[380px]">
+        <div data-testid="analytics-chart-category" className="bg-white border border-slate-200 rounded-sm p-6 shadow-xs flex flex-col justify-between min-h-[380px]">
           <div>
-            <h4 className="text-base font-black text-[#1D1C1A] uppercase tracking-wide">Sales Share by Category</h4>
-            <p className="text-xs font-bold text-[#615E59] uppercase tracking-wider">Distribution of revenue generated by product categories.</p>
+            <h4 className="text-base font-bold text-slate-800 uppercase tracking-wide">Sales Share by Category</h4>
+            <p className="text-xs font-bold text-slate-455 uppercase tracking-wider">Distribution of revenue generated by product categories.</p>
           </div>
 
           <div className="w-full h-[220px] flex items-center justify-center relative">
             {pieChartData.length === 0 ? (
-              <p className="text-xs font-black uppercase text-[#615E59]">No transaction data</p>
+              <p className="text-xs font-bold uppercase text-slate-400">No transaction data</p>
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -297,7 +297,7 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
                     dataKey="value"
                   >
                     {pieChartData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="#FFFFFF" strokeWidth={1} />
                     ))}
                   </Pie>
                   <Tooltip content={<CustomPieTooltip />} />
@@ -307,17 +307,17 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
             
             {/* Ambient center stats */}
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-[9px] font-black text-[#615E59] uppercase tracking-widest">Share</span>
-              <span className="text-sm font-black text-[#1D1C1A] uppercase tracking-wide">Categories</span>
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Share</span>
+              <span className="text-sm font-bold text-slate-800 uppercase tracking-wide">Categories</span>
             </div>
           </div>
 
           {/* Custom Labels List */}
           <div className="grid grid-cols-2 gap-2 text-left">
             {pieChartData.slice(0, 4).map((entry, index) => (
-              <div key={entry.name} className="flex items-center gap-1.5 text-[10px] font-black text-[#1D1C1A] uppercase tracking-wider">
+              <div key={entry.name} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
                 <span 
-                  className="w-2.5 h-2.5 rounded-full inline-block flex-shrink-0 border border-[#1D1C1A]" 
+                  className="w-2.5 h-2.5 rounded-full inline-block flex-shrink-0 border border-slate-200" 
                   style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }} 
                 />
                 <span className="truncate">{entry.name}</span>
@@ -332,35 +332,35 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* 1. Bar Chart: Fulfillment Statuses (Spans 2 columns) */}
-        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-6 shadow-[4px_4px_0px_0px_#1D1C1A] min-h-[300px] flex flex-col justify-between">
+        <div data-testid="analytics-chart-fulfillment" className="bg-white border border-slate-200 rounded-sm p-6 shadow-xs min-h-[300px] flex flex-col justify-between">
           <div>
-            <h4 className="text-base font-black text-[#1D1C1A] uppercase tracking-wide">Fulfillment Performance</h4>
-            <p className="text-xs font-bold text-[#615E59] uppercase tracking-wider">Total volume of orders processed grouped by status.</p>
+            <h4 className="text-base font-bold text-slate-800 uppercase tracking-wide">Fulfillment Performance</h4>
+            <p className="text-xs font-bold text-slate-455 uppercase tracking-wider">Total volume of orders processed grouped by status.</p>
           </div>
 
           <div className="w-full h-[180px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barChartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(29,28,26,0.06)" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(226,232,240,0.8)" vertical={false} />
                 <XAxis 
                   dataKey="status" 
                   tickLine={false} 
                   axisLine={false}
-                  tick={{ fill: '#1D1C1A', fontSize: 10, fontWeight: 700 }} 
+                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: 600 }} 
                 />
                 <YAxis 
                   tickLine={false} 
                   axisLine={false}
-                  tick={{ fill: '#1D1C1A', fontSize: 10, fontWeight: 700 }} 
+                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: 600 }} 
                 />
                 <Tooltip 
-                  cursor={{ fill: 'rgba(29, 28, 26, 0.03)' }}
+                  cursor={{ fill: 'rgba(0, 0, 0, 0.02)' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       return (
-                        <div className="bg-white border-2 border-[#1D1C1A] p-3 rounded-xl shadow-[3px_3px_0px_0px_#1D1C1A]">
-                          <p className="text-xs font-black text-[#1D1C1A]">
-                            {payload[0].payload.status}: <span className="text-[#E1392A] font-black">{payload[0].value} orders</span>
+                        <div className="bg-white border border-slate-200 p-3 rounded-sm shadow-sm">
+                          <p className="text-xs font-bold text-slate-800">
+                            {payload[0].payload.status}: <span className="text-[#2874F0] font-bold">{payload[0].value} orders</span>
                           </p>
                         </div>
                       )
@@ -370,14 +370,14 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
                 />
                 <Bar 
                   dataKey="Orders" 
-                  fill="#E1392A" 
-                  radius={[8, 8, 0, 0]}
+                  fill="#2874F0" 
+                  radius={[4, 4, 0, 0]}
                   maxBarSize={55}
                 >
                   {barChartData.map((entry, index) => {
-                    const colors = ['#F5B025', '#3b82f6', '#10b981'] // butterscotch, blue, emerald
+                    const colors = ['#FF9F00', '#a855f7', '#10b981'] // yellow, purple, emerald
                     const statusColor = entry.status === 'Pending' ? colors[0] : entry.status === 'Shipped' ? colors[1] : colors[2]
-                    return <Cell key={`cell-${index}`} fill={statusColor} stroke="#1D1C1A" strokeWidth={2} />
+                    return <Cell key={`cell-${index}`} fill={statusColor} />
                   })}
                 </Bar>
               </BarChart>
@@ -386,25 +386,25 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
         </div>
 
         {/* 2. Simple Performance KPI Stat */}
-        <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-6 shadow-[4px_4px_0px_0px_#1D1C1A] flex flex-col justify-between min-h-[300px]">
+        <div data-testid="analytics-sla-kpi" className="bg-white border border-slate-200 rounded-sm p-6 shadow-xs flex flex-col justify-between min-h-[300px]">
           <div>
-            <h4 className="text-base font-black text-[#1D1C1A] uppercase tracking-wide">Delivery Efficiency</h4>
-            <p className="text-xs font-bold text-[#615E59] uppercase tracking-wider">Proportion of orders successfully dispatched and delivered.</p>
+            <h4 className="text-base font-bold text-slate-800 uppercase tracking-wide">Delivery Efficiency</h4>
+            <p className="text-xs font-bold text-slate-455 uppercase tracking-wider">Proportion of orders successfully dispatched and delivered.</p>
           </div>
 
           <div className="flex flex-col items-center justify-center py-4 space-y-2">
-            <span className="text-5xl font-black text-[#E1392A] leading-none">
+            <span className="text-5xl font-extrabold text-[#2874F0] leading-none">
               {orders.length > 0 
                 ? `${Math.round((orders.filter(o => o.status === 'Delivered').length / orders.length) * 100)}%` 
                 : '100%'}
             </span>
-            <span className="text-xs font-black text-[#1D1C1A] uppercase tracking-wider mt-1">Dispatched Success Rate</span>
-            <p className="text-[10px] text-[#615E59] font-semibold text-center px-4 leading-relaxed mt-2">
+            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider mt-1.5">Dispatched Success Rate</span>
+            <p className="text-[10px] text-slate-400 font-semibold text-center px-4 leading-relaxed mt-2">
               Measures customer orders that have reached their destination out of all platform transactions.
             </p>
           </div>
 
-          <div className="border-t-2 border-[#1D1C1A]/10 pt-3.5 flex justify-between items-center text-[9px] font-black text-[#615E59] uppercase tracking-widest">
+          <div className="border-t border-slate-100 pt-3.5 flex justify-between items-center text-[9px] font-bold text-slate-400 uppercase tracking-widest">
             <span>Standard SLA</span>
             <span className="text-emerald-600">98% Target</span>
           </div>

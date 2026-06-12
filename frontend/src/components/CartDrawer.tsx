@@ -66,41 +66,46 @@ export const CartDrawer: React.FC = () => {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 24, stiffness: 220 }}
-            className="fixed top-0 right-0 h-screen w-full sm:w-[460px] bg-[#FAF6EE] border-l-3 border-[#1D1C1A] shadow-2xl z-50 flex flex-col justify-between"
+            data-testid="cart-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Shopping Cart Drawer"
+            className="fixed top-0 right-0 h-screen w-full sm:w-[420px] bg-[#F1F3F6] border-l border-slate-200 shadow-2xl z-50 flex flex-col justify-between"
           >
             {/* Drawer Header */}
-            <div className="p-6 border-b-3 border-[#1D1C1A] bg-white flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#E1392A] text-white border-2 border-[#1D1C1A] flex items-center justify-center shadow-xs">
-                  <ShoppingCart size={18} />
+            <div className="p-4 border-b border-slate-200 bg-white flex items-center justify-between shadow-xs">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-full bg-[#2874F0]/10 text-[#2874F0] flex items-center justify-center">
+                  <ShoppingCart size={16} />
                 </div>
                 <div>
-                  <h3 className="text-base font-black uppercase tracking-wider text-[#1D1C1A]">Shopping Cart</h3>
-                  <p className="text-[10px] text-[#615E59] font-bold uppercase tracking-wider mt-0.5">
-                    {cartItems.length} unique artifact{cartItems.length !== 1 ? 's' : ''}
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Shopping Cart</h3>
+                  <p data-testid="cart-drawer-item-count" className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">
+                    {cartItems.length} item{cartItems.length !== 1 ? 's' : ''} in cart
                   </p>
                 </div>
               </div>
               
               <button
                 onClick={() => setCartDrawerOpen(false)}
-                className="p-2 rounded-xl border-2 border-[#1D1C1A] bg-white hover:bg-slate-50 transition-colors shadow-xs"
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-650 transition-colors"
                 aria-label="Close cart drawer"
               >
-                <X size={16} className="text-[#1D1C1A]" />
+                <X size={16} />
               </button>
             </div>
 
             {/* Cart Items List */}
-            <div className="flex-grow p-6 overflow-y-auto space-y-5 scrollbar-thin">
+            <div data-testid="cart-drawer-items-list" className="flex-grow p-4 overflow-y-auto space-y-3 scrollbar-thin">
               {cartItems.length === 0 ? (
-                <div className="text-center py-20">
-                  <ShoppingCart size={42} className="text-slate-350 mx-auto mb-4" />
-                  <h4 className="text-sm font-black uppercase text-[#1D1C1A] mb-1">Your cart is empty</h4>
-                  <p className="text-xs text-[#615E59] mb-6 font-medium">Add premium tech items to begin your collection.</p>
+                <div data-testid="cart-drawer-empty-state" className="text-center py-20 bg-white rounded-sm border border-slate-200 p-6">
+                  <ShoppingCart size={36} className="text-slate-300 mx-auto mb-4" />
+                  <h4 className="text-sm font-bold uppercase text-slate-700 mb-1">Your cart is empty</h4>
+                  <p className="text-xs text-slate-450 mb-6 font-medium">Add premium items to begin shopping.</p>
                   <button
                     onClick={() => setCartDrawerOpen(false)}
-                    className="btn-secondary text-xs uppercase px-6 py-3"
+                    data-testid="cart-drawer-close-empty-btn"
+                    className="px-5 py-2.5 bg-[#2874F0] hover:bg-[#1e5ecb] text-white text-xs font-bold rounded-sm uppercase tracking-wide transition-colors"
                   >
                     Continue Shopping
                   </button>
@@ -109,24 +114,29 @@ export const CartDrawer: React.FC = () => {
                 cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex gap-4 p-4 bg-white border-3 border-[#1D1C1A] rounded-2xl shadow-[3px_3px_0px_0px_#1D1C1A] relative"
+                    data-testid={`cart-drawer-item-${item.product_id}`}
+                    className="flex gap-3 p-3 bg-white border border-slate-200/80 rounded-sm hover:shadow-xs transition-shadow relative"
                   >
                     {/* Item Image */}
-                    <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-[#1D1C1A] flex-shrink-0 bg-[#FAF6EE]">
+                    <div className="w-16 h-16 border border-slate-100 rounded-sm bg-slate-50 flex items-center justify-center p-1 flex-shrink-0">
                       <img
                         src={item.product.image_url}
                         alt={item.product.name}
-                        className="w-full h-full object-cover"
+                        className="object-contain max-h-full max-w-full"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80';
+                        }}
                       />
                     </div>
 
                     {/* Item Info */}
-                    <div className="flex-grow flex flex-col justify-between">
+                    <div className="flex-grow flex flex-col justify-between min-w-0">
                       <div>
-                        <h4 className="font-black text-xs uppercase tracking-wider text-[#1D1C1A] line-clamp-1">
+                        <h4 data-testid={`cart-drawer-item-name-${item.product_id}`} className="font-semibold text-xs text-slate-800 line-clamp-2 leading-relaxed pr-4">
                           {item.product.name}
                         </h4>
-                        <p className="text-[10px] text-[#615E59] font-bold uppercase tracking-wider mt-0.5">
+                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">
                           {item.product.category}
                         </p>
                       </div>
@@ -134,32 +144,36 @@ export const CartDrawer: React.FC = () => {
                       {/* Quantity & Price Row */}
                       <div className="flex items-center justify-between mt-2">
                         {/* Quantity controls */}
-                        <div className="flex items-center border-2 border-[#1D1C1A] rounded-lg bg-[#FAF6EE] overflow-hidden shadow-xs">
+                        <div className="flex items-center border border-slate-300 bg-slate-50 rounded-sm overflow-hidden">
                           <button
                             onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-                            className="p-1.5 hover:bg-[#F3ECE0] border-r-2 border-[#1D1C1A] transition-colors"
+                            disabled={item.quantity <= 1}
+                            data-testid={`cart-drawer-qty-decrease-${item.product_id}`}
+                            className="p-1 hover:bg-slate-250 disabled:opacity-30 transition-colors"
                             aria-label="Decrease quantity"
                           >
-                            <Minus size={10} className="text-[#1D1C1A]" />
+                            <Minus size={10} className="text-slate-600" />
                           </button>
-                          <span className="px-3 text-xs font-black text-[#1D1C1A] select-none">
+                          <span data-testid={`cart-drawer-qty-value-${item.product_id}`} className="px-2 text-xs font-bold text-slate-800 select-none">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-                            className="p-1.5 hover:bg-[#F3ECE0] border-l-2 border-[#1D1C1A] transition-colors"
+                            disabled={item.quantity >= item.product.stock}
+                            data-testid={`cart-drawer-qty-increase-${item.product_id}`}
+                            className="p-1 hover:bg-slate-250 disabled:opacity-30 transition-colors"
                             aria-label="Increase quantity"
                           >
-                            <Plus size={10} className="text-[#1D1C1A]" />
+                            <Plus size={10} className="text-slate-600" />
                           </button>
                         </div>
 
                         {/* Price */}
                         <div className="text-right">
-                          <span className="text-xs text-[#615E59] font-bold">
+                          <span className="text-[10px] text-slate-400 font-semibold">
                             ₹{item.product.price.toLocaleString('en-IN')} each
                           </span>
-                          <div className="text-sm font-black text-[#1D1C1A]">
+                          <div data-testid={`cart-drawer-item-total-${item.product_id}`} className="text-xs font-extrabold text-slate-900">
                             ₹{(item.product.price * item.quantity).toLocaleString('en-IN')}
                           </div>
                         </div>
@@ -169,7 +183,8 @@ export const CartDrawer: React.FC = () => {
                     {/* Remove button */}
                     <button
                       onClick={() => removeFromCart(item.product_id)}
-                      className="absolute top-3 right-3 p-1 text-slate-400 hover:text-[#E1392A] transition-colors"
+                      data-testid={`cart-drawer-remove-btn-${item.product_id}`}
+                      className="absolute top-2.5 right-2.5 p-1 text-slate-400 hover:text-red-500 transition-colors"
                       aria-label="Remove item"
                     >
                       <Trash2 size={13} />
@@ -181,30 +196,32 @@ export const CartDrawer: React.FC = () => {
 
             {/* Drawer Footer */}
             {cartItems.length > 0 && (
-              <div className="p-6 border-t-3 border-[#1D1C1A] bg-white space-y-4">
-                <div className="flex items-center justify-between border-b-2 border-dashed border-slate-200 pb-3">
-                  <span className="text-xs text-[#615E59] font-black uppercase tracking-wider">Subtotal</span>
-                  <span className="text-lg font-black text-[#1D1C1A]">
+              <div className="p-4 border-t border-slate-200 bg-white space-y-3">
+                <div className="flex items-center justify-between border-b border-dashed border-slate-200 pb-2.5">
+                  <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Subtotal</span>
+                  <span data-testid="cart-drawer-subtotal" className="text-base font-extrabold text-slate-900">
                     ₹{cartTotal.toLocaleString('en-IN')}
                   </span>
                 </div>
                 
-                <p className="text-[10px] text-[#615E59] font-semibold text-center mt-1">
+                <p className="text-[9px] text-slate-400 font-medium text-center mt-1">
                   🔒 Secure checkout processed instantly. Shipping computed at next step.
                 </p>
 
-                <div className="flex gap-3">
+                <div className="flex gap-2.5">
                   <Link
                     to="/cart"
                     onClick={() => setCartDrawerOpen(false)}
-                    className="flex-1 btn-secondary text-xs uppercase py-3.5 text-center font-black tracking-wider flex items-center justify-center gap-1.5"
+                    data-testid="cart-drawer-view-cart-btn"
+                    className="flex-1 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-sm uppercase tracking-wide text-center transition-colors flex items-center justify-center"
                   >
                     View Cart
                   </Link>
                   <Link
                     to="/checkout"
                     onClick={() => setCartDrawerOpen(false)}
-                    className="flex-1 btn-primary text-xs uppercase py-3.5 text-center font-black tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/10"
+                    data-testid="cart-drawer-checkout-btn"
+                    className="flex-1 py-2.5 bg-[#FB641B] hover:bg-[#e05310] text-white text-xs font-bold rounded-sm uppercase tracking-wide text-center flex items-center justify-center gap-1 transition-colors shadow-xs"
                   >
                     Checkout
                     <ArrowRight size={13} />

@@ -1,47 +1,41 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import {
   ShoppingCart, LogOut, LayoutDashboard, LogIn,
   Search, X, Menu, ChevronDown, Package,
-  Zap, Sparkles, Store, Truck
+  Heart, Sparkles, Store, Truck, ShoppingBag
 } from 'lucide-react'
-=======
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { ShoppingCart, LogOut, LayoutDashboard, LogIn, Search } from 'lucide-react'
->>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
-import { useSearch } from '../context/SearchContext'
 
 const ANNOUNCEMENT_MSGS = [
-  '✦ FREE SHIPPING on orders above ₹999 · Use code NOVA10 for 10% off',
+  '✦ FREE SHIPPING on orders above ₹999 · Use code SARATHI10 for 10% off',
   '✦ New Arrivals: Smart Home Collection now live — explore 50+ products',
   '✦ Limited Time: Up to 40% off on selected Electronics this week only',
 ]
 
+const CATEGORY_ITEMS = [
+  { label: 'Electronics', href: '/?category=Electronics' },
+  { label: 'Fashion', href: '/?category=Fashion' },
+  { label: 'Home & Kitchen', href: '/?category=Home%20%26%20Kitchen' },
+  { label: 'Sports & Fitness', href: '/?category=Sports%20%26%20Fitness' },
+  { label: 'Beauty', href: '/?category=Beauty' },
+  { label: 'Books', href: '/?category=Books' },
+  { label: 'Deals', href: '/?category=deals' },
+]
+
 export const Navbar: React.FC = () => {
-<<<<<<< HEAD
   const { user, isAuthenticated, isAdmin, isShopOwner, isDeliveryPartner, logout } = useAuth()
   const { cartCount, setCartDrawerOpen } = useCart()
-=======
-  const { user, isAuthenticated, isAdmin, logout } = useAuth()
-  const { cartCount } = useCart()
-  const { searchQuery, setSearchQuery } = useSearch()
->>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [scrolled, setScrolled] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
   const [announcementIdx, setAnnouncementIdx] = useState(0)
   const [announcementVisible, setAnnouncementVisible] = useState(true)
 
-  const searchRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // Announcement rotation
@@ -52,24 +46,11 @@ export const Navbar: React.FC = () => {
     return () => clearInterval(interval)
   }, [])
 
-  // Scroll detection
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false)
     setUserDropdownOpen(false)
-    setSearchOpen(false)
   }, [location.pathname])
-
-  // Focus search on open
-  useEffect(() => {
-    if (searchOpen) searchRef.current?.focus()
-  }, [searchOpen])
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -92,180 +73,98 @@ export const Navbar: React.FC = () => {
     e.preventDefault()
     if (searchQuery.trim()) {
       navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`)
-      setSearchOpen(false)
       setSearchQuery('')
     }
   }
 
   const isStaff = isAdmin || isShopOwner || isDeliveryPartner
 
-  const navLinks = isAuthenticated && isStaff
-    ? []
-    : [
-        { label: 'Catalog', href: '/' },
-        { label: 'Deals', href: '/?category=deals' },
-        ...(isAuthenticated ? [{ label: 'My Orders', href: '/orders' }] : []),
-      ]
-
   return (
-<<<<<<< HEAD
     <>
       {/* Announcement Banner */}
       {announcementVisible && (
-        <div data-testid="announcement-banner" role="banner" className="announcement-banner relative bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 text-white overflow-hidden shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
-            <div className="flex-1 text-center text-xs font-semibold tracking-wide animate-fade-in">
-              <span key={announcementIdx} data-testid="announcement-text" className="animate-fade-in inline-block text-white-force">
+        <div data-testid="announcement-banner" role="banner" className="relative bg-[#205dbd] text-white overflow-hidden shadow-xs border-b border-blue-400/25">
+          <div className="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between gap-4">
+            <div className="flex-1 text-center text-xs font-medium tracking-wide">
+              <span key={announcementIdx} data-testid="announcement-text" className="inline-block text-white">
                 {ANNOUNCEMENT_MSGS[announcementIdx]}
-=======
-    <nav className="glass sticky top-0 z-50 px-6 py-4 transition-all duration-300">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="bg-gradient-to-r from-purple-500 to-indigo-500 w-9 h-9 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform duration-300">
-            N
-          </span>
-          <span className="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-purple-400 bg-clip-text text-transparent tracking-tight">
-            NovaCart
-          </span>
-        </Link>
-
-        {/* Categories / Navigation Links */}
-        <div className="hidden md:flex items-center gap-6 text-sm text-slate-300 font-medium">
-          <Link to="/" className="hover:text-purple-400 transition-colors duration-200">Catalog</Link>
-          {isAuthenticated && (
-            <>
-              <Link to="/orders" className="hover:text-purple-400 transition-colors duration-200">My Orders</Link>
-            </>
-          )}
-        </div>
-
-        {/* Search Bar (Desktop) */}
-        <div className="flex-1 max-w-md mx-4 lg:mx-8 hidden md:block">
-          <div className="relative group">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-400 transition-colors duration-200" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-900/50 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm text-slate-200 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 placeholder:text-slate-500 transition-all duration-300"
-            />
-          </div>
-        </div>
-
-        {/* Action Controls */}
-        <div className="flex items-center gap-4">
-          {/* Admin Dashboard button */}
-          {isAuthenticated && isAdmin && (
-            <Link
-              to="/admin/dashboard"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20 hover:bg-purple-500/20 hover:text-purple-200 transition-all duration-200"
-            >
-              <LayoutDashboard size={14} />
-              <span className="hidden sm:inline">Admin Dashboard</span>
-            </Link>
-          )}
-
-          {/* Cart Icon */}
-          <Link to="/cart" className="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all duration-200">
-            <ShoppingCart size={20} />
-            {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-slate-900 shadow-md">
-                {cartCount}
->>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
               </span>
             </div>
             <button
               data-testid="announcement-close-btn"
               onClick={() => setAnnouncementVisible(false)}
-              className="flex-shrink-0 p-0.5 rounded hover:bg-white/20 transition-colors text-white-force"
+              className="flex-shrink-0 p-0.5 rounded hover:bg-white/20 transition-colors text-white"
               aria-label="Close announcement"
             >
-              <X size={14} />
+              <X size={13} />
             </button>
           </div>
         </div>
       )}
 
       {/* Main Navbar */}
-      <nav
-        data-testid="main-navbar"
-        role="navigation"
-        aria-label="Main navigation"
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/90 backdrop-blur-xl border-b border-slate-200/80 shadow-md shadow-slate-100/10'
-            : 'bg-white/70 backdrop-blur-lg border-b border-slate-200/40'
-        }`}
-      >
+      <header className="sticky top-0 z-50 w-full shadow-md bg-[#2874F0] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14 gap-4">
 
-            {/* LEFT: Logo */}
-            <Link to="/" data-testid="navbar-logo" aria-label="Prathazon home" title="Go to homepage" className="flex items-center gap-2.5 group flex-shrink-0">
-              <div className="relative">
-                <div className="absolute inset-0 bg-amber-500 rounded-xl blur-md opacity-25 group-hover:opacity-45 transition-opacity" />
-                <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-lg">
-                  <Zap size={18} className="text-white-force" fill="white" />
-                </div>
-              </div>
+            {/* LEFT: Brand Logo */}
+            <Link to="/" data-testid="navbar-logo" aria-label="Sarathi home" title="Go to homepage" className="flex items-center gap-2.5 group flex-shrink-0">
+              <img
+                src="/sarathi-logo.jpg"
+                alt="Sarathi Logo"
+                className="h-11 w-11 object-contain rounded-full border-2 border-white/30 bg-white"
+              />
               <div className="flex flex-col leading-tight">
-                <span className="text-base font-extrabold tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-amber-600 bg-clip-text text-transparent">
-                  Prathazon
+                <span className="text-base font-extrabold tracking-tight text-white">
+                  Sarathi Store
                 </span>
-                <span className="text-[9px] font-bold text-amber-600 tracking-[0.15em] uppercase -mt-0.5">
-                  Elite Store
+                <span className="text-[9px] font-semibold text-[#FF9F00] tracking-wide -mt-0.5 italic">
+                  Smart Shopping
                 </span>
               </div>
             </Link>
 
-            {/* CENTER: Nav Links (desktop) */}
-            <div data-testid="navbar-links" className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => {
-                const isActive = location.pathname === link.href
-                return (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    data-testid={`nav-link-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
-                    title={`Go to ${link.label}`}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-150 ${
-                      isActive
-                        ? 'text-amber-600 bg-amber-500/10'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                )
-              })}
-            </div>
+            {/* CENTER: Persistent Search Bar (Flipkart Style) */}
+            {!isStaff && (
+              <form 
+                data-testid="search-form" 
+                role="search" 
+                aria-label="Product search" 
+                onSubmit={handleSearch} 
+                className="flex-1 max-w-xl relative hidden md:block"
+              >
+                <input
+                  data-testid="search-input"
+                  name="searchQuery"
+                  type="text"
+                  role="searchbox"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for products, brands and more"
+                  className="w-full px-4 py-2 pr-10 text-slate-800 text-sm bg-white rounded-sm border-0 focus:outline-none focus:ring-0 shadow-inner"
+                  autoComplete="off"
+                />
+                <button
+                  type="submit"
+                  aria-label="Search"
+                  className="absolute right-0 top-0 bottom-0 px-3 flex items-center justify-center text-[#2874F0] hover:text-blue-700 transition-colors"
+                >
+                  <Search size={16} />
+                </button>
+              </form>
+            )}
 
             {/* RIGHT: Actions */}
-            <div className="flex items-center gap-1 sm:gap-2">
-              {/* Search Toggle */}
-              {!isStaff && (
-                <button
-                  data-testid="navbar-search-btn"
-                  onClick={() => setSearchOpen(!searchOpen)}
-                  className="relative p-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100/60 transition-all duration-150"
-                  aria-label="Search products"
-                  title="Search products"
-                >
-                  <Search size={18} />
-                </button>
-              )}
-
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
               {/* Admin Button */}
               {isAuthenticated && isAdmin && (
                 <Link
                   to="/admin/dashboard"
                   data-testid="navbar-admin-link"
                   title="Open Admin Dashboard"
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20 hover:bg-amber-500/15 hover:text-amber-700 transition-all duration-150"
+                  className="hidden sm:flex items-center gap-1 px-3 py-1 bg-white/10 hover:bg-white/20 border border-white/20 rounded-sm text-xs font-semibold"
                 >
-                  <LayoutDashboard size={13} />
+                  <LayoutDashboard size={12} />
                   <span>Admin</span>
                 </Link>
               )}
@@ -274,10 +173,11 @@ export const Navbar: React.FC = () => {
               {isAuthenticated && isShopOwner && (
                 <Link
                   to="/seller/dashboard"
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20 hover:bg-amber-500/15 hover:text-amber-700 transition-all duration-150"
+                  data-testid="navbar-seller-link"
+                  className="hidden sm:flex items-center gap-1 px-3 py-1 bg-white/10 hover:bg-white/20 border border-white/20 rounded-sm text-xs font-semibold"
                 >
-                  <LayoutDashboard size={13} />
-                  <span>Seller Console</span>
+                  <LayoutDashboard size={12} />
+                  <span>Seller</span>
                 </Link>
               )}
 
@@ -285,32 +185,47 @@ export const Navbar: React.FC = () => {
               {isAuthenticated && isDeliveryPartner && (
                 <Link
                   to="/delivery/dashboard"
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20 hover:bg-amber-500/15 hover:text-amber-700 transition-all duration-150"
+                  data-testid="navbar-carrier-link"
+                  className="hidden sm:flex items-center gap-1 px-3 py-1 bg-white/10 hover:bg-white/20 border border-white/20 rounded-sm text-xs font-semibold"
                 >
-                  <LayoutDashboard size={13} />
-                  <span>Carrier Console</span>
+                  <LayoutDashboard size={12} />
+                  <span>Carrier</span>
                 </Link>
               )}
 
-              {/* Cart */}
+              {/* Wishlist Link */}
+              {!isStaff && isAuthenticated && (
+                <Link
+                  to="/wishlist"
+                  data-testid="navbar-wishlist-link"
+                  aria-label="Wishlist"
+                  className="flex items-center gap-1 text-sm font-semibold hover:text-slate-100 transition-colors"
+                >
+                  <Heart size={16} className="fill-white/10" />
+                  <span className="hidden sm:inline">Wishlist</span>
+                </Link>
+              )}
+
+              {/* Cart Toggle */}
               {!isStaff && (
                 <button
                   data-testid="navbar-cart-btn"
                   onClick={() => setCartDrawerOpen(true)}
-                  className="relative p-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100/60 transition-all duration-150 group"
+                  className="relative flex items-center gap-1.5 text-sm font-semibold hover:text-slate-100 transition-colors"
                   aria-label={`Shopping cart with ${cartCount} items`}
                   title={`Cart (${cartCount} items)`}
                 >
-                  <ShoppingCart size={18} className="group-hover:scale-110 transition-transform" />
+                  <ShoppingCart size={16} />
+                  <span className="hidden sm:inline">Cart</span>
                   {cartCount > 0 && (
-                    <span data-testid="cart-count-badge" aria-label={`${cartCount} items in cart`} className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white-force text-[10px] font-black flex items-center justify-center border-2 border-white shadow-lg animate-scale-in">
-                      {cartCount > 9 ? '9+' : cartCount}
+                    <span data-testid="cart-count-badge" aria-label={`${cartCount} items in cart`} className="w-5 h-5 rounded-full bg-[#FF9F00] text-white text-[10px] font-black flex items-center justify-center border border-white shadow-xs">
+                      {cartCount}
                     </span>
                   )}
                 </button>
               )}
 
-              {/* Auth / User */}
+              {/* Auth Dropdown */}
               {isAuthenticated ? (
                 <div className="relative" ref={dropdownRef}>
                   <button
@@ -319,77 +234,61 @@ export const Navbar: React.FC = () => {
                     aria-expanded={userDropdownOpen}
                     aria-haspopup="true"
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-xl hover:bg-slate-100/80 transition-all duration-150 group"
+                    className="flex items-center gap-1 hover:text-slate-100 transition-colors text-sm font-semibold py-1"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-white-force text-xs font-bold shadow-md">
-                      {user?.email?.charAt(0).toUpperCase() || 'U'}
-                    </div>
+                    <span>Account</span>
                     <ChevronDown
-                      size={14}
-                      className={`text-slate-500 transition-transform duration-200 ${userDropdownOpen ? 'rotate-180' : ''}`}
+                      size={13}
+                      className={`transition-transform duration-200 ${userDropdownOpen ? 'rotate-180' : ''}`}
                     />
                   </button>
 
                   {userDropdownOpen && (
-                    <div data-testid="user-dropdown" role="menu" className="absolute right-0 top-full mt-2 w-60 bg-white border border-slate-200 rounded-2xl shadow-xl shadow-slate-200/40 overflow-hidden animate-slide-down">
-                      {/* User info */}
-                      <div className="px-4 py-3 border-b border-slate-100 bg-gradient-to-br from-amber-500/5 to-transparent">
-                        <p className="text-xs text-slate-500 font-medium">Signed in as</p>
-                        <p data-testid="user-email-display" className="text-sm font-bold text-slate-800 truncate">{user?.email}</p>
-                        {isAdmin && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 mt-0.5">
-                            <Sparkles size={10} />
-                            Administrator
-                          </span>
-                        )}
-                        {isShopOwner && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 mt-0.5">
-                            <Store size={10} />
-                            Certified Seller
-                          </span>
-                        )}
-                        {isDeliveryPartner && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-600 mt-0.5">
-                            <Truck size={10} />
-                            Logistics Partner
-                          </span>
-                        )}
+                    <div data-testid="user-dropdown" role="menu" className="absolute right-0 top-full mt-2 w-56 bg-white text-slate-800 rounded-sm shadow-lg border border-slate-200/80 overflow-hidden z-50">
+                      {/* User Info */}
+                      <div className="px-4 py-2.5 border-b border-slate-100 bg-slate-50">
+                        <p className="text-[10px] text-slate-400 font-medium">Logged in as</p>
+                        <p data-testid="user-email-display" className="text-xs font-bold text-slate-800 truncate">{user?.email}</p>
                       </div>
 
-                      <div className="p-2">
+                      <div className="p-1">
                         {!isStaff && (
                           <Link
                             to="/orders"
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
+                            data-testid="dropdown-my-orders"
+                            className="flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
                           >
-                            <Package size={15} className="text-amber-500" />
+                            <Package size={14} className="text-blue-500" />
                             My Orders
                           </Link>
                         )}
                         {isAdmin && (
                           <Link
                             to="/admin/dashboard"
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
+                            data-testid="dropdown-admin-console"
+                            className="flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
                           >
-                            <LayoutDashboard size={15} className="text-amber-500" />
-                            Admin Dashboard
+                            <LayoutDashboard size={14} className="text-blue-500" />
+                            Admin Console
                           </Link>
                         )}
                         {isShopOwner && (
                           <Link
                             to="/seller/dashboard"
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
+                            data-testid="dropdown-seller-console"
+                            className="flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
                           >
-                            <LayoutDashboard size={15} className="text-amber-500" />
+                            <Store size={14} className="text-blue-500" />
                             Seller Console
                           </Link>
                         )}
                         {isDeliveryPartner && (
                           <Link
                             to="/delivery/dashboard"
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all"
+                            data-testid="dropdown-carrier-console"
+                            className="flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
                           >
-                            <LayoutDashboard size={15} className="text-amber-500" />
+                            <Truck size={14} className="text-blue-500" />
                             Carrier Console
                           </Link>
                         )}
@@ -397,9 +296,9 @@ export const Navbar: React.FC = () => {
                           data-testid="logout-btn"
                           role="menuitem"
                           onClick={handleLogout}
-                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-500 hover:text-red-700 hover:bg-red-50 transition-all mt-1"
+                          className="w-full flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-red-500 hover:bg-red-50 transition-colors border-t border-slate-100 mt-1"
                         >
-                          <LogOut size={15} />
+                          <LogOut size={14} />
                           Sign Out
                         </button>
                       </div>
@@ -411,141 +310,124 @@ export const Navbar: React.FC = () => {
                   to="/login"
                   data-testid="navbar-signin-btn"
                   title="Sign in to your account"
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white-force shadow-lg shadow-amber-600/15 hover:shadow-amber-500/25 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                  className="px-5 py-1 bg-white text-[#2874F0] hover:bg-slate-50 rounded-sm text-sm font-semibold transition-colors shadow-xs"
                 >
-                  <LogIn size={15} />
-                  <span className="hidden sm:inline">Sign In</span>
+                  Login
                 </Link>
               )}
 
-              {/* Mobile menu toggle */}
+              {/* Mobile Menu Button */}
               <button
                 data-testid="mobile-menu-toggle"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100/60 transition-all duration-150"
+                className="md:hidden p-1 hover:bg-white/10 rounded transition-colors"
                 aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={mobileMenuOpen}
-                title="Toggle navigation menu"
               >
-                {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
           </div>
 
-          {/* Search Bar (expandable) */}
-          {searchOpen && (
-            <div data-testid="search-bar-container" className="pb-4 animate-slide-down">
-              <form data-testid="search-form" role="search" aria-label="Product search" onSubmit={handleSearch} className="relative">
-                <Search
-                  size={17}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#1D1C1A] pointer-events-none z-10"
-                />
+          {/* Search bar inside header on mobile/tablet */}
+          {!isStaff && (
+            <div className="pb-3 md:hidden">
+              <form onSubmit={handleSearch} className="relative w-full">
                 <input
-                  ref={searchRef}
-                  data-testid="search-input"
-                  name="searchQuery"
-                  type="search"
-                  role="searchbox"
+                  type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for products, brands, categories..."
-                  title="Type your search query"
-                  autoComplete="off"
-                  className="w-full pl-11 pr-11 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm text-[#1D1C1A] font-bold placeholder-[#A5A199] focus:outline-none transition-all shadow-[3px_3px_0px_0px_#1D1C1A] focus:shadow-[2px_2px_0px_0px_#1D1C1A] focus:translate-x-[1px] focus:translate-y-[1px]"
+                  placeholder="Search for products, brands and more"
+                  className="w-full px-3 py-1.5 pr-8 text-slate-800 text-xs bg-white rounded-sm focus:outline-none"
                 />
-                <button
-                  type="button"
-                  data-testid="search-close-btn"
-                  aria-label="Close search"
-                  onClick={() => { setSearchOpen(false); setSearchQuery('') }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 border-2 border-transparent hover:border-[#1D1C1A] rounded-lg text-[#1D1C1A] bg-[#FAF6EE] transition-all"
-                >
-                  <X size={16} />
+                <button type="submit" className="absolute right-0 top-0 bottom-0 px-2.5 flex items-center justify-center text-[#2874F0]">
+                  <Search size={14} />
                 </button>
               </form>
             </div>
           )}
         </div>
-<<<<<<< HEAD
+      </header>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div data-testid="mobile-menu" role="menu" className="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur-xl animate-slide-down shadow-lg">
-            <div className="max-w-7xl mx-auto px-4 py-4 space-y-1">
-              {navLinks.map((link) => {
-                const isActive = location.pathname === link.href
-                return (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                      isActive
-                        ? 'text-amber-600 bg-amber-50'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                )
-              })}
-              {isAuthenticated && isAdmin && (
-                <Link
-                  to="/admin/dashboard"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-amber-600 hover:bg-amber-50 transition-all"
-                >
-                  <LayoutDashboard size={16} />
-                  Admin Dashboard
-                </Link>
-              )}
-              {isAuthenticated && isShopOwner && (
-                <Link
-                  to="/seller/dashboard"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-amber-600 hover:bg-amber-50 transition-all"
-                >
-                  <Store size={16} />
-                  Seller Console
-                </Link>
-              )}
-              {isAuthenticated && isDeliveryPartner && (
-                <Link
-                  to="/delivery/dashboard"
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-amber-600 hover:bg-amber-50 transition-all"
-                >
-                  <Truck size={16} />
-                  Carrier Console
-                </Link>
-              )}
-              {!isAuthenticated && (
-                <Link
-                  to="/login"
-                  className="flex items-center justify-center gap-2 w-full mt-3 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-500 to-orange-600 text-white-force"
-                >
-                  <LogIn size={16} />
-                  Sign In to Shop
-                </Link>
-              )}
-            </div>
+      {/* Category Strip below Navbar (Flipkart Style) */}
+      {!isStaff && (
+        <nav className="w-full bg-white border-b border-slate-200/80 overflow-x-auto shadow-xs select-none" aria-label="Product categories">
+          <div className="max-w-7xl mx-auto px-4 flex items-center justify-center md:gap-12 gap-6 py-2.5 scrollable-tabs">
+            {CATEGORY_ITEMS.map((item) => (
+              <Link
+                key={item.label}
+                to={item.href}
+                data-testid={`category-link-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                className="text-xs font-semibold text-slate-700 hover:text-[#2874F0] transition-colors whitespace-nowrap px-1 py-0.5 tracking-wide"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
-        )}
-      </nav>
-    </>
-=======
-      </div>
+        </nav>
+      )}
 
-      {/* Search Bar (Mobile) */}
-      <div className="md:hidden mt-4">
-        <div className="relative group">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-purple-400 transition-colors duration-200" />
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-900/50 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm text-slate-200 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 placeholder:text-slate-500 transition-all duration-300"
-          />
+      {/* Mobile Menu Panel */}
+      {mobileMenuOpen && (
+        <div data-testid="mobile-menu" role="menu" className="md:hidden border-t border-slate-200 bg-white text-slate-800 shadow-md">
+          <div className="px-4 py-3 space-y-1">
+            {CATEGORY_ITEMS.map((item) => (
+              <Link
+                key={item.label}
+                to={item.href}
+                data-testid={`mobile-category-link-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                className="block py-2.5 border-b border-slate-100 text-sm font-semibold text-slate-700"
+              >
+                {item.label}
+              </Link>
+            ))}
+            {isAuthenticated && (
+              <>
+                <Link to="/orders" data-testid="mobile-my-orders" className="flex items-center gap-2 py-2.5 text-sm font-semibold text-slate-700 border-b border-slate-100">
+                  <Package size={16} className="text-blue-500" />
+                  My Orders
+                </Link>
+                {isAdmin && (
+                  <Link to="/admin/dashboard" data-testid="mobile-admin-console" className="flex items-center gap-2 py-2.5 text-sm font-semibold text-slate-700 border-b border-slate-100">
+                    <LayoutDashboard size={16} className="text-blue-500" />
+                    Admin Console
+                  </Link>
+                )}
+                {isShopOwner && (
+                  <Link to="/seller/dashboard" data-testid="mobile-seller-console" className="flex items-center gap-2 py-2.5 text-sm font-semibold text-slate-700 border-b border-slate-100">
+                    <Store size={16} className="text-blue-500" />
+                    Seller Console
+                  </Link>
+                )}
+                {isDeliveryPartner && (
+                  <Link to="/delivery/dashboard" data-testid="mobile-carrier-console" className="flex items-center gap-2 py-2.5 text-sm font-semibold text-slate-700 border-b border-slate-100">
+                    <Truck size={16} className="text-blue-500" />
+                    Carrier Console
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  data-testid="mobile-logout-btn"
+                  className="w-full flex items-center gap-2 py-2.5 text-sm font-semibold text-red-500 text-left"
+                >
+                  <LogOut size={16} />
+                  Sign Out
+                </button>
+              </>
+            )}
+            {!isAuthenticated && (
+              <Link
+                to="/login"
+                data-testid="mobile-login-btn"
+                className="flex items-center justify-center gap-2 w-full mt-3 py-2.5 rounded-sm text-sm font-semibold bg-[#2874F0] text-white"
+              >
+                <LogIn size={16} />
+                Login / Sign Up
+              </Link>
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
->>>>>>> 3fb1eaec9d7fbe035b485f07fc838529eccd6729
+      )}
+    </>
   )
 }

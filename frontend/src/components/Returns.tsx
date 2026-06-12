@@ -82,14 +82,14 @@ export const Returns: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="container mx-auto py-8 text-center">
+      <div className="container mx-auto py-8 text-center" data-testid="returns-unauthorized">
         <p className="text-gray-600">Please log in to view your returns</p>
       </div>
     )
   }
 
   if (loading) {
-    return <div className="text-center py-8">Loading returns...</div>
+    return <div className="text-center py-8" data-testid="returns-loading-indicator">Loading returns...</div>
   }
 
   return (
@@ -99,6 +99,7 @@ export const Returns: React.FC = () => {
       {!showForm && (
         <button
           onClick={() => setShowForm(true)}
+          data-testid="returns-request-btn"
           className="bg-blue-600 text-white px-4 py-2 rounded-lg mb-6 hover:bg-blue-700"
         >
           Request Return
@@ -106,14 +107,16 @@ export const Returns: React.FC = () => {
       )}
 
       {showForm && (
-        <form onSubmit={handleSubmitReturn} className="bg-gray-100 p-6 rounded-lg mb-6">
+        <form onSubmit={handleSubmitReturn} data-testid="returns-form" className="bg-gray-100 p-6 rounded-lg mb-6">
           <h2 className="text-xl font-semibold mb-4">Create Return Request</h2>
 
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Order ID</label>
+              <label htmlFor="return-order-id" className="block text-sm font-medium mb-2">Order ID</label>
               <input
                 type="text"
+                id="return-order-id"
+                data-testid="return-order-id-input"
                 value={orderId}
                 onChange={(e) => setOrderId(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2"
@@ -122,9 +125,11 @@ export const Returns: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Product ID</label>
+              <label htmlFor="return-product-id" className="block text-sm font-medium mb-2">Product ID</label>
               <input
                 type="text"
+                id="return-product-id"
+                data-testid="return-product-id-input"
                 value={productId}
                 onChange={(e) => setProductId(e.target.value)}
                 className="w-full border border-gray-300 rounded px-3 py-2"
@@ -135,9 +140,11 @@ export const Returns: React.FC = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Quantity</label>
+            <label htmlFor="return-quantity" className="block text-sm font-medium mb-2">Quantity</label>
             <input
               type="number"
+              id="return-quantity"
+              data-testid="return-quantity-input"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
               className="w-full border border-gray-300 rounded px-3 py-2"
@@ -147,8 +154,10 @@ export const Returns: React.FC = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Reason for Return</label>
+            <label htmlFor="return-reason" className="block text-sm font-medium mb-2">Reason for Return</label>
             <select
+              id="return-reason"
+              data-testid="return-reason-select"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2"
@@ -165,8 +174,10 @@ export const Returns: React.FC = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Additional Details</label>
+            <label htmlFor="return-description" className="block text-sm font-medium mb-2">Additional Details</label>
             <textarea
+              id="return-description"
+              data-testid="return-desc-input"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 h-20"
@@ -178,6 +189,7 @@ export const Returns: React.FC = () => {
             <button
               type="submit"
               disabled={submitting}
+              data-testid="return-submit-btn"
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
             >
               {submitting ? 'Submitting...' : 'Submit Return Request'}
@@ -185,6 +197,7 @@ export const Returns: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowForm(false)}
+              data-testid="return-cancel-btn"
               className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
             >
               Cancel
@@ -197,17 +210,17 @@ export const Returns: React.FC = () => {
         <h2 className="text-2xl font-bold mb-4">Your Return Requests</h2>
 
         {returns.length === 0 ? (
-          <p className="text-gray-600">No return requests yet</p>
+          <p className="text-gray-600" data-testid="returns-empty-state">No return requests yet</p>
         ) : (
           <div className="space-y-4">
             {returns.map((returnReq) => (
-              <div key={returnReq.id} className="border border-gray-200 p-4 rounded">
+              <div key={returnReq.id} data-testid={`returns-card-${returnReq.id}`} className="border border-gray-200 p-4 rounded">
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <h3 className="font-semibold">Return Request #{returnReq.id.substring(0, 8)}</h3>
                     <p className="text-sm text-gray-600">Order: {returnReq.order_id.substring(0, 8)}</p>
                   </div>
-                  <span className={`px-3 py-1 rounded text-sm font-medium ${getStatusBadge(returnReq.status)}`}>
+                  <span data-testid={`returns-status-${returnReq.id}`} className={`px-3 py-1 rounded text-sm font-medium ${getStatusBadge(returnReq.status)}`}>
                     {returnReq.status}
                   </span>
                 </div>
@@ -219,7 +232,7 @@ export const Returns: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Refund Amount</p>
-                    <p className="font-semibold text-green-600">${returnReq.refund_amount.toFixed(2)}</p>
+                    <p className="font-semibold text-green-600" data-testid={`returns-refund-${returnReq.id}`}>${returnReq.refund_amount.toFixed(2)}</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Reason</p>

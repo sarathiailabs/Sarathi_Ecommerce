@@ -88,13 +88,12 @@ export const DeliveryDashboard: React.FC = () => {
 
   // Calculate stats
   const estimatedEarnings = completedShipments.length * 150 // ₹150 base payout per delivery
-  const totalKmTravelled = myDeliveries.length * 4.8 // 4.8km average
+  const totalKmTravelled = myDeliveries.length * 4.8
 
-  // Deterministic address helper for elegant visuals
   const mockAddress = (orderId: string) => {
     const num = orderId.charCodeAt(0) + orderId.charCodeAt(orderId.length - 1)
     const sectors = ['Sector 62, Noida', 'Indiranagar, Bangalore', 'Andheri West, Mumbai', 'Salt Lake, Kolkata', 'DLF Phase 3, Gurgaon']
-    const hubs = ['Prathazon Central Hub', 'North Logistics Center', 'South Dispatch Wing', 'East Express Gateway', 'West Transit Port']
+    const hubs = ['Sarathi Central Hub', 'North Logistics Center', 'South Dispatch Wing', 'East Express Gateway', 'West Transit Port']
     return {
       destination: sectors[num % sectors.length],
       pickup: hubs[(num + 2) % hubs.length],
@@ -103,101 +102,93 @@ export const DeliveryDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF6EE] pb-24 pt-8">
-      {/* Background Dots */}
-      <div 
-        className="absolute inset-0 opacity-[0.05] pointer-events-none" 
-        style={{ 
-          backgroundImage: 'radial-gradient(#1D1C1A 2px, transparent 2px)', 
-          backgroundSize: '24px 24px' 
-        }} 
-      />
-
+    <div className="min-h-screen bg-[#F1F3F6] pb-24 pt-8 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
-        {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 border-b-3 border-[#1D1C1A] pb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-200 pb-6">
           <div>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-[#F5B025] text-[#1D1C1A] border-2 border-[#1D1C1A] shadow-[2px_2px_0px_0px_#1D1C1A] uppercase tracking-wider mb-3">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold bg-[#FF9F00] text-white tracking-wider mb-2.5 uppercase">
               <Truck size={12} className="animate-bounce" />
               Carrier Operations Gate
             </span>
-            <h1 className="text-4xl sm:text-5xl font-black text-[#1D1C1A] tracking-tight uppercase leading-none">
-              CARRIER DASHBOARD
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 uppercase tracking-tight leading-none">
+              Carrier Dashboard
             </h1>
-            <p className="text-sm font-bold text-[#615E59] mt-2">
-              Authorized Delivery Partner: <span className="text-[#E1392A]">{user?.full_name || user?.email}</span>
+            <p className="text-xs font-semibold text-slate-500 mt-2">
+              Authorized Delivery Partner: <span className="text-[#2874F0] font-bold">{user?.full_name || user?.email}</span>
             </p>
           </div>
 
           <button
             onClick={fetchData}
             disabled={loading}
-            className="self-start md:self-center btn-secondary flex items-center gap-2 px-5 py-3 uppercase text-xs font-black tracking-wider"
+            data-testid="delivery-refresh-btn"
+            className="self-start md:self-center flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-slate-50 border border-slate-350 text-slate-700 rounded-sm text-xs font-bold uppercase tracking-wider shadow-sm transition-colors"
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
             Refresh Logistics Deck
           </button>
         </div>
 
-        {/* Tactile Key Metrics Deck */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           
-          <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[6px_6px_0px_0px_#1D1C1A] hover:-translate-y-0.5 transition-all">
+          <div data-testid="delivery-stat-active" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] text-[#615E59] font-black uppercase tracking-widest">Active Runs</span>
-              <div className="w-8 h-8 rounded-xl bg-orange-100 border-2 border-[#1D1C1A] flex items-center justify-center text-orange-600">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Active Runs</span>
+              <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-orange-600">
                 <Truck size={14} />
               </div>
             </div>
-            <div className="text-3xl font-black text-[#1D1C1A]">{activeShipments.length}</div>
-            <p className="text-[10px] text-slate-400 font-bold mt-1">Assignments in route</p>
+            <div className="text-2xl font-extrabold text-slate-855">{activeShipments.length}</div>
+            <p className="text-[10px] text-slate-450 font-semibold mt-1">Assignments in route</p>
           </div>
 
-          <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[6px_6px_0px_0px_#1D1C1A] hover:-translate-y-0.5 transition-all">
+          <div data-testid="delivery-stat-available" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] text-[#615E59] font-black uppercase tracking-widest">Available Loads</span>
-              <div className="w-8 h-8 rounded-xl bg-blue-100 border-2 border-[#1D1C1A] flex items-center justify-center text-blue-600">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Available Loads</span>
+              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0]">
                 <ClipboardList size={14} />
               </div>
             </div>
-            <div className="text-3xl font-black text-[#1D1C1A]">{unassigned.length}</div>
-            <p className="text-[10px] text-slate-400 font-bold mt-1">Pending dispatch orders</p>
+            <div className="text-2xl font-extrabold text-slate-855">{unassigned.length}</div>
+            <p className="text-[10px] text-slate-455 font-semibold mt-1">Pending dispatch orders</p>
           </div>
 
-          <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[6px_6px_0px_0px_#1D1C1A] hover:-translate-y-0.5 transition-all">
+          <div data-testid="delivery-stat-earnings" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] text-[#615E59] font-black uppercase tracking-widest">Total Earnings</span>
-              <div className="w-8 h-8 rounded-xl bg-emerald-100 border-2 border-[#1D1C1A] flex items-center justify-center text-emerald-600">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total Earnings</span>
+              <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
                 <TrendingUp size={14} />
               </div>
             </div>
-            <div className="text-3xl font-black text-[#E1392A]">₹{estimatedEarnings}</div>
-            <p className="text-[10px] text-slate-400 font-bold mt-1">Based on ₹150 / delivery</p>
+            <div className="text-2xl font-extrabold text-slate-855">₹{estimatedEarnings}</div>
+            <p className="text-[10px] text-slate-455 font-semibold mt-1">Based on ₹150 / delivery</p>
           </div>
 
-          <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[6px_6px_0px_0px_#1D1C1A] hover:-translate-y-0.5 transition-all">
+          <div data-testid="delivery-stat-distance" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] text-[#615E59] font-black uppercase tracking-widest">Logistics Hubs</span>
-              <div className="w-8 h-8 rounded-xl bg-purple-100 border-2 border-[#1D1C1A] flex items-center justify-center text-purple-600">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Logistics Hubs</span>
+              <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
                 <MapPin size={14} />
               </div>
             </div>
-            <div className="text-3xl font-black text-[#1D1C1A]">{totalKmTravelled.toFixed(1)} km</div>
-            <p className="text-[10px] text-slate-400 font-bold mt-1">Distance covered</p>
+            <div className="text-2xl font-extrabold text-slate-855">{totalKmTravelled.toFixed(1)} km</div>
+            <p className="text-[10px] text-slate-455 font-semibold mt-1">Distance covered</p>
           </div>
 
         </div>
 
-        {/* Tab Selection */}
-        <div className="flex border-b-3 border-[#1D1C1A] mb-8 overflow-x-auto whitespace-nowrap scrollbar-none gap-2">
+        <div className="flex border-b border-slate-200 mb-6 overflow-x-auto whitespace-nowrap scrollbar-none gap-2" role="tablist">
           
           <button
             onClick={() => setActiveTab('my_active')}
-            className={`px-6 py-3.5 text-xs font-black uppercase tracking-wider border-t-3 border-x-3 border-[#1D1C1A] rounded-t-xl transition-all ${
+            role="tab"
+            aria-selected={activeTab === 'my_active'}
+            data-testid="delivery-tab-active"
+            className={`px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
               activeTab === 'my_active'
-                ? 'bg-white text-[#E1392A] -mb-[3px] border-b-3 border-white translate-y-[1px]'
-                : 'bg-slate-100/60 text-slate-500 border-transparent hover:bg-slate-200/50 hover:text-black'
+                ? 'border-[#2874F0] text-[#2874F0] font-extrabold'
+                : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
             My Active Shipments ({activeShipments.length})
@@ -205,10 +196,13 @@ export const DeliveryDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('available')}
-            className={`px-6 py-3.5 text-xs font-black uppercase tracking-wider border-t-3 border-x-3 border-[#1D1C1A] rounded-t-xl transition-all ${
+            role="tab"
+            aria-selected={activeTab === 'available'}
+            data-testid="delivery-tab-available"
+            className={`px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
               activeTab === 'available'
-                ? 'bg-white text-[#E1392A] -mb-[3px] border-b-3 border-white translate-y-[1px]'
-                : 'bg-slate-100/60 text-slate-500 border-transparent hover:bg-slate-200/50 hover:text-black'
+                ? 'border-[#2874F0] text-[#2874F0] font-extrabold'
+                : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
             Available Jobs Pool ({unassigned.length})
@@ -216,70 +210,71 @@ export const DeliveryDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('my_history')}
-            className={`px-6 py-3.5 text-xs font-black uppercase tracking-wider border-t-3 border-x-3 border-[#1D1C1A] rounded-t-xl transition-all ${
+            role="tab"
+            aria-selected={activeTab === 'my_history'}
+            data-testid="delivery-tab-completed"
+            className={`px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
               activeTab === 'my_history'
-                ? 'bg-white text-[#E1392A] -mb-[3px] border-b-3 border-white translate-y-[1px]'
-                : 'bg-slate-100/60 text-slate-500 border-transparent hover:bg-slate-200/50 hover:text-black'
+                ? 'border-[#2874F0] text-[#2874F0] font-extrabold'
+                : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
             Completed Shipments ({completedShipments.length})
           </button>
         </div>
 
-        {/* Tab Contents */}
         {loading ? (
-          <div className="space-y-6">
+          <div data-testid="delivery-loading-skeleton" className="space-y-4 animate-pulse">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-6 h-40 skeleton" />
+              <div key={i} className="bg-white border border-slate-200 rounded-sm p-6 h-32" />
             ))}
           </div>
         ) : (
           <AnimatePresence mode="wait">
             
-            {/* 1. MY ACTIVE SHIPMENTS TAB */}
             {activeTab === 'my_active' && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="space-y-6"
+                className="space-y-4"
               >
                 {activeShipments.length === 0 ? (
-                  <div className="text-center py-16 bg-white border-3 border-[#1D1C1A] rounded-3xl shadow-[4px_4px_0px_0px_#1D1C1A]">
-                    <Truck size={42} className="text-slate-300 mx-auto mb-4 animate-pulse" />
-                    <h3 className="text-lg font-black uppercase text-[#1D1C1A] mb-1">No Active Dispatches</h3>
-                    <p className="text-slate-500 text-sm mb-6 font-medium">Head over to the Available Jobs Pool to claim some delivery tasks!</p>
+                  <div data-testid="delivery-empty-active" className="text-center py-16 bg-white border border-slate-200 rounded-sm shadow-xs">
+                    <Truck size={42} className="text-slate-250 mx-auto mb-4 animate-pulse" />
+                    <h3 className="text-sm font-bold uppercase text-slate-755 mb-1">No Active Dispatches</h3>
+                    <p className="text-slate-400 text-xs mb-6 font-semibold">Head over to the Available Jobs Pool to claim some delivery tasks!</p>
                     <button
                       onClick={() => setActiveTab('available')}
-                      className="btn-primary px-6 py-3 text-xs font-black uppercase shadow-sm"
+                      className="px-5 py-2.5 bg-[#2874F0] hover:bg-[#1264e3] text-white text-xs font-bold uppercase rounded-sm shadow-xs transition-colors"
                     >
                       Browse Available Jobs
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-6">
+                  <div className="grid grid-cols-1 gap-4">
                     {activeShipments.map((delivery) => {
                       const { destination, pickup, recipient } = mockAddress(delivery.order_id)
                       const isPickedUp = delivery.status !== 'assigned' && delivery.status !== 'pending'
                       const isInTransit = delivery.status === 'in_transit'
 
                       return (
-                        <div key={delivery.id} className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-6 shadow-[5px_5px_0px_0px_#1D1C1A] hover:shadow-[7px_7px_0px_0px_#1D1C1A] transition-all">
-                          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-5 pb-4 border-b border-slate-200">
+                        <div key={delivery.id} data-testid={`delivery-active-card-${delivery.id}`} className="bg-white border border-slate-200 rounded-sm p-5 shadow-xs hover:shadow-sm transition-all">
+                          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 pb-3 border-b border-slate-100">
                             <div>
-                              <div className="flex items-center gap-3">
-                                <span className="font-black text-slate-800 text-sm uppercase tracking-wide">
+                              <div className="flex items-center gap-2.5">
+                                <span className="font-extrabold text-slate-800 text-xs uppercase tracking-wide">
                                   Delivery ID: #{delivery.id.slice(-6).toUpperCase()}
                                 </span>
-                                <span className={`px-3 py-1 border-2 border-[#1D1C1A] rounded-md text-[9px] font-black uppercase ${
-                                  delivery.status === 'picked_up' ? 'bg-orange-100 text-orange-800' :
-                                  delivery.status === 'in_transit' ? 'bg-blue-100 text-blue-800' :
-                                  'bg-slate-100 text-slate-800'
+                                <span className={`px-2 py-0.5 rounded-sm text-[9px] font-bold uppercase ${
+                                  delivery.status === 'picked_up' ? 'bg-orange-50 text-orange-700' :
+                                  delivery.status === 'in_transit' ? 'bg-blue-50 text-blue-700' :
+                                  'bg-slate-100 text-slate-700'
                                 }`}>
                                   {delivery.status.replace('_', ' ')}
                                 </span>
                               </div>
-                              <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest">
+                              <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
                                 Assigned Order ID: {delivery.order_id}
                               </p>
                             </div>
@@ -289,7 +284,8 @@ export const DeliveryDashboard: React.FC = () => {
                                 <button
                                   onClick={() => handleStatusUpdate(delivery.id, 'picked_up')}
                                   disabled={updatingId === delivery.id}
-                                  className="btn-primary px-4 py-2.5 text-[10px] font-black uppercase tracking-wider shadow-sm"
+                                  data-testid={`delivery-btn-pickup-${delivery.id}`}
+                                  className="px-4 py-2 bg-[#FF9F00] hover:bg-[#ff9100] text-white text-[10px] font-bold uppercase rounded-sm shadow-xs transition-colors"
                                 >
                                   Mark as Picked Up
                                 </button>
@@ -299,7 +295,8 @@ export const DeliveryDashboard: React.FC = () => {
                                 <button
                                   onClick={() => handleStatusUpdate(delivery.id, 'in_transit')}
                                   disabled={updatingId === delivery.id}
-                                  className="btn-primary px-4 py-2.5 text-[10px] font-black uppercase tracking-wider shadow-sm"
+                                  data-testid={`delivery-btn-transit-${delivery.id}`}
+                                  className="px-4 py-2 bg-[#FF9F00] hover:bg-[#ff9100] text-white text-[10px] font-bold uppercase rounded-sm shadow-xs transition-colors"
                                 >
                                   Mark as In Transit
                                 </button>
@@ -309,7 +306,8 @@ export const DeliveryDashboard: React.FC = () => {
                                 <button
                                   onClick={() => handleStatusUpdate(delivery.id, 'delivered')}
                                   disabled={updatingId === delivery.id}
-                                  className="btn-primary bg-emerald-600 hover:bg-emerald-700 text-white-force px-4 py-2.5 text-[10px] font-black uppercase tracking-wider shadow-sm"
+                                  data-testid={`delivery-btn-deliver-${delivery.id}`}
+                                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold uppercase rounded-sm shadow-xs transition-colors"
                                 >
                                   Confirm Delivered ✓
                                 </button>
@@ -317,42 +315,40 @@ export const DeliveryDashboard: React.FC = () => {
                             </div>
                           </div>
 
-                          {/* Route tracking details */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             
-                            <div className="flex items-start gap-3">
-                              <div className="w-8 h-8 rounded-lg bg-[#FAF6EE] border-2 border-[#1D1C1A] flex items-center justify-center text-[#E1392A] mt-0.5">
-                                <MapPin size={14} />
+                            <div className="flex items-start gap-2.5">
+                              <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-rose-500 mt-0.5 border border-slate-100 flex-shrink-0">
+                                <MapPin size={13} />
                               </div>
                               <div>
-                                <span className="text-[9px] font-black uppercase text-[#615E59] tracking-wider block">Pickup Facility</span>
-                                <span className="text-xs font-black text-[#1D1C1A] uppercase">{pickup}</span>
+                                <span className="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Pickup Facility</span>
+                                <span data-testid={`delivery-pickup-text-${delivery.id}`} className="text-xs font-bold text-slate-750 uppercase">{pickup}</span>
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3">
-                              <div className="w-8 h-8 rounded-lg bg-[#FAF6EE] border-2 border-[#1D1C1A] flex items-center justify-center text-[#F5B025] mt-0.5">
-                                <User size={14} />
+                            <div className="flex items-start gap-2.5">
+                              <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-[#2874F0] mt-0.5 border border-slate-100 flex-shrink-0">
+                                <User size={13} />
                               </div>
                               <div>
-                                <span className="text-[9px] font-black uppercase text-[#615E59] tracking-wider block">Recipient</span>
-                                <span className="text-xs font-black text-[#1D1C1A] uppercase">{recipient}</span>
-                                <span className="text-[10px] text-[#615E59] font-bold block mt-0.5">{destination}</span>
+                                <span className="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Recipient</span>
+                                <span data-testid={`delivery-recipient-text-${delivery.id}`} className="text-xs font-bold text-slate-750 uppercase">{recipient}</span>
+                                <span className="text-[10px] text-slate-450 font-semibold block mt-0.5">{destination}</span>
                               </div>
                             </div>
 
-                            <div className="flex items-start gap-3">
-                              <div className="w-8 h-8 rounded-lg bg-[#FAF6EE] border-2 border-[#1D1C1A] flex items-center justify-center text-blue-500 mt-0.5">
-                                <Calendar size={14} />
+                            <div className="flex items-start gap-2.5">
+                              <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-emerald-600 mt-0.5 border border-slate-100 flex-shrink-0">
+                                <Calendar size={13} />
                               </div>
                               <div>
-                                <span className="text-[9px] font-black uppercase text-[#615E59] tracking-wider block">Est. Completion</span>
-                                <span className="text-xs font-black text-[#1D1C1A]">
+                                <span className="text-[9px] font-bold uppercase text-slate-400 tracking-wider block">Est. Completion</span>
+                                <span data-testid={`delivery-est-completion-${delivery.id}`} className="text-xs font-bold text-slate-750">
                                   {delivery.estimated_delivery ? new Date(delivery.estimated_delivery).toLocaleString() : 'As soon as possible'}
                                 </span>
                               </div>
                             </div>
-
                           </div>
                         </div>
                       )
@@ -362,38 +358,37 @@ export const DeliveryDashboard: React.FC = () => {
               </motion.div>
             )}
 
-            {/* 2. AVAILABLE JOBS TAB */}
             {activeTab === 'available' && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="space-y-6"
+                className="space-y-4"
               >
                 {unassigned.length === 0 ? (
-                  <div className="text-center py-16 bg-white border-3 border-[#1D1C1A] rounded-3xl shadow-[4px_4px_0px_0px_#1D1C1A]">
+                  <div data-testid="delivery-empty-available" className="text-center py-16 bg-white border border-slate-200 rounded-sm shadow-xs">
                     <CheckCircle2 size={42} className="text-emerald-500 mx-auto mb-4" />
-                    <h3 className="text-lg font-black uppercase text-[#1D1C1A] mb-1">Logistics Clean Sheet</h3>
-                    <p className="text-slate-500 text-sm font-medium">All dispatch orders are currently claimed. Excellent work!</p>
+                    <h3 className="text-sm font-bold uppercase text-slate-755 mb-1">Logistics Clean Sheet</h3>
+                    <p className="text-slate-400 text-xs font-semibold">All dispatch orders are currently claimed. Excellent work!</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-6">
+                  <div className="grid grid-cols-1 gap-4">
                     {unassigned.map((delivery) => {
                       const { destination, pickup, recipient } = mockAddress(delivery.order_id)
                       
                       return (
-                        <div key={delivery.id} className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-6 shadow-[5px_5px_0px_0px_#1D1C1A] hover:shadow-[7px_7px_0px_0px_#1D1C1A] hover:-translate-y-0.5 transition-all">
-                          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-5 pb-4 border-b border-slate-200">
+                        <div key={delivery.id} data-testid={`delivery-available-card-${delivery.id}`} className="bg-white border border-slate-200 rounded-sm p-5 shadow-xs hover:shadow-sm transition-all">
+                          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 pb-3 border-b border-slate-100">
                             <div>
-                              <div className="flex items-center gap-3">
-                                <span className="font-black text-slate-800 text-sm uppercase tracking-wide">
+                              <div className="flex items-center gap-2">
+                                <span className="font-extrabold text-slate-800 text-xs uppercase tracking-wide">
                                   Logistics Assignment #{delivery.id.slice(-6).toUpperCase()}
                                 </span>
-                                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase bg-blue-100 text-blue-800 border border-blue-200">
+                                <span className="px-2 py-0.5 rounded-sm text-[9px] font-bold uppercase bg-blue-50 text-blue-800 border border-blue-100">
                                   Awaiting Partner
                                 </span>
                               </div>
-                              <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-widest">
+                              <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider">
                                 Est. Dispatch Hub: {pickup}
                               </p>
                             </div>
@@ -401,25 +396,25 @@ export const DeliveryDashboard: React.FC = () => {
                             <button
                               onClick={() => handleClaim(delivery.id)}
                               disabled={claimingId === delivery.id}
-                              className="btn-primary px-6 py-3 text-xs font-black uppercase tracking-wider shadow-sm flex items-center gap-2 self-start lg:self-center"
+                              data-testid={`delivery-btn-claim-${delivery.id}`}
+                              className="px-4 py-2 bg-[#FF9F00] hover:bg-[#ff9100] text-white text-xs font-bold uppercase tracking-wider rounded-sm shadow-xs flex items-center gap-1.5 self-start lg:self-center transition-colors"
                             >
                               <Truck size={14} />
-                              {claimingId === delivery.id ? 'Claiming Load...' : 'Claim Shipment task (₹150)'}
+                              {claimingId === delivery.id ? 'Claiming Load...' : 'Claim Job (₹150)'}
                             </button>
                           </div>
 
-                          {/* Address Info */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-[#FAF6EE] border-2 border-[#1D1C1A] rounded-xl p-4">
-                              <span className="text-[9px] font-black uppercase text-[#615E59] tracking-wider block mb-1">Pickup From</span>
-                              <p className="text-xs font-black text-[#1D1C1A] uppercase">{pickup}</p>
-                              <p className="text-[10px] text-slate-400 font-bold mt-0.5">Warehoused order: {delivery.order_id}</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-slate-50 border border-slate-200 rounded-sm p-4">
+                              <span className="text-[9px] font-bold uppercase text-slate-400 tracking-wider block mb-1">Pickup From</span>
+                              <p data-testid={`delivery-available-pickup-${delivery.id}`} className="text-xs font-bold text-slate-700 uppercase">{pickup}</p>
+                              <p className="text-[10px] text-slate-450 font-semibold mt-0.5">Warehoused order: {delivery.order_id}</p>
                             </div>
 
-                            <div className="bg-[#FAF6EE] border-2 border-[#1D1C1A] rounded-xl p-4">
-                              <span className="text-[9px] font-black uppercase text-[#615E59] tracking-wider block mb-1">Delivery Destination</span>
-                              <p className="text-xs font-black text-[#1D1C1A] uppercase">{recipient}</p>
-                              <p className="text-xs font-bold text-[#E1392A] mt-0.5">{destination}</p>
+                            <div className="bg-slate-50 border border-slate-200 rounded-sm p-4">
+                              <span className="text-[9px] font-bold uppercase text-slate-400 tracking-wider block mb-1">Delivery Destination</span>
+                              <p className="text-xs font-bold text-slate-700 uppercase">{recipient}</p>
+                              <p data-testid={`delivery-available-dest-${delivery.id}`} className="text-xs font-bold text-[#2874F0] mt-0.5">{destination}</p>
                             </div>
                           </div>
                         </div>
@@ -430,47 +425,46 @@ export const DeliveryDashboard: React.FC = () => {
               </motion.div>
             )}
 
-            {/* 3. COMPLETED SHIPMENTS TAB */}
             {activeTab === 'my_history' && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="space-y-6"
+                className="space-y-4"
               >
                 {completedShipments.length === 0 ? (
-                  <div className="text-center py-16 bg-white border-3 border-[#1D1C1A] rounded-3xl shadow-[4px_4px_0px_0px_#1D1C1A]">
-                    <Clock size={42} className="text-slate-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-black uppercase text-[#1D1C1A] mb-1">No Completed Shipments</h3>
-                    <p className="text-slate-500 text-sm font-medium">Claim your active shipments and complete delivery runs to build your history!</p>
+                  <div data-testid="delivery-empty-completed" className="text-center py-16 bg-white border border-slate-200 rounded-sm shadow-xs">
+                    <Clock size={42} className="text-slate-250 mx-auto mb-4" />
+                    <h3 className="text-sm font-bold uppercase text-slate-755 mb-1">No Completed Shipments</h3>
+                    <p className="text-slate-400 text-xs font-semibold">Claim your active shipments and complete delivery runs to build your history!</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 gap-6">
+                  <div className="grid grid-cols-1 gap-4">
                     {completedShipments.map((delivery) => {
                       const { destination, pickup, recipient } = mockAddress(delivery.order_id)
                       
                       return (
-                        <div key={delivery.id} className="bg-white border-3 border-[#1D1C1A]/60 rounded-2xl p-6 shadow-sm opacity-85 hover:opacity-100 transition-opacity">
-                          <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                        <div key={delivery.id} data-testid={`delivery-completed-card-${delivery.id}`} className="bg-white border border-slate-200 rounded-sm p-5 shadow-xs opacity-90 hover:opacity-100 transition-opacity">
+                          <div className="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
                             <div>
-                              <span className="font-black text-slate-600 text-xs uppercase tracking-wide">
+                              <span className="font-bold text-slate-600 text-xs uppercase tracking-wide">
                                 Delivery #{delivery.id.slice(-6).toUpperCase()}
                               </span>
                               <p className="text-[9px] text-slate-400 font-bold mt-0.5">Order ID: {delivery.order_id}</p>
                             </div>
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 border-2 border-emerald-600 bg-emerald-50 text-emerald-700 rounded-lg text-[9px] font-black uppercase">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-sm text-[9px] font-bold uppercase border border-emerald-150">
                               ✓ Completed
                             </span>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
                             <div>
-                              <p className="font-bold text-slate-500 uppercase text-[9px] tracking-wider">Transit Details</p>
-                              <p className="font-black text-[#1D1C1A] mt-1">{pickup} → {destination}</p>
+                              <p className="font-bold text-slate-400 uppercase text-[9px] tracking-wider font-semibold">Transit Details</p>
+                              <p data-testid={`delivery-completed-details-${delivery.id}`} className="font-bold text-slate-700 mt-1 uppercase text-xs">{pickup} → {destination}</p>
                             </div>
                             <div>
-                              <p className="font-bold text-slate-500 uppercase text-[9px] tracking-wider">Completion Timestamp</p>
-                              <p className="font-black text-slate-800 mt-1">
+                              <p className="font-bold text-slate-400 uppercase text-[9px] tracking-wider font-semibold">Completion Timestamp</p>
+                              <p data-testid={`delivery-completed-time-${delivery.id}`} className="font-bold text-slate-600 mt-1 text-xs">
                                 {delivery.actual_delivery ? new Date(delivery.actual_delivery).toLocaleString() : 'N/A'}
                               </p>
                             </div>
@@ -485,28 +479,25 @@ export const DeliveryDashboard: React.FC = () => {
 
           </AnimatePresence>
         )}
-
       </div>
 
-      {/* Retro Toast alerts */}
       <AnimatePresence>
         {toastMsg && (
           <motion.div
             initial={{ opacity: 0, y: 16, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
-            className={`fixed bottom-12 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border shadow-xl backdrop-blur-xl max-w-xs ${
+            className={`fixed bottom-6 left-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-sm border shadow-lg bg-white max-w-xs ${
               toastMsg.isError
-                ? 'border-red-200 bg-red-50 text-red-800'
-                : 'border-amber-200 bg-amber-50 text-amber-900'
+                ? 'border-red-200 text-red-800'
+                : 'border-emerald-250 text-emerald-800'
             }`}
           >
             {toastMsg.isError ? '⚠️' : '✅'}
-            <span className="text-sm font-bold">{toastMsg.text}</span>
+            <span className="text-xs font-bold">{toastMsg.text}</span>
           </motion.div>
         )}
       </AnimatePresence>
-
     </div>
   )
 }

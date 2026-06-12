@@ -83,10 +83,10 @@ export const OrderDetail: React.FC = () => {
 
   if (loading) {
     return (
-      <div data-page="order-detail" data-loading="true" className="max-w-4xl mx-auto px-4 py-10 space-y-6 animate-pulse">
+      <div data-page="order-detail" data-loading="true" data-testid="order-detail-loading" className="max-w-4xl mx-auto px-4 py-10 space-y-6 animate-pulse">
         <div className="h-6 w-48 bg-slate-200 rounded-xl" />
-        <div className="h-40 bg-slate-100 rounded-3xl" />
-        <div className="h-60 bg-slate-100 rounded-3xl" />
+        <div className="h-40 bg-slate-105 rounded-3xl" />
+        <div className="h-60 bg-slate-105 rounded-3xl" />
       </div>
     )
   }
@@ -233,6 +233,10 @@ export const OrderDetail: React.FC = () => {
                   src={item.product.image_url}
                   alt={item.product.name}
                   className="w-14 h-14 rounded-xl object-cover bg-white border border-slate-200 flex-shrink-0"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80';
+                  }}
                 />
               )}
               <div className="flex-1 min-w-0">

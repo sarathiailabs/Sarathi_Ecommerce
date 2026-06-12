@@ -397,8 +397,8 @@ Features:
 ```bash
 # Backend
 cd backend
-pip install -r requirements.txt
-python -m uvicorn app.main:app --reload
+npm install
+npm run dev
 
 # Frontend
 cd frontend
@@ -491,9 +491,7 @@ npm run dev
 
 ## Support & Documentation
 
-For API documentation, visit:
-- OpenAPI/Swagger: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
+For API documentation, refer to the endpoint mappings in [README.md](file:///d:/Prathazon-Elite-Store/README.md).
 
 ---
 

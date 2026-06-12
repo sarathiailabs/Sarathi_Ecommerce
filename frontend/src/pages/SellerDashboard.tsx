@@ -214,37 +214,29 @@ export const SellerDashboard: React.FC = () => {
     : '4.8'
 
   return (
-    <div className="min-h-screen bg-[#FAF6EE] pb-24 pt-8">
-      {/* Dots Grid background */}
-      <div 
-        className="absolute inset-0 opacity-[0.05] pointer-events-none" 
-        style={{ 
-          backgroundImage: 'radial-gradient(#1D1C1A 2px, transparent 2px)', 
-          backgroundSize: '24px 24px' 
-        }} 
-      />
-
+    <div className="min-h-screen bg-[#F1F3F6] pb-24 pt-8 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
-        {/* Editorial Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 border-b-3 border-[#1D1C1A] pb-8">
+        {/* Modern Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-200 pb-6">
           <div>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-[#E1392A] text-white border-2 border-[#1D1C1A] shadow-[2px_2px_0px_0px_#1D1C1A] uppercase tracking-wider mb-3">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold bg-[#2874F0] text-white tracking-wider mb-2.5 uppercase">
               <Store size={12} />
-              Vendor Operations gate
+              Vendor Operations Console
             </span>
-            <h1 className="text-4xl sm:text-5xl font-black text-[#1D1C1A] tracking-tight uppercase leading-none">
-              SELLER CONSOLE
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 uppercase tracking-tight leading-none">
+              Seller Console
             </h1>
-            <p className="text-sm font-bold text-[#615E59] mt-2">
-              Merchant: <span className="text-[#E1392A]">{user?.full_name || user?.email}</span>
+            <p className="text-xs font-semibold text-slate-500 mt-2">
+              Merchant: <span className="text-[#2874F0] font-bold">{user?.full_name || user?.email}</span>
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2.5">
             <button
               onClick={() => setShowShopModal(true)}
-              className="btn-secondary flex items-center gap-2 px-5 py-3 uppercase text-xs font-black tracking-wider"
+              data-testid="seller-open-shop-btn"
+              className="flex items-center gap-1.5 px-4 py-2 bg-[#FF9F00] hover:bg-[#ff9100] text-white rounded-sm text-xs font-bold uppercase tracking-wider shadow-sm transition-colors"
             >
               <Plus size={14} />
               Open New Shop
@@ -252,7 +244,8 @@ export const SellerDashboard: React.FC = () => {
             <button
               onClick={fetchData}
               disabled={loading}
-              className="btn-secondary flex items-center gap-2 px-5 py-3 uppercase text-xs font-black tracking-wider bg-white"
+              data-testid="seller-reload-btn"
+              className="flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 rounded-sm text-xs font-bold uppercase tracking-wider shadow-sm transition-colors"
             >
               <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
               Reload Logs
@@ -262,19 +255,19 @@ export const SellerDashboard: React.FC = () => {
 
         {/* SHOP REGISTER EMPTY STATE */}
         {!loading && shops.length === 0 ? (
-          <div className="text-center py-20 bg-white border-3 border-[#1D1C1A] rounded-3xl shadow-[5px_5px_0px_0px_#1D1C1A] max-w-2xl mx-auto">
-            <div className="w-16 h-16 rounded-2xl bg-amber-50 border-3 border-[#1D1C1A] flex items-center justify-center mx-auto text-[#E1392A] mb-6 shadow-[2px_2px_0px_0px_#1D1C1A]">
+          <div className="text-center py-16 bg-white border border-slate-200 rounded-sm shadow-sm max-w-2xl mx-auto px-6">
+            <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto text-[#2874F0] mb-6 shadow-xs">
               <Store size={28} />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#1D1C1A] uppercase tracking-tight mb-2">
-              LAUNCh YOUR DIGITAL FLAGSHIp
+            <h2 className="text-xl font-extrabold text-slate-800 uppercase tracking-tight mb-2">
+              Launch Your Digital Flagship
             </h2>
-            <p className="text-slate-500 font-bold text-sm mb-8 max-w-md mx-auto leading-relaxed">
-              Open your vendor store on Prathazon today. Upload premium catalog items, monitor orders, and connect with elite members.
+            <p className="text-slate-400 font-semibold text-xs mb-6 max-w-md mx-auto leading-relaxed">
+              Open your vendor store on Sarathi Store today. Upload premium catalog items, monitor orders, and connect with elite members.
             </p>
             <button
               onClick={() => setShowShopModal(true)}
-              className="btn-primary px-8 py-4 uppercase text-xs font-black tracking-wider shadow-md"
+              className="inline-flex items-center gap-1.5 px-6 py-3 bg-[#FF9F00] hover:bg-[#ff9100] text-white text-xs font-bold uppercase tracking-wider rounded-sm shadow-sm transition-colors"
             >
               Open Your Shop Now
               <Plus size={16} />
@@ -284,15 +277,16 @@ export const SellerDashboard: React.FC = () => {
           <>
             {/* Active Shop Selector Dropdown for multiseller support */}
             {shops.length > 1 && (
-              <div className="flex items-center gap-3 mb-8 bg-white border-3 border-[#1D1C1A] p-4 rounded-2xl shadow-[3px_3px_0px_0px_#1D1C1A] max-w-md">
-                <span className="text-xs font-black uppercase text-slate-500">Active Shop:</span>
+              <div className="flex items-center gap-3 mb-6 bg-white border border-slate-200 p-3 rounded-sm shadow-xs max-w-md">
+                <span className="text-xs font-bold uppercase text-slate-400">Active Shop:</span>
                 <select
                   value={activeShop?.id || ''}
+                  data-testid="seller-active-shop-select"
                   onChange={(e) => {
                     const shop = shops.find(s => s.id === e.target.value)
                     if (shop) handleShopChange(shop)
                   }}
-                  className="flex-1 px-3 py-2 bg-transparent text-sm font-black text-[#1D1C1A] border-2 border-[#1D1C1A] rounded-xl focus:outline-none appearance-none cursor-pointer"
+                  className="flex-1 px-3 py-1.5 bg-transparent text-xs font-bold text-slate-700 border border-slate-300 rounded-sm focus:outline-none focus:border-[#2874F0] cursor-pointer"
                 >
                   {shops.map(s => (
                     <option key={s.id} value={s.id}>{s.name}</option>
@@ -303,9 +297,9 @@ export const SellerDashboard: React.FC = () => {
 
             {/* Shop Billboard Profile */}
             {activeShop && (
-              <div className="bg-white border-3 border-[#1D1C1A] rounded-3xl p-6 sm:p-8 shadow-[5px_5px_0px_0px_#1D1C1A] mb-12 flex flex-col md:flex-row gap-6 md:items-center justify-between">
-                <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-2xl border-3 border-[#1D1C1A] bg-amber-50 overflow-hidden flex-shrink-0 shadow-[2px_2px_0px_0px_#1D1C1A]">
+              <div className="bg-white border border-slate-200 rounded-sm p-6 shadow-sm mb-6 flex flex-col md:flex-row gap-6 md:items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-sm border border-slate-200 bg-slate-50 overflow-hidden flex-shrink-0 shadow-xs flex items-center justify-center">
                     <img
                       src={activeShop.logo_url || 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=150&q=80'}
                       alt={activeShop.name}
@@ -317,15 +311,16 @@ export const SellerDashboard: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-[#1D1C1A] uppercase tracking-tight leading-none">{activeShop.name}</h2>
-                    <p className="text-xs text-slate-500 font-bold mt-2 uppercase">{activeShop.description || 'Premium Certified Merchant Partner'}</p>
-                    <span className="inline-block text-[9px] font-black text-[#615E59] bg-slate-100 px-2 py-0.5 border border-slate-200 mt-2 rounded">SHOP ID: {activeShop.id}</span>
+                    <h2 className="text-xl font-extrabold text-slate-800 uppercase tracking-tight leading-none">{activeShop.name}</h2>
+                    <p className="text-xs text-[#2874F0] font-bold mt-2 uppercase">{activeShop.description || 'Premium Certified Merchant Partner'}</p>
+                    <span className="inline-block text-[9px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 mt-2 rounded-sm border border-slate-200">SHOP ID: {activeShop.id}</span>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setShowProductModal(true)}
-                  className="btn-primary flex items-center gap-2 px-6 py-4 uppercase text-xs font-black tracking-wider self-start md:self-center"
+                  data-testid="seller-add-product-btn"
+                  className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2874F0] hover:bg-[#1264e3] text-white rounded-sm text-xs font-bold uppercase tracking-wider shadow-sm self-start md:self-center transition-colors"
                 >
                   <Plus size={16} />
                   Add Catalog Listing
@@ -333,87 +328,87 @@ export const SellerDashboard: React.FC = () => {
               </div>
             )}
 
-            {/* Tactile Key Metrics Deck */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {/* Modern Key Metrics Deck */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               
-              <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A]">
+              <div data-testid="seller-stat-listings" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] text-[#615E59] font-black uppercase tracking-widest">Active Listings</span>
-                  <div className="w-8 h-8 rounded-xl bg-amber-50 border-2 border-[#1D1C1A] flex items-center justify-center text-[#E1392A]">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Active Listings</span>
+                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0]">
                     <Package size={14} />
                   </div>
                 </div>
-                <div className="text-3xl font-black text-[#1D1C1A]">{totalListings} items</div>
-                <p className="text-[10px] text-slate-400 font-bold mt-1">Live in store catalog</p>
+                <div className="text-2xl font-extrabold text-slate-850">{totalListings} items</div>
+                <p className="text-[10px] text-slate-455 font-semibold mt-1">Live in store catalog</p>
               </div>
 
-              <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A]">
+              <div data-testid="seller-stat-inventory" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] text-[#615E59] font-black uppercase tracking-widest">Inventory Value</span>
-                  <div className="w-8 h-8 rounded-xl bg-emerald-50 border-2 border-[#1D1C1A] flex items-center justify-center text-emerald-600">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Inventory Value</span>
+                  <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
                     <DollarSign size={14} />
                   </div>
                 </div>
-                <div className="text-3xl font-black text-[#1D1C1A]">₹{totalInventoryValue.toLocaleString('en-IN')}</div>
-                <p className="text-[10px] text-slate-400 font-bold mt-1">Cumulative product value</p>
+                <div className="text-2xl font-extrabold text-slate-850">₹{totalInventoryValue.toLocaleString('en-IN')}</div>
+                <p className="text-[10px] text-slate-455 font-semibold mt-1">Cumulative product value</p>
               </div>
 
-              <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A]">
+              <div data-testid="seller-stat-restock" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] text-[#615E59] font-black uppercase tracking-widest">Restock Alerts</span>
-                  <div className="w-8 h-8 rounded-xl bg-rose-50 border-2 border-[#1D1C1A] flex items-center justify-center text-rose-500">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Restock Alerts</span>
+                  <div className="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center text-rose-550">
                     <AlertCircle size={14} />
                   </div>
                 </div>
-                <div className="text-3xl font-black text-[#E1392A]">{lowStockCount}</div>
-                <p className="text-[10px] text-slate-400 font-bold mt-1">Items at or below 5 units</p>
+                <div className="text-2xl font-extrabold text-rose-600">{lowStockCount}</div>
+                <p className="text-[10px] text-slate-455 font-semibold mt-1">Items at or below 5 units</p>
               </div>
 
-              <div className="bg-white border-3 border-[#1D1C1A] rounded-2xl p-5 shadow-[4px_4px_0px_0px_#1D1C1A]">
+              <div data-testid="seller-stat-rating" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] text-[#615E59] font-black uppercase tracking-widest">Store Rating</span>
-                  <div className="w-8 h-8 rounded-xl bg-purple-50 border-2 border-[#1D1C1A] flex items-center justify-center text-purple-600">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Store Rating</span>
+                  <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-[#FF9F00]">
                     <BarChart2 size={14} />
                   </div>
                 </div>
-                <div className="text-3xl font-black text-[#1D1C1A]">{avgRating} ★</div>
-                <p className="text-[10px] text-slate-400 font-bold mt-1">Avg customer evaluation</p>
+                <div className="text-2xl font-extrabold text-slate-850">{avgRating} ★</div>
+                <p className="text-[10px] text-slate-455 font-semibold mt-1">Avg customer evaluation</p>
               </div>
 
             </div>
 
             {/* Catalog Grid Section */}
             <div>
-              <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-4">
-                <h3 className="text-xl font-black text-[#1D1C1A] uppercase">Active Catalog</h3>
-                <span className="text-xs text-[#615E59] font-bold uppercase">{products.length} live units</span>
+              <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-3">
+                <h3 className="text-base font-extrabold text-slate-800 uppercase">Active Catalog</h3>
+                <span className="text-xs text-slate-450 font-bold uppercase">{products.length} live units</span>
               </div>
 
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className="aspect-square bg-white border-3 border-[#1D1C1A] rounded-2xl skeleton" />
+                    <div key={i} className="aspect-square bg-white border border-slate-200 rounded-sm" />
                   ))}
                 </div>
               ) : products.length === 0 ? (
-                <div className="text-center py-16 bg-white border-3 border-[#1D1C1A] rounded-3xl shadow-[3px_3px_0px_0px_#1D1C1A] max-w-lg mx-auto">
+                <div className="text-center py-16 bg-white border border-slate-200 rounded-sm shadow-xs max-w-lg mx-auto">
                   <Package size={36} className="text-slate-300 mx-auto mb-4" />
-                  <h4 className="text-sm font-black uppercase text-[#1D1C1A] mb-1">Catalog Empty</h4>
-                  <p className="text-slate-500 text-xs mb-5 font-bold">List your first premium tech artifact now.</p>
+                  <h4 className="text-xs font-bold uppercase text-slate-750 mb-1">Catalog Empty</h4>
+                  <p className="text-slate-400 text-xs mb-5 font-semibold">List your first premium tech artifact now.</p>
                   <button
                     onClick={() => setShowProductModal(true)}
-                    className="btn-primary px-5 py-2.5 text-[10px] font-black uppercase tracking-wider"
+                    className="px-4 py-2 bg-[#2874F0] hover:bg-[#1264e3] text-white text-[11px] font-bold uppercase rounded-sm transition-colors"
                   >
                     Add Product Listing
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {products.map(product => (
-                    <div key={product.id} className="bg-white border-3 border-[#1D1C1A] rounded-2xl overflow-hidden shadow-[4px_4px_0px_0px_#1D1C1A] hover:shadow-[6px_6px_0px_0px_#1D1C1A] hover:-translate-y-0.5 transition-all flex flex-col justify-between">
+                    <div key={product.id} className="bg-white border border-slate-200 rounded-sm overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                       <div>
                         {/* Square image aspect */}
-                        <div className="aspect-square bg-[#FAF6EE] border-b-2 border-[#1D1C1A] overflow-hidden">
+                        <div className="aspect-square bg-slate-50 border-b border-slate-100 overflow-hidden relative">
                           <img
                             src={product.image_url}
                             alt={product.name}
@@ -425,32 +420,32 @@ export const SellerDashboard: React.FC = () => {
                           />
                         </div>
                         
-                        <div className="p-4">
+                        <div className="p-3">
                           <div className="flex items-center justify-between mb-1.5">
-                            <span className="px-2 py-0.5 border border-slate-200 bg-slate-50 rounded text-[9px] font-black uppercase text-slate-500">
+                            <span className="px-1.5 py-0.5 border border-slate-150 bg-slate-50 rounded-sm text-[9px] font-bold uppercase text-slate-500">
                               {product.category}
                             </span>
-                            <span className={`text-[10px] font-black uppercase ${product.stock <= 5 ? 'text-red-500' : 'text-[#3A8E7D]'}`}>
+                            <span className={`text-[10px] font-bold ${product.stock <= 5 ? 'text-red-500 font-extrabold' : 'text-emerald-600'}`}>
                               Stock: {product.stock}
                             </span>
                           </div>
                           
-                          <h4 className="font-black text-sm text-[#1D1C1A] uppercase tracking-wide truncate mb-1">
+                          <h4 className="font-bold text-xs text-slate-800 uppercase tracking-wide truncate mb-1">
                             {product.name}
                           </h4>
                           
-                          <p className="text-[11px] text-slate-500 font-semibold line-clamp-2 leading-relaxed">
+                          <p className="text-[10px] text-slate-450 font-semibold line-clamp-2 leading-relaxed">
                             {product.description}
                           </p>
                         </div>
                       </div>
 
-                      <div className="p-4 pt-0 flex items-center justify-between border-t border-slate-100 mt-2">
-                        <span className="text-base font-black text-[#1D1C1A]">
+                      <div className="p-3 pt-0 flex items-center justify-between border-t border-slate-100 mt-2">
+                        <span className="text-sm font-extrabold text-slate-850">
                           ₹{product.price.toLocaleString('en-IN')}
                         </span>
-                        <span className="text-[10px] font-bold text-amber-500">
-                          {product.rating} ★ ({product.review_count})
+                        <span className="text-[10px] font-bold text-amber-500 flex items-center">
+                          {product.rating} ★ <span className="text-slate-400 font-semibold ml-0.5">({product.review_count})</span>
                         </span>
                       </div>
                     </div>
@@ -466,70 +461,81 @@ export const SellerDashboard: React.FC = () => {
       {/* Modal 1: Open Shop Form */}
       <AnimatePresence>
         {showShopModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1D1C1A]/50 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
+              initial={{ scale: 0.97, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#FAF6EE] border-3 border-[#1D1C1A] rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-[6px_6px_0px_0px_#1D1C1A] relative"
+              exit={{ scale: 0.97, opacity: 0 }}
+              data-testid="seller-shop-modal"
+              role="dialog"
+              aria-modal="true"
+              className="bg-white border border-slate-200 rounded-sm p-6 sm:p-8 max-w-md w-full shadow-xl relative"
             >
               <button
                 onClick={() => setShowShopModal(false)}
-                className="absolute top-4 right-4 p-1.5 border-2 border-transparent hover:border-[#1D1C1A] rounded-xl text-[#1D1C1A] transition-all"
+                className="absolute top-4 right-4 p-1 rounded-full text-slate-400 hover:text-slate-650 hover:bg-slate-100 transition-all"
+                aria-label="Close modal"
               >
                 <X size={18} />
               </button>
 
               <div className="mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 border-2 border-[#1D1C1A] flex items-center justify-center text-[#E1392A]">
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0]">
                   <Store size={18} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-[#1D1C1A] uppercase leading-none">Register Store</h3>
-                  <p className="text-xs text-slate-500 font-bold mt-1 uppercase">Establish your certified marketplace</p>
+                  <h3 className="text-base font-extrabold text-slate-800 uppercase leading-none">Register Store</h3>
+                  <p className="text-[10px] text-slate-400 font-bold mt-1.5 uppercase">Establish your certified marketplace</p>
                 </div>
               </div>
 
               <form onSubmit={handleCreateShop} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Shop Name *</label>
+                  <label htmlFor="shop-name-input" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Shop Name *</label>
                   <input
                     type="text"
                     required
+                    id="shop-name-input"
+                    data-testid="shop-name-input"
                     value={shopName}
                     onChange={(e) => setShopName(e.target.value)}
                     placeholder="e.g. Apex Tech Deck"
-                    className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-bold text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A]"
+                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Description</label>
+                  <label htmlFor="shop-desc-input" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Description</label>
                   <textarea
                     rows={3}
+                    id="shop-desc-input"
+                    data-testid="shop-desc-input"
                     value={shopDesc}
                     onChange={(e) => setShopDesc(e.target.value)}
                     placeholder="Describe your premium items..."
-                    className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-bold text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A]"
+                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Logo URL</label>
+                  <label htmlFor="shop-logo-input" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Logo URL</label>
                   <input
                     type="url"
+                    id="shop-logo-input"
+                    data-testid="shop-logo-input"
                     value={shopLogo}
                     onChange={(e) => setShopLogo(e.target.value)}
                     placeholder="https://images.unsplash.com/..."
-                    className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-bold text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A]"
+                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
                   />
-                  <p className="text-[9px] text-slate-400 font-bold">Leave empty for a cool default logo.</p>
+                  <p className="text-[9px] text-slate-400 font-semibold">Leave empty for a cool default logo.</p>
                 </div>
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full btn-primary py-4 uppercase text-xs font-black tracking-wider shadow-sm mt-3"
+                  data-testid="shop-submit-btn"
+                  className="w-full bg-[#FF9F00] hover:bg-[#ff9100] text-white py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors mt-2"
                 >
                   {submitting ? 'Registering...' : 'Open Vendor Store'}
                 </button>
@@ -542,50 +548,58 @@ export const SellerDashboard: React.FC = () => {
       {/* Modal 2: Add Product Listing Form */}
       <AnimatePresence>
         {showProductModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1D1C1A]/50 backdrop-blur-xs overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto">
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
+              initial={{ scale: 0.97, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#FAF6EE] border-3 border-[#1D1C1A] rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-[6px_6px_0px_0px_#1D1C1A] relative my-8"
+              exit={{ scale: 0.97, opacity: 0 }}
+              data-testid="seller-product-modal"
+              role="dialog"
+              aria-modal="true"
+              className="bg-white border border-slate-200 rounded-sm p-6 sm:p-8 max-w-lg w-full shadow-xl relative my-8"
             >
               <button
                 onClick={() => setShowProductModal(false)}
-                className="absolute top-4 right-4 p-1.5 border-2 border-transparent hover:border-[#1D1C1A] rounded-xl text-[#1D1C1A] transition-all"
+                className="absolute top-4 right-4 p-1 rounded-full text-slate-400 hover:text-slate-650 hover:bg-slate-100 transition-all"
+                aria-label="Close modal"
               >
                 <X size={18} />
               </button>
 
               <div className="mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 border-2 border-[#1D1C1A] flex items-center justify-center text-[#E1392A]">
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0]">
                   <Plus size={18} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-[#1D1C1A] uppercase leading-none">Add Product</h3>
-                  <p className="text-xs text-slate-500 font-bold mt-1 uppercase">Add listing to {activeShop?.name}</p>
+                  <h3 className="text-base font-extrabold text-slate-800 uppercase leading-none">Add Product</h3>
+                  <p className="text-[10px] text-slate-400 font-bold mt-1.5 uppercase">Add listing to {activeShop?.name}</p>
                 </div>
               </div>
 
               <form onSubmit={handleAddProduct} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5 col-span-2">
-                    <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Product Title *</label>
+                    <label htmlFor="prod-name-input" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Product Title *</label>
                     <input
                       type="text"
                       required
+                      id="prod-name-input"
+                      data-testid="prod-name-input"
                       value={prodName}
                       onChange={(e) => setProdName(e.target.value)}
                       placeholder="e.g. Tactile Wireless Headset"
-                      className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-bold text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Category *</label>
+                    <label htmlFor="prod-cat-select" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Category *</label>
                     <select
+                      id="prod-cat-select"
+                      data-testid="prod-cat-select"
                       value={prodCat}
                       onChange={(e) => setProdCat(e.target.value)}
-                      className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-black text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A] appearance-none"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#2874F0] cursor-pointer"
                     >
                       {PRODUCT_CATEGORIES.map(cat => (
                         <option key={cat} value={cat}>{cat}</option>
@@ -594,66 +608,75 @@ export const SellerDashboard: React.FC = () => {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Stock Quantity *</label>
+                    <label htmlFor="prod-stock-input" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Stock Quantity *</label>
                     <input
                       type="number"
                       required
                       min={0}
+                      id="prod-stock-input"
+                      data-testid="prod-stock-input"
                       value={prodStock}
                       onChange={(e) => setProdStock(e.target.value)}
                       placeholder="e.g. 50"
-                      className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-bold text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
                     />
                   </div>
 
                   <div className="space-y-1.5 col-span-2">
-                    <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Price (₹) *</label>
+                    <label htmlFor="prod-price-input" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Price (₹) *</label>
                     <input
                       type="number"
                       required
                       min={1}
+                      id="prod-price-input"
+                      data-testid="prod-price-input"
                       value={prodPrice}
                       onChange={(e) => setProdPrice(e.target.value)}
                       placeholder="e.g. 1999"
-                      className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-bold text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
                     />
                   </div>
 
                   <div className="space-y-1.5 col-span-2">
-                    <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Description *</label>
+                    <label htmlFor="prod-desc-input" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Description *</label>
                     <textarea
                       rows={3}
                       required
+                      id="prod-desc-input"
+                      data-testid="prod-desc-input"
                       value={prodDesc}
                       onChange={(e) => setProdDesc(e.target.value)}
                       placeholder="Provide rich specifications or features..."
-                      className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-bold text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
                     />
                   </div>
 
                   <div className="space-y-1.5 col-span-2">
-                    <label className="block text-xs font-black text-slate-500 uppercase tracking-wide">Image URL</label>
+                    <label htmlFor="prod-image-input" className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Image URL</label>
                     <input
                       type="url"
+                      id="prod-image-input"
+                      data-testid="prod-image-input"
                       value={prodImage}
                       onChange={(e) => setProdImage(e.target.value)}
                       placeholder="https://images.unsplash.com/..."
-                      className="w-full px-4 py-3 bg-white border-2 border-[#1D1C1A] rounded-xl text-sm font-bold text-[#1D1C1A] focus:outline-none focus:bg-[#FAF6EE] shadow-[2px_2px_0px_0px_#1D1C1A]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
                     />
                     
                     {/* Preset Picker */}
                     <div className="mt-2.5 space-y-1.5">
-                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Or select a high-end preset image:</span>
-                      <div className="flex flex-wrap gap-2">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Or select a high-end preset image:</span>
+                      <div className="flex flex-wrap gap-1.5">
                         {IMAGE_PRESETS.map(preset => (
                           <button
                             key={preset.label}
                             type="button"
                             onClick={() => setProdImage(preset.url)}
-                            className={`px-3 py-1 border-2 text-[9px] font-black rounded-lg transition-all ${
+                            data-testid={`prod-preset-${preset.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                            className={`px-2 py-0.5 border text-[9px] font-bold rounded-sm transition-all ${
                               prodImage === preset.url
-                                ? 'bg-amber-100 border-[#1D1C1A] text-[#1D1C1A]'
-                                : 'bg-white border-slate-200 text-slate-500 hover:border-slate-400'
+                                ? 'bg-blue-50 border-[#2874F0] text-[#2874F0]'
+                                : 'bg-white border-slate-200 text-slate-500 hover:border-slate-350'
                             }`}
                           >
                             {preset.label}
@@ -667,7 +690,8 @@ export const SellerDashboard: React.FC = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full btn-primary py-4 uppercase text-xs font-black tracking-wider shadow-sm mt-4"
+                  data-testid="product-submit-btn"
+                  className="w-full bg-[#FF9F00] hover:bg-[#ff9100] text-white py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors mt-3"
                 >
                   {submitting ? 'Uploading Listing...' : 'Publish Product Listing'}
                 </button>
@@ -677,21 +701,21 @@ export const SellerDashboard: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Retro Toast alerts */}
+      {/* Modern Toast alerts */}
       <AnimatePresence>
         {toastMsg && (
           <motion.div
             initial={{ opacity: 0, y: 16, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
-            className={`fixed bottom-12 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl border shadow-xl backdrop-blur-xl max-w-xs ${
+            className={`fixed bottom-6 left-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-sm border shadow-lg bg-white max-w-xs ${
               toastMsg.isError
-                ? 'border-red-200 bg-red-50 text-red-800'
-                : 'border-amber-200 bg-amber-50 text-amber-900'
+                ? 'border-red-200 text-red-800'
+                : 'border-emerald-250 text-emerald-800'
             }`}
           >
             {toastMsg.isError ? '⚠️' : '✅'}
-            <span className="text-sm font-bold">{toastMsg.text}</span>
+            <span className="text-xs font-bold">{toastMsg.text}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -699,3 +723,4 @@ export const SellerDashboard: React.FC = () => {
     </div>
   )
 }
+
