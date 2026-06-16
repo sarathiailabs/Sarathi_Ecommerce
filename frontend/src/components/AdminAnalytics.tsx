@@ -1,19 +1,11 @@
-import React from 'react'
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar
-} from 'recharts'
-import { DollarSign, ShoppingBag, TrendingUp, AlertTriangle } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import ReactECharts from 'echarts-for-react'
+import { DollarSign, ShoppingBag, TrendingUp, AlertTriangle, Calendar } from 'lucide-react'
+import { 
+  getRevenueChartOptions, 
+  getCategoryChartOptions, 
+  getOrderStatusChartOptions 
+} from '../utils/chartOptions'
 
 // Interfaces
 interface OrderItem {
@@ -53,77 +45,275 @@ interface AdminAnalyticsProps {
   products: Product[]
 }
 
-// Custom Tooltip component for rich visual aesthetics
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white border border-slate-200 p-3 rounded-sm shadow-sm">
-        <p className="text-[9px] uppercase tracking-widest font-bold text-slate-400 mb-1">{label}</p>
-        <p className="text-xs font-bold text-slate-800">
-          {payload[0].name}: <span className="text-[#2874F0]">₹{payload[0].value?.toFixed(2)}</span>
-        </p>
-      </div>
-    )
-  }
-  return null
+const PIE_COLORS = [
+  '#2874F0', // brand blue
+  '#FF9F00', // yellow
+  '#FB641B', // orange
+  '#10b981', // emerald green
+  '#a855f7', // purple
+  '#64748b'  // slate
+]
+
+// Shimmer Loader for ECharts Loading State
+const ChartSkeleton: React.FC<{ type: 'line' | 'pie' | 'bar' }> = ({ type }) => {
+  return (
+    <div className="w-full h-full flex flex-col justify-between p-4 animate-pulse">
+      {type === 'line' && (
+        <div className="space-y-4 w-full h-full flex flex-col justify-end">
+          <div className="flex items-end space-x-2 h-44 w-full">
+            <div className="bg-slate-100 rounded-t h-1/4 w-full"></div>
+            <div className="bg-slate-100 rounded-t h-1/2 w-full"></div>
+            <div className="bg-slate-100 rounded-t h-3/4 w-full"></div>
+            <div className="bg-slate-100 rounded-t h-2/3 w-full"></div>
+            <div className="bg-slate-100 rounded-t h-full w-full"></div>
+          </div>
+        </div>
+      )}
+      {type === 'pie' && (
+        <div className="flex flex-col items-center justify-center space-y-4 h-full w-full">
+          <div className="w-28 h-28 rounded-full border-[6px] border-slate-100 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-slate-50"></div>
+          </div>
+        </div>
+      )}
+      {type === 'bar' && (
+        <div className="space-y-4 w-full h-full flex flex-col justify-end">
+          <div className="flex items-end space-x-4 h-28 w-full px-4">
+            <div className="bg-slate-100 rounded-t h-1/3 w-full"></div>
+            <div className="bg-slate-100 rounded-t h-2/3 w-full"></div>
+            <div className="bg-slate-100 rounded-t h-1/2 w-full"></div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
-const CustomPieTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white border border-slate-200 p-3 rounded-sm shadow-sm">
-        <p className="text-xs font-bold text-slate-800">
-          {payload[0].name}: <span className="text-[#2874F0]">₹{payload[0].value?.toFixed(2)}</span>
-        </p>
-      </div>
-    )
-  }
-  return null
-}
+// Fallback Empty State
+const EmptyState: React.FC<{ message: string }> = ({ message }) => (
+  <div className="w-full h-full flex flex-col items-center justify-center space-y-2 py-8 animate-in fade-in duration-300">
+    <div className="p-3 rounded-full bg-slate-50 text-slate-400 border border-slate-100">
+      <AlertTriangle size={20} />
+    </div>
+    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{message}</span>
+  </div>
+)
 
 export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products }) => {
-  // --- METRIC CALCULATIONS ---
-  const totalRevenue = orders.reduce((sum, order) => sum + Number(order.total_amount), 0)
-  const totalSales = orders.length
-  const averageOrderValue = totalSales > 0 ? totalRevenue / totalSales : 0
-  const lowStockCount = products.filter(p => Number(p.stock) < 10).length
+  // --- FILTERS STATE ---
+  const [timeframe, setTimeframe] = useState<string>('30days')
+  const [customStartDate, setCustomStartDate] = useState<string>('')
+  const [customEndDate, setCustomEndDate] = useState<string>('')
+  const [isChartLoading, setIsChartLoading] = useState<boolean>(false)
 
-  // --- AREA CHART: REVENUE OVER TIME (Last 30 Days) ---
-  // Create a timeline map of the last 30 days
-  const dailyDataMap: { [date: string]: number } = {}
-  const now = new Date()
-  
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date()
-    d.setDate(now.getDate() - i)
-    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-    dailyDataMap[dateStr] = 0
-  }
+  // Trigger brief shimmer loading on filter switches
+  useEffect(() => {
+    setIsChartLoading(true)
+    const timer = setTimeout(() => {
+      setIsChartLoading(false)
+    }, 350)
+    return () => clearTimeout(timer)
+  }, [timeframe, customStartDate, customEndDate])
 
-  // Populate daily revenues from actual orders
-  orders.forEach(order => {
+  // --- FILTER ORDERS BY TIMEFRAME ---
+  const filteredOrders = orders.filter(order => {
     const orderDate = new Date(order.created_at)
-    const dateStr = orderDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-    if (dailyDataMap[dateStr] !== undefined) {
-      dailyDataMap[dateStr] += Number(order.total_amount)
+    const now = new Date()
+
+    switch (timeframe) {
+      case 'today': {
+        const todayStart = new Date()
+        todayStart.setHours(0, 0, 0, 0)
+        return orderDate >= todayStart
+      }
+      case '7days': {
+        const limit = new Date()
+        limit.setDate(now.getDate() - 7)
+        limit.setHours(0, 0, 0, 0)
+        return orderDate >= limit
+      }
+      case '30days': {
+        const limit = new Date()
+        limit.setDate(now.getDate() - 30)
+        limit.setHours(0, 0, 0, 0)
+        return orderDate >= limit
+      }
+      case '90days': {
+        const limit = new Date()
+        limit.setDate(now.getDate() - 90)
+        limit.setHours(0, 0, 0, 0)
+        return orderDate >= limit
+      }
+      case '12months': {
+        const limit = new Date()
+        limit.setMonth(now.getMonth() - 12)
+        limit.setHours(0, 0, 0, 0)
+        return orderDate >= limit
+      }
+      case 'custom': {
+        if (!customStartDate) return true
+        const start = new Date(customStartDate)
+        start.setHours(0, 0, 0, 0)
+        const end = customEndDate ? new Date(customEndDate) : new Date()
+        end.setHours(23, 59, 59, 999)
+        return orderDate >= start && orderDate <= end
+      }
+      default:
+        return true
     }
   })
 
-  const areaChartData = Object.keys(dailyDataMap).map(date => ({
-    date,
-    Revenue: dailyDataMap[date]
-  }))
+  // --- METRIC CALCULATIONS ---
+  const totalRevenue = filteredOrders.reduce((sum, order) => sum + Number(order.total_amount), 0)
+  const totalSales = filteredOrders.length
+  const averageOrderValue = totalSales > 0 ? totalRevenue / totalSales : 0
+  const lowStockCount = products.filter(p => Number(p.stock) < 10).length
 
-  // --- PIE CHART: REVENUE BY CATEGORY ---
+  // --- REVENUE OVER TIME GROUPING ---
+  const now = new Date()
+  let revenueChartData: { date: string; Revenue: number }[] = []
+
+  if (timeframe === 'today') {
+    const hourlyMap: { [label: string]: number } = {}
+    const hoursArray: string[] = []
+    for (let i = 0; i < 24; i++) {
+      const ampm = i >= 12 ? 'PM' : 'AM'
+      const hour12 = i % 12 === 0 ? 12 : i % 12
+      const label = `${hour12} ${ampm}`
+      hoursArray.push(label)
+      hourlyMap[label] = 0
+    }
+
+    filteredOrders.forEach(order => {
+      const orderDate = new Date(order.created_at)
+      const hour = orderDate.getHours()
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const hour12 = hour % 12 === 0 ? 12 : hour % 12
+      const label = `${hour12} ${ampm}`
+      if (hourlyMap[label] !== undefined) {
+        hourlyMap[label] += Number(order.total_amount)
+      }
+    })
+
+    revenueChartData = hoursArray.map(label => ({
+      date: label,
+      Revenue: hourlyMap[label]
+    }))
+  } else if (timeframe === '12months') {
+    const monthlyMap: { [label: string]: number } = {}
+    const monthLabels: string[] = []
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date()
+      d.setMonth(now.getMonth() - i)
+      const label = d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      monthLabels.push(label)
+      monthlyMap[label] = 0
+    }
+
+    filteredOrders.forEach(order => {
+      const orderDate = new Date(order.created_at)
+      const label = orderDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+      if (monthlyMap[label] !== undefined) {
+        monthlyMap[label] += Number(order.total_amount)
+      }
+    })
+
+    revenueChartData = monthLabels.map(label => ({
+      date: label,
+      Revenue: monthlyMap[label]
+    }))
+  } else if (timeframe === 'custom') {
+    const start = customStartDate ? new Date(customStartDate) : new Date(now.getTime() - 29 * 24 * 60 * 60 * 1000)
+    const end = customEndDate ? new Date(customEndDate) : new Date()
+    const daysDiff = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+
+    if (daysDiff <= 90) {
+      const dailyMap: { [label: string]: number } = {}
+      const dateLabels: string[] = []
+      let current = new Date(start)
+      while (current <= end) {
+        const label = current.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        if (!dateLabels.includes(label)) {
+          dateLabels.push(label)
+        }
+        dailyMap[label] = 0
+        current.setDate(current.getDate() + 1)
+      }
+
+      filteredOrders.forEach(order => {
+        const orderDate = new Date(order.created_at)
+        const label = orderDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        if (dailyMap[label] !== undefined) {
+          dailyMap[label] += Number(order.total_amount)
+        }
+      })
+
+      revenueChartData = dateLabels.map(label => ({
+        date: label,
+        Revenue: dailyMap[label]
+      }))
+    } else {
+      const monthlyMap: { [label: string]: number } = {}
+      const monthLabels: string[] = []
+      let current = new Date(start)
+      while (current <= end) {
+        const label = current.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+        if (!monthLabels.includes(label)) {
+          monthLabels.push(label)
+        }
+        monthlyMap[label] = 0
+        current.setMonth(current.getMonth() + 1)
+      }
+
+      filteredOrders.forEach(order => {
+        const orderDate = new Date(order.created_at)
+        const label = orderDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+        if (monthlyMap[label] !== undefined) {
+          monthlyMap[label] += Number(order.total_amount)
+        }
+      })
+
+      revenueChartData = monthLabels.map(label => ({
+        date: label,
+        Revenue: monthlyMap[label]
+      }))
+    }
+  } else {
+    // 7days, 30days, 90days
+    const daysCount = timeframe === '7days' ? 7 : timeframe === '30days' ? 30 : 90
+    const dailyMap: { [label: string]: number } = {}
+    const dateLabels: string[] = []
+
+    for (let i = daysCount - 1; i >= 0; i--) {
+      const d = new Date()
+      d.setDate(now.getDate() - i)
+      const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      dateLabels.push(label)
+      dailyMap[label] = 0
+    }
+
+    filteredOrders.forEach(order => {
+      const orderDate = new Date(order.created_at)
+      const label = orderDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      if (dailyMap[label] !== undefined) {
+        dailyMap[label] += Number(order.total_amount)
+      }
+    })
+
+    revenueChartData = dateLabels.map(label => ({
+      date: label,
+      Revenue: dailyMap[label]
+    }))
+  }
+
+  // --- REVENUE BY CATEGORY ---
   const categoryMap: { [cat: string]: number } = {}
-  
-  // Index products for quick category lookup
   const productCategoryMap: { [id: string]: string } = {}
   products.forEach(p => {
     productCategoryMap[p.id] = p.category
   })
 
-  orders.forEach(order => {
+  filteredOrders.forEach(order => {
     order.items.forEach(item => {
       const cat = productCategoryMap[item.product_id] || 'Other'
       const itemRevenue = Number(item.price) * Number(item.quantity)
@@ -136,22 +326,18 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
     value: categoryMap[category]
   }))
 
-  const PIE_COLORS = [
-    '#2874F0', // brand blue
-    '#FF9F00', // yellow
-    '#FB641B', // orange
-    '#10b981', // emerald green
-    '#a855f7', // purple
-    '#64748b'  // slate
-  ]
+  // --- ORDER STATUS DISTRIBUTION ---
+  const statusMap: { [status: string]: number } = {
+    Pending: 0,
+    Processing: 0,
+    Shipped: 0,
+    Delivered: 0,
+    Cancelled: 0
+  }
 
-  // --- BAR CHART: ORDER STATUS DISTRIBUTION ---
-  const statusMap: { [status: string]: number } = { Pending: 0, Shipped: 0, Delivered: 0 }
-  orders.forEach(order => {
+  filteredOrders.forEach(order => {
     if (statusMap[order.status] !== undefined) {
       statusMap[order.status] += 1
-    } else {
-      statusMap[order.status] = 1
     }
   })
 
@@ -160,9 +346,64 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
     Orders: statusMap[status]
   }))
 
+  const isRevenueEmpty = revenueChartData.every(d => d.Revenue === 0)
+  const isPieEmpty = pieChartData.length === 0
+  const isStatusEmpty = filteredOrders.length === 0
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
+      {/* 📅 FILTER CONTROLS */}
+      <div className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex items-center gap-2">
+          <div className="p-2 bg-blue-50 text-[#2874F0] rounded-sm">
+            <Calendar size={18} />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wide">Analysis Timeframe</h4>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Configure metrics date ranges</p>
+          </div>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+          <div className="relative w-full sm:w-auto">
+            <select
+              value={timeframe}
+              onChange={(e) => setTimeframe(e.target.value)}
+              className="bg-white text-xs font-bold uppercase tracking-wider border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#2874F0] appearance-none cursor-pointer pr-8 w-full sm:w-48 shadow-xs"
+            >
+              <option value="today">Today</option>
+              <option value="7days">Last 7 Days</option>
+              <option value="30days">Last 30 Days</option>
+              <option value="90days">Last 90 Days</option>
+              <option value="12months">Last 12 Months</option>
+              <option value="custom">Custom Date Range</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+              ▼
+            </div>
+          </div>
+
+          {timeframe === 'custom' && (
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto animate-in fade-in duration-200">
+              <input
+                type="date"
+                value={customStartDate}
+                onChange={(e) => setCustomStartDate(e.target.value)}
+                className="bg-white text-xs font-bold border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#2874F0] w-full sm:w-auto shadow-xs"
+              />
+              <span className="text-xs font-bold text-slate-400 uppercase">to</span>
+              <input
+                type="date"
+                value={customEndDate}
+                onChange={(e) => setCustomEndDate(e.target.value)}
+                className="bg-white text-xs font-bold border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#2874F0] w-full sm:w-auto shadow-xs"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* 🚀 METRIC CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
@@ -231,46 +472,25 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* 1. Area Chart: Revenue Trend (Span 2 cols) */}
-        <div data-testid="analytics-chart-trajectory" className="bg-white border border-slate-200 rounded-sm p-6 shadow-xs flex flex-col justify-between min-h-[380px]">
+        <div data-testid="analytics-chart-trajectory" className="bg-white border border-slate-200 rounded-sm p-6 shadow-xs flex flex-col justify-between min-h-[380px] lg:col-span-2">
           <div className="mb-4">
             <h4 className="text-base font-bold text-slate-800 uppercase tracking-wide">Revenue Trajectory</h4>
-            <p className="text-xs font-bold text-slate-455 uppercase tracking-wider">Total transaction amounts logged daily over the last 30 days.</p>
+            <p className="text-xs font-bold text-slate-450 uppercase tracking-wider">Total transaction amounts logged over the selected timeframe.</p>
           </div>
           
           <div className="w-full h-[280px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={areaChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2874F0" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#2874F0" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(226,232,240,0.8)" vertical={false} />
-                <XAxis 
-                  dataKey="date" 
-                  tickLine={false} 
-                  axisLine={false} 
-                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: 600 }} 
-                />
-                <YAxis 
-                  tickLine={false} 
-                  axisLine={false} 
-                  tickFormatter={(v) => `₹${v}`}
-                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: 600 }} 
-                />
-                <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(40, 116, 240, 0.15)', strokeWidth: 1.5 }} />
-                <Area 
-                  type="monotone" 
-                  dataKey="Revenue" 
-                  stroke="#2874F0" 
-                  strokeWidth={3}
-                  fillOpacity={1} 
-                  fill="url(#colorRevenue)" 
-                  name="Revenue"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+            {isChartLoading ? (
+              <ChartSkeleton type="line" />
+            ) : isRevenueEmpty ? (
+              <EmptyState message="No revenue recorded for this period" />
+            ) : (
+              <ReactECharts
+                option={getRevenueChartOptions(revenueChartData)}
+                style={{ height: '100%', width: '100%' }}
+                notMerge={true}
+                lazyUpdate={true}
+              />
+            )}
           </div>
         </div>
 
@@ -282,40 +502,24 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
           </div>
 
           <div className="w-full h-[220px] flex items-center justify-center relative">
-            {pieChartData.length === 0 ? (
-              <p className="text-xs font-bold uppercase text-slate-400">No transaction data</p>
+            {isChartLoading ? (
+              <ChartSkeleton type="pie" />
+            ) : isPieEmpty ? (
+              <EmptyState message="No category share data" />
             ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieChartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={65}
-                    outerRadius={85}
-                    paddingAngle={3}
-                    dataKey="value"
-                  >
-                    {pieChartData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="#FFFFFF" strokeWidth={1} />
-                    ))}
-                  </Pie>
-                  <Tooltip content={<CustomPieTooltip />} />
-                </PieChart>
-              </ResponsiveContainer>
+              <ReactECharts
+                option={getCategoryChartOptions(pieChartData)}
+                style={{ height: '100%', width: '100%' }}
+                notMerge={true}
+                lazyUpdate={true}
+              />
             )}
-            
-            {/* Ambient center stats */}
-            <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Share</span>
-              <span className="text-sm font-bold text-slate-800 uppercase tracking-wide">Categories</span>
-            </div>
           </div>
 
           {/* Custom Labels List */}
-          <div className="grid grid-cols-2 gap-2 text-left">
-            {pieChartData.slice(0, 4).map((entry, index) => (
-              <div key={entry.name} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-700 uppercase tracking-wider">
+          <div className="grid grid-cols-2 gap-2 text-left min-h-[36px]">
+            {!isChartLoading && !isPieEmpty && pieChartData.slice(0, 4).map((entry, index) => (
+              <div key={entry.name} className="flex items-center gap-1.5 text-[10px] font-bold text-slate-700 uppercase tracking-wider animate-in fade-in duration-200">
                 <span 
                   className="w-2.5 h-2.5 rounded-full inline-block flex-shrink-0 border border-slate-200" 
                   style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }} 
@@ -332,56 +536,25 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* 1. Bar Chart: Fulfillment Statuses (Spans 2 columns) */}
-        <div data-testid="analytics-chart-fulfillment" className="bg-white border border-slate-200 rounded-sm p-6 shadow-xs min-h-[300px] flex flex-col justify-between">
+        <div data-testid="analytics-chart-fulfillment" className="bg-white border border-slate-200 rounded-sm p-6 shadow-xs min-h-[300px] flex flex-col justify-between lg:col-span-2">
           <div>
             <h4 className="text-base font-bold text-slate-800 uppercase tracking-wide">Fulfillment Performance</h4>
             <p className="text-xs font-bold text-slate-455 uppercase tracking-wider">Total volume of orders processed grouped by status.</p>
           </div>
 
           <div className="w-full h-[180px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={barChartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(226,232,240,0.8)" vertical={false} />
-                <XAxis 
-                  dataKey="status" 
-                  tickLine={false} 
-                  axisLine={false}
-                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: 600 }} 
-                />
-                <YAxis 
-                  tickLine={false} 
-                  axisLine={false}
-                  tick={{ fill: '#64748b', fontSize: 10, fontWeight: 600 }} 
-                />
-                <Tooltip 
-                  cursor={{ fill: 'rgba(0, 0, 0, 0.02)' }}
-                  content={({ active, payload }) => {
-                    if (active && payload && payload.length) {
-                      return (
-                        <div className="bg-white border border-slate-200 p-3 rounded-sm shadow-sm">
-                          <p className="text-xs font-bold text-slate-800">
-                            {payload[0].payload.status}: <span className="text-[#2874F0] font-bold">{payload[0].value} orders</span>
-                          </p>
-                        </div>
-                      )
-                    }
-                    return null
-                  }}
-                />
-                <Bar 
-                  dataKey="Orders" 
-                  fill="#2874F0" 
-                  radius={[4, 4, 0, 0]}
-                  maxBarSize={55}
-                >
-                  {barChartData.map((entry, index) => {
-                    const colors = ['#FF9F00', '#a855f7', '#10b981'] // yellow, purple, emerald
-                    const statusColor = entry.status === 'Pending' ? colors[0] : entry.status === 'Shipped' ? colors[1] : colors[2]
-                    return <Cell key={`cell-${index}`} fill={statusColor} />
-                  })}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            {isChartLoading ? (
+              <ChartSkeleton type="bar" />
+            ) : isStatusEmpty ? (
+              <EmptyState message="No fulfillment status data" />
+            ) : (
+              <ReactECharts
+                option={getOrderStatusChartOptions(barChartData)}
+                style={{ height: '100%', width: '100%' }}
+                notMerge={true}
+                lazyUpdate={true}
+              />
+            )}
           </div>
         </div>
 
@@ -394,8 +567,8 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
 
           <div className="flex flex-col items-center justify-center py-4 space-y-2">
             <span className="text-5xl font-extrabold text-[#2874F0] leading-none">
-              {orders.length > 0 
-                ? `${Math.round((orders.filter(o => o.status === 'Delivered').length / orders.length) * 100)}%` 
+              {filteredOrders.length > 0 
+                ? `${Math.round((filteredOrders.filter(o => o.status === 'Delivered').length / filteredOrders.length) * 100)}%` 
                 : '100%'}
             </span>
             <span className="text-xs font-bold text-slate-700 uppercase tracking-wider mt-1.5">Dispatched Success Rate</span>

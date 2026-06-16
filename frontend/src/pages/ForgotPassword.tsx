@@ -104,6 +104,14 @@ export const ForgotPassword: React.FC = () => {
                     🛠 Dev Mode — Reset Token
                   </p>
                   <p data-testid="dev-reset-token" className="text-xs font-mono text-slate-700 break-all">{devToken}</p>
+                  <div className="mt-2">
+                    <Link
+                      to={`/reset-password?token=${devToken}`}
+                      className="text-xs text-[#2874F0] font-bold hover:underline"
+                    >
+                      Click here to reset password using this token &rarr;
+                    </Link>
+                  </div>
                   <p className="text-[10px] text-slate-400 mt-2">This token is only shown in non-production environments.</p>
                 </div>
               )}
