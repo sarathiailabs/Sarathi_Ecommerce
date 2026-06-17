@@ -39,7 +39,7 @@ export const Login: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false)
 
   return (
-    <div data-page="login" data-testid="login-page" className="min-h-[calc(100vh-130px)] flex bg-[#F8FAFC] py-12 select-none justify-center items-center">
+    <div id="signin-section" data-page="login" data-testid="login-page" className="min-h-[calc(100vh-130px)] flex bg-[#F8FAFC] py-12 select-none justify-center items-center">
       <div className="w-full max-w-4xl bg-white rounded-sm border border-slate-200 shadow-md flex overflow-hidden min-h-[500px]">
         {/* LEFT: Branding Panel (Blue Flipkart-like side panel) */}
         <div className="brand-panel hidden md:flex flex-col w-[40%] bg-[#0F6FFF] text-white p-10 justify-between relative overflow-hidden">

@@ -298,7 +298,19 @@ export const Home: React.FC = () => {
     <div className="min-h-screen bg-[#F8FAFC]">
       {isFiltered ? (
         /* ==================== CATALOG MODE (Filtered Search / Category results) ==================== */
-        <section id="products" data-testid="products-section" className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        <section id="products-section" data-testid="products-section" className="max-w-6xl mx-auto px-4 sm:px-6 py-10 relative">
+          <div id="electronics-section" className="absolute -top-10" />
+          <div id="home-kitchen-section" className="absolute -top-10" />
+          <div id="fashion-section" className="absolute -top-10" />
+          <div id="sports-section" className="absolute -top-10" />
+          <div id="helpcenter-section" className="absolute -top-10" />
+          <div id="returnspolicy-section" className="absolute -top-10" />
+          <div id="shippinginfo-section" className="absolute -top-10" />
+          <div id="contactus-section" className="absolute -top-10" />
+          <div id="signin-section" className="absolute -top-10" />
+          <div id="createaccount-section" className="absolute -top-10" />
+          <div id="myorders-section" className="absolute -top-10" />
+          <div id="cart-section" className="absolute -top-10" />
           {/* Horizontal Category Chips Carousel */}
           {!isStaff && (
             <div className="w-full mb-8">
@@ -533,13 +545,21 @@ export const Home: React.FC = () => {
           </div>
         </section>
       ) : (
-        /* ==================== PREMIUM BRAND LANDING MODE ==================== */
-        <div className="space-y-16 md:space-y-24 pb-20">
+        <div className="space-y-16 md:space-y-24 pb-20 relative">
+          <div id="signin-section" className="absolute top-0" />
+          <div id="createaccount-section" className="absolute top-0" />
+          <div id="myorders-section" className="absolute top-0" />
+          <div id="cart-section" className="absolute top-0" />
           {/* 1. Hero Section */}
           <HeroSlider />
 
           {/* 2. Featured Categories */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none">
+          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none relative">
+            <div id="products-section" className="absolute -top-10" />
+            <div id="electronics-section" className="absolute -top-10" />
+            <div id="home-kitchen-section" className="absolute -top-10" />
+            <div id="fashion-section" className="absolute -top-10" />
+            <div id="sports-section" className="absolute -top-10" />
             <div className="text-left mb-8">
               <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Categories</h2>
               <h3 className="text-xl font-extrabold text-slate-900 mt-1">Shop Curated Hardware</h3>
@@ -1046,8 +1066,10 @@ export const Home: React.FC = () => {
             </Swiper>
           </section>
 
-          {/* 8. Brand Story */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none border-t border-slate-200/60 pt-16">
+          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none border-t border-slate-200/60 pt-16 relative">
+            <div id="helpcenter-section" className="absolute -top-10" />
+            <div id="returnspolicy-section" className="absolute -top-10" />
+            <div id="shippinginfo-section" className="absolute -top-10" />
             <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
               <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Our Philosophy</h2>
               <h3 className="text-2xl font-black text-slate-900">Redefining Shopping Aesthetics</h3>
@@ -1174,8 +1196,8 @@ export const Home: React.FC = () => {
             </div>
           </section>
 
-          {/* 10. Newsletter Section */}
-          <section className="max-w-4xl mx-auto px-4 sm:px-6 select-none">
+          <section className="max-w-4xl mx-auto px-4 sm:px-6 select-none relative">
+            <div id="contactus-section" className="absolute -top-10" />
             <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-[32px] p-8 md:p-12 text-center text-white space-y-6 relative overflow-hidden shadow-lg">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(15,111,255,0.08),transparent)]" />
               <div className="max-w-md mx-auto space-y-2 relative z-10">
@@ -1218,83 +1240,7 @@ export const Home: React.FC = () => {
             </div>
           </section>
 
-          {/* 11. Footer */}
-          <footer className="border-t border-slate-200/80 bg-white rounded-t-[40px] pt-16 pb-8 select-none">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-left">
-              <div className="col-span-2 space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#0F6FFF] flex items-center justify-center text-white text-xs font-black shadow-xs">
-                    S
-                  </div>
-                  <span className="font-extrabold text-sm uppercase tracking-wider text-slate-800">Sarathi Elite</span>
-                </div>
-                <p className="text-xs text-slate-400 font-semibold leading-relaxed max-w-xs">
-                  Redefining storefront configurations with clean design systems, authenticated checkout flows, and secure APIs.
-                </p>
-              </div>
 
-              <div>
-                <h4 className="text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-4">Storefront</h4>
-                <ul className="space-y-2.5 text-xs text-slate-500 font-semibold">
-                  <li>
-                    <button onClick={() => setSelectedCategory('Electronics')} className="hover:text-[#0F6FFF] transition-colors">
-                      Electronics
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => setSelectedCategory('Mobiles')} className="hover:text-[#0F6FFF] transition-colors">
-                      Mobiles
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => setSelectedCategory('Appliances')} className="hover:text-[#0F6FFF] transition-colors">
-                      Appliances
-                    </button>
-                  </li>
-                  <li>
-                    <button onClick={() => setSelectedCategory('Deals')} className="hover:text-[#0F6FFF] transition-colors">
-                      Deals of the Week
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-4">Support</h4>
-                <ul className="space-y-2.5 text-xs text-slate-500 font-semibold">
-                  <li>
-                    <Link to="/orders" className="hover:text-[#0F6FFF] transition-colors">
-                      Track Orders
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/cart" className="hover:text-[#0F6FFF] transition-colors">
-                      Shopping Cart
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/orders" className="hover:text-[#0F6FFF] transition-colors">
-                      Order History
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/" className="hover:text-[#0F6FFF] transition-colors">
-                      Terms of Service
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 border-t border-slate-100 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                © {new Date().getFullYear()} Sarathi Elite Store. All rights reserved.
-              </span>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                Designed for Design Conscious Buyers
-              </span>
-            </div>
-          </footer>
         </div>
       )}
 

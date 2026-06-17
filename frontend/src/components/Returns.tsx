@@ -93,7 +93,7 @@ export const Returns: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto py-8">
+    <div id="returnspolicy-section" className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Returns & Refunds</h1>
 
       {!showForm && (

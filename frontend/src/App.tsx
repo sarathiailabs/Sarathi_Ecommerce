@@ -1,5 +1,5 @@
-
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { SearchProvider } from './context/SearchContext'
@@ -32,10 +32,46 @@ import { ForgotPassword } from './pages/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword'
 import { OrderDetail } from './pages/OrderDetail'
 import { NotFound } from './pages/NotFound'
+import { HelpPage } from './pages/HelpPage'
+import { ShippingPage } from './pages/ShippingPage'
+import { ContactPage } from './pages/ContactPage'
+
+const ScrollToHash = () => {
+  const { pathname, search, hash } = useLocation()
+
+  useEffect(() => {
+    if (hash) {
+      const id = hash.replace('#', '')
+      const timer = setTimeout(() => {
+        const element = document.getElementById(id)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 150)
+      return () => clearTimeout(timer)
+    } else if (pathname === '/' || pathname === '/products') {
+      const timer = setTimeout(() => {
+        const id = pathname === '/products' ? 'products-section' : ''
+        if (id) {
+          const element = document.getElementById(id)
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' })
+          }
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+      }, 150)
+      return () => clearTimeout(timer)
+    }
+  }, [pathname, search, hash])
+
+  return null
+}
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToHash />
       <AuthProvider>
         <CartProvider>
           <SearchProvider>
@@ -45,12 +81,16 @@ function App() {
               <Routes>
                 {/* ── Public routes ─────────────────────────────── */}
                 <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Home />} />
                 <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/search" element={<ProductSearch />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/help" element={<HelpPage />} />
+                <Route path="/shipping" element={<ShippingPage />} />
+                <Route path="/contact" element={<ContactPage />} />
                 <Route path="/404" element={<NotFound />} />
 
                 {/* ── Customer routes ────────────────────────────── */}

@@ -99,7 +99,7 @@ export const Register: React.FC = () => {
   }
 
   return (
-    <div data-page="register" className="min-h-[calc(100vh-130px)] flex bg-[#F8FAFC] py-8 select-none justify-center items-center">
+    <div id="createaccount-section" data-page="register" className="min-h-[calc(100vh-130px)] flex bg-[#F8FAFC] py-8 select-none justify-center items-center">
       <div className="w-full max-w-4xl bg-white rounded-sm border border-slate-200 shadow-md flex overflow-hidden min-h-[580px]">
         {/* LEFT: Perks Panel (Flipkart Blue) */}
         <div className="brand-panel hidden md:flex flex-col w-[38%] bg-[#0F6FFF] text-white p-10 justify-between relative overflow-hidden">

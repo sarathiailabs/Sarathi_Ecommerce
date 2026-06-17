@@ -1,35 +1,28 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Mail, Phone, MapPin, Twitter, Instagram, Github, Youtube, ArrowRight } from 'lucide-react'
+import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
 
 const LINKS = {
   Shop: [
-    { label: 'All Products', href: '/' },
-    { label: 'Electronics', href: '/?category=Electronics' },
-    { label: 'Home & Kitchen', href: '/?category=Home%20%26%20Living' },
-    { label: 'Fashion', href: '/?category=Fashion%20%26%20Accessories' },
-    { label: 'Sports', href: '/?category=Sports%20%26%20Fitness' },
+    { label: 'All Products', href: '/products#products-section' },
+    { label: 'Electronics', href: '/products?category=electronics#electronics-section' },
+    { label: 'Home & Kitchen', href: '/products?category=home-kitchen#home-kitchen-section' },
+    { label: 'Fashion', href: '/products?category=fashion#fashion-section' },
+    { label: 'Sports', href: '/products?category=sports#sports-section' },
   ],
   Account: [
-    { label: 'Sign In', href: '/login' },
-    { label: 'Create Account', href: '/register' },
-    { label: 'My Orders', href: '/orders' },
-    { label: 'Cart', href: '/cart' },
+    { label: 'Sign In', href: '/login#signin-section' },
+    { label: 'Create Account', href: '/register#createaccount-section' },
+    { label: 'My Orders', href: '/orders#myorders-section' },
+    { label: 'Cart', href: '/cart#cart-section' },
   ],
   Support: [
-    { label: 'Help Center', href: '#' },
-    { label: 'Returns Policy', href: '/returns' },
-    { label: 'Shipping Info', href: '#' },
-    { label: 'Contact Us', href: '#' },
+    { label: 'Help Center', href: '/help#helpcenter-section' },
+    { label: 'Returns Policy', href: '/returns#returnspolicy-section' },
+    { label: 'Shipping Info', href: '/shipping#shippinginfo-section' },
+    { label: 'Contact Us', href: '/contact#contactus-section' },
   ],
 }
-
-const SOCIAL = [
-  { icon: <Twitter size={16} />, href: '#', label: 'Twitter' },
-  { icon: <Instagram size={16} />, href: '#', label: 'Instagram' },
-  { icon: <Youtube size={16} />, href: '#', label: 'YouTube' },
-  { icon: <Github size={16} />, href: '#', label: 'GitHub' },
-]
 
 export const Footer: React.FC = () => {
   return (
@@ -80,15 +73,15 @@ export const Footer: React.FC = () => {
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-xs text-slate-400">
                 <Mail size={12} className="text-[#14B8A6]/70" />
-                support@sarathi.ai
+                support@sarathiailabs.com
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-400">
                 <Phone size={12} className="text-[#14B8A6]/70" />
-                +91 80 4321 9876
+                +91 90224 73314
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-400">
                 <MapPin size={12} className="text-[#14B8A6]/70" />
-                Bengaluru, Karnataka, India
+                Kolhapur, Maharashtra, India
               </div>
             </div>
           </div>
@@ -104,7 +97,7 @@ export const Footer: React.FC = () => {
                       to={item.href}
                       data-testid={`footer-link-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                       title={item.label}
-                      className="text-xs text-[#878787] hover:text-white transition-colors duration-150"
+                      className="text-xs text-[#878787] hover:text-cyan-400 cursor-pointer transition-colors duration-200 focus:outline-none focus:text-cyan-400 focus:underline"
                     >
                       {item.label}
                     </Link>
@@ -120,24 +113,10 @@ export const Footer: React.FC = () => {
           <p data-testid="footer-copyright" className="text-xs text-slate-500">
             © {new Date().getFullYear()} Sarathi Store. All rights reserved.
           </p>
-          <div data-testid="footer-social-links" className="flex items-center gap-3">
-            {SOCIAL.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                data-testid={`social-link-${s.label.toLowerCase()}`}
-                aria-label={s.label}
-                title={`Follow us on ${s.label}`}
-                className="w-8 h-8 rounded-full bg-[#213147] hover:bg-[#14B8A6] flex items-center justify-center text-slate-400 hover:text-white transition-colors"
-              >
-                {s.icon}
-              </a>
-            ))}
-          </div>
           <div data-testid="footer-legal-links" className="flex gap-4 text-xs text-slate-500">
-            <a href="#" data-testid="footer-privacy-link" title="Privacy Policy" className="hover:text-white cursor-pointer transition-colors">Privacy</a>
-            <a href="#" data-testid="footer-terms-link" title="Terms of Service" className="hover:text-white cursor-pointer transition-colors">Terms</a>
-            <a href="#" data-testid="footer-cookies-link" title="Cookie Policy" className="hover:text-white cursor-pointer transition-colors">Cookies</a>
+            <a href="#" data-testid="footer-privacy-link" title="Privacy Policy" className="hover:text-cyan-400 cursor-pointer transition-colors duration-200">Privacy</a>
+            <a href="#" data-testid="footer-terms-link" title="Terms of Service" className="hover:text-cyan-400 cursor-pointer transition-colors duration-200">Terms</a>
+            <a href="#" data-testid="footer-cookies-link" title="Cookie Policy" className="hover:text-cyan-400 cursor-pointer transition-colors duration-200">Cookies</a>
           </div>
         </div>
       </div>

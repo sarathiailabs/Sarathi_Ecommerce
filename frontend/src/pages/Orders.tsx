@@ -293,7 +293,7 @@ export const Orders: React.FC = () => {
   }
 
   return (
-    <div data-testid="orders-page" className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+    <div id="myorders-section" data-testid="orders-page" className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       {/* Header */}
       <div className="mb-8 border-b border-slate-200 pb-5">
         <h1 className="text-2xl font-extrabold text-slate-800 uppercase tracking-tight">My Orders</h1>

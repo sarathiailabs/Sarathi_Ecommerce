@@ -84,7 +84,7 @@ export const Cart: React.FC = () => {
   }
 
   return (
-    <div data-page="cart" className="max-w-5xl mx-auto px-4 sm:px-6 py-10 select-none bg-[#F8FAFC] min-h-screen">
+    <div id="cart-section" data-page="cart" className="max-w-5xl mx-auto px-4 sm:px-6 py-10 select-none bg-[#F8FAFC] min-h-screen">
       
       {/* Header bar */}
       <div className="flex items-center justify-between mb-6 bg-white p-5 rounded-2xl border border-slate-200/50 shadow-xs">
