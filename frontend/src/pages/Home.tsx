@@ -18,6 +18,7 @@ import api from '../services/api'
 import { useCart, Product } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { HeroSlider } from '../components/HeroSlider'
+import { scrollToElementWithOffset } from '../utils/scroll'
 
 const SORT_OPTIONS = [
   { value: 'default', label: 'Featured' },
@@ -91,20 +92,34 @@ export const Home: React.FC = () => {
   const { user, isAuthenticated, isAdmin, isShopOwner, isDeliveryPartner } = useAuth()
   const isStaff = isAdmin || isShopOwner || isDeliveryPartner
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
-  // Redirect users with special roles to their dashboards
   useEffect(() => {
-    if (isAuthenticated) {
-      if (isAdmin) {
-        navigate('/admin/dashboard', { replace: true })
-      } else if (isShopOwner) {
-        navigate('/seller/dashboard', { replace: true })
-      } else if (isDeliveryPartner) {
-        navigate('/delivery/dashboard', { replace: true })
-      }
+    const handleResetFilters = () => {
+      setSelectedCategory('All')
+      setSearchQuery('')
+      setSearchParams({})
     }
-  }, [isAuthenticated, isAdmin, isShopOwner, isDeliveryPartner, navigate])
+    window.addEventListener('reset-filters', handleResetFilters)
+    return () => {
+      window.removeEventListener('reset-filters', handleResetFilters)
+    }
+  }, [setSearchParams])
+
+  const handleCategorySelect = (cat: string) => {
+    setSelectedCategory(cat)
+    const newParams: Record<string, string> = {}
+    if (cat !== 'All') {
+      newParams.category = cat
+    }
+    if (searchQuery) {
+      newParams.search = searchQuery
+    }
+    setSearchParams(newParams)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+
 
   const urlSearch = searchParams.get('search')
   const urlCat = searchParams.get('category')
@@ -277,6 +292,8 @@ export const Home: React.FC = () => {
     e.preventDefault()
     if (heroSearch.trim()) {
       setSearchQuery(heroSearch)
+      setSearchParams({ search: heroSearch.trim() })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -315,10 +332,11 @@ export const Home: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-[60vh] bg-[#F5F7FA]">
       {isFiltered ? (
         /* ==================== CATALOG MODE (Filtered Search / Category results) ==================== */
-        <section id="products-section" data-testid="products-section" className="max-w-6xl mx-auto px-4 sm:px-6 py-10 relative">
+        <div className="w-full bg-[#F5F7FA] py-8 md:py-10">
+          <section id="products-section" data-testid="products-section" className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div id="electronics-section" className="absolute -top-10" />
           <div id="home-kitchen-section" className="absolute -top-10" />
           <div id="fashion-section" className="absolute -top-10" />
@@ -341,7 +359,7 @@ export const Home: React.FC = () => {
                     <button
                       key={cat}
                       data-testid={`category-chip-${cat.toLowerCase().replace(/\s+/g, '-')}`}
-                      onClick={() => setSelectedCategory(cat)}
+                      onClick={() => handleCategorySelect(cat)}
                       className={`text-xs font-bold px-5 py-2.5 rounded-full transition-all border whitespace-nowrap shadow-xs hover:shadow-sm ${
                         isActive
                           ? 'bg-[#0F6FFF] border-[#0F6FFF] text-white hover:bg-[#0D5ED9]'
@@ -383,7 +401,10 @@ export const Home: React.FC = () => {
                   <select
                     value={sortBy}
                     data-testid="sort-select"
-                    onChange={(e) => setSortBy(e.target.value)}
+                    onChange={(e) => {
+                      setSortBy(e.target.value)
+                      scrollToElementWithOffset('products-section', 95)
+                    }}
                     className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-primary-500/25 transition-all shadow-xs"
                   >
                     {SORT_OPTIONS.map((o) => (
@@ -400,7 +421,7 @@ export const Home: React.FC = () => {
             {loading ? (
               <div data-testid="product-loading-skeleton" data-loading="true" className="grid grid-cols-2 lg:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="bg-white border border-slate-200/50 rounded-2xl p-4 flex flex-col gap-3">
+                  <div key={i} className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 flex flex-col gap-3">
                     <div className="aspect-square skeleton rounded-xl" />
                     <div className="skeleton h-4 rounded w-3/4" />
                     <div className="skeleton h-3 rounded w-1/2" />
@@ -418,6 +439,8 @@ export const Home: React.FC = () => {
                   onClick={() => {
                     setSearchQuery('')
                     setSelectedCategory('All')
+                    setSearchParams({})
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
                   className="px-4 py-2 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-xs font-bold rounded-xl shadow-xs transition-colors"
                 >
@@ -452,7 +475,7 @@ export const Home: React.FC = () => {
                         data-category={product.category}
                         data-price={product.price}
                         data-stock={product.stock}
-                        className="bg-white border border-slate-200/60 rounded-3xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 p-4 flex flex-col group relative"
+                        className="bg-white border border-slate-200/60 rounded-3xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 p-3 md:p-4 flex flex-col group relative"
                       >
                         {/* Rating Star Badge on Top Right */}
                         <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-full border border-slate-200/60 flex items-center gap-1 shadow-xs z-10">
@@ -564,29 +587,31 @@ export const Home: React.FC = () => {
             )}
           </div>
         </section>
+        </div>
       ) : (
         <div className="relative">
           <div id="signin-section" className="absolute top-0" />
           <div id="createaccount-section" className="absolute top-0" />
           <div id="myorders-section" className="absolute top-0" />
           <div id="cart-section" className="absolute top-0" />
-          <div className="space-y-16 md:space-y-24 pb-20">
+          <div className="w-full">
             {/* 1. Hero Section */}
             <HeroSlider />
 
           {/* 2. Featured Categories */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none relative">
-            <div id="products-section" className="absolute -top-10" />
-            <div id="electronics-section" className="absolute -top-10" />
-            <div id="home-kitchen-section" className="absolute -top-10" />
-            <div id="fashion-section" className="absolute -top-10" />
-            <div id="sports-section" className="absolute -top-10" />
-            <div className="text-left mb-8">
-              <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Categories</h2>
-              <h3 className="text-xl font-extrabold text-slate-900 mt-1">Shop Curated Hardware</h3>
-            </div>
+          <div className="w-full bg-[#F5F7FA] py-8 md:py-10">
+            <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none relative">
+              <div id="products-section" className="absolute -top-10" />
+              <div id="electronics-section" className="absolute -top-10" />
+              <div id="home-kitchen-section" className="absolute -top-10" />
+              <div id="fashion-section" className="absolute -top-10" />
+              <div id="sports-section" className="absolute -top-10" />
+              <div className="text-left mb-4">
+                <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Categories</h2>
+                <h3 className="text-xl font-extrabold text-slate-900 mt-1">Shop Curated Hardware</h3>
+              </div>
 
-            <div className="flex items-center gap-5 overflow-x-auto pb-4 scrollbar-none md:grid md:grid-cols-4 lg:grid-cols-5 md:gap-5">
+              <div className="flex items-center gap-5 overflow-x-auto pb-4 scrollbar-none md:grid md:grid-cols-4 lg:grid-cols-5 md:gap-5">
               {categories
                 .filter((c) => c !== 'All')
                 .map((cat) => {
@@ -636,7 +661,7 @@ export const Home: React.FC = () => {
                   return (
                     <button
                       key={cat}
-                      onClick={() => setSelectedCategory(cat)}
+                      onClick={() => handleCategorySelect(cat)}
                       className="flex-shrink-0 w-44 md:w-auto h-40 rounded-3xl overflow-hidden relative group shadow-md hover:shadow-xl transition-all duration-300 border border-slate-200/10 text-left"
                     >
                       {/* Category Background Image */}
@@ -666,30 +691,32 @@ export const Home: React.FC = () => {
                 })}
             </div>
           </section>
+          </div>
 
           {/* 3. Trending Products (Swiper carousel) */}
-          <section id="trending-carousel" className="max-w-6xl mx-auto px-4 sm:px-6 select-none relative">
-            <div className="flex items-end justify-between mb-8">
-              <div className="text-left">
-                <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Trending</h2>
-                <h3 className="text-xl font-extrabold text-slate-900 mt-1">Selected Highlights</h3>
+          <div className="w-full bg-white border-y border-slate-100 py-8 md:py-10">
+            <section id="trending-carousel" className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none relative">
+              <div className="flex items-end justify-between mb-4">
+                <div className="text-left">
+                  <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Trending</h2>
+                  <h3 className="text-xl font-extrabold text-slate-900 mt-1">Selected Highlights</h3>
+                </div>
+                {/* Carousel navigation controls */}
+                <div className="flex items-center gap-2">
+                  <button
+                    className="trending-prev w-8 h-8 rounded-full border border-slate-200/80 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-500 shadow-2xs transition-colors hover:border-[#0F6FFF] hover:text-[#0F6FFF] disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="Scroll left"
+                  >
+                    <ChevronLeft size={14} />
+                  </button>
+                  <button
+                    className="trending-next w-8 h-8 rounded-full border border-slate-200/80 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-500 shadow-2xs transition-colors hover:border-[#0F6FFF] hover:text-[#0F6FFF] disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="Scroll right"
+                  >
+                    <ChevronRight size={14} />
+                  </button>
+                </div>
               </div>
-              {/* Carousel navigation controls */}
-              <div className="flex items-center gap-2">
-                <button
-                  className="trending-prev w-8 h-8 rounded-full border border-slate-200/80 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-500 shadow-2xs transition-colors hover:border-[#0F6FFF] hover:text-[#0F6FFF] disabled:opacity-40 disabled:cursor-not-allowed"
-                  aria-label="Scroll left"
-                >
-                  <ChevronLeft size={14} />
-                </button>
-                <button
-                  className="trending-next w-8 h-8 rounded-full border border-slate-200/80 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-500 shadow-2xs transition-colors hover:border-[#0F6FFF] hover:text-[#0F6FFF] disabled:opacity-40 disabled:cursor-not-allowed"
-                  aria-label="Scroll right"
-                >
-                  <ChevronRight size={14} />
-                </button>
-              </div>
-            </div>
 
             {/* Swiper slider container */}
             <Swiper
@@ -710,7 +737,7 @@ export const Home: React.FC = () => {
               {loading ? (
                 [...Array(4)].map((_, i) => (
                   <SwiperSlide key={i}>
-                    <div className="bg-white border border-slate-200/50 rounded-2xl p-4 flex flex-col gap-3 animate-pulse">
+                    <div className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 flex flex-col gap-3 animate-pulse">
                       <div className="aspect-square bg-slate-100 rounded-xl" />
                       <div className="skeleton h-4 rounded w-3/4" />
                       <div className="skeleton h-7 rounded w-full mt-2" />
@@ -724,7 +751,7 @@ export const Home: React.FC = () => {
                   return (
                     <SwiperSlide key={product.id} className="h-auto">
                       <div
-                        className="bg-white border border-slate-200/50 rounded-2xl p-4 hover:shadow-md hover:border-slate-250 transition-all duration-200 flex flex-col justify-between relative group shadow-2xs h-full"
+                        className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 hover:shadow-md hover:border-slate-250 transition-all duration-200 flex flex-col justify-between relative group shadow-2xs h-full"
                       >
                         {/* Rating Star Badge */}
                         <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-full border border-slate-200/60 flex items-center gap-1 shadow-xs z-10">
@@ -780,10 +807,12 @@ export const Home: React.FC = () => {
               )}
             </Swiper>
           </section>
+          </div>
 
           {/* 4. Featured Collection */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none">
-            <div className="grid md:grid-cols-2 gap-8">
+          <div className="w-full bg-[#F5F7FA] py-8 md:py-10">
+            <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none">
+              <div className="grid md:grid-cols-2 gap-6">
               {/* Card 1 */}
               <div className="relative rounded-3xl overflow-hidden bg-slate-950 text-white p-8 border border-slate-800 shadow-lg min-h-[220px] flex flex-col justify-between group">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(15,111,255,0.15),transparent)]" />
@@ -821,18 +850,20 @@ export const Home: React.FC = () => {
               </div>
             </div>
           </section>
+          </div>
 
           {/* 5. AI Recommendations Section */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none">
-            <div className="text-left mb-8">
-              <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">For You</h2>
-              <h3 className="text-xl font-extrabold text-slate-900 mt-1">Recommended for You</h3>
-            </div>
+          <div className="w-full bg-white border-y border-slate-100 py-8 md:py-10">
+            <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none">
+              <div className="text-left mb-4">
+                <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">For You</h2>
+                <h3 className="text-xl font-extrabold text-slate-900 mt-1">Recommended for You</h3>
+              </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {loading
                 ? [...Array(4)].map((_, i) => (
-                    <div key={i} className="bg-white border border-slate-200/50 rounded-2xl p-4 flex flex-col gap-3 animate-pulse">
+                    <div key={i} className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 flex flex-col gap-3 animate-pulse">
                       <div className="aspect-square bg-slate-100 rounded-xl" />
                       <div className="h-4 bg-slate-100 rounded w-3/4" />
                     </div>
@@ -843,7 +874,7 @@ export const Home: React.FC = () => {
                     return (
                       <div
                         key={product.id}
-                        className="bg-white border border-slate-200/50 rounded-2xl p-4 hover:shadow-md hover:border-slate-250 transition-all duration-200 flex flex-col justify-between group relative shadow-2xs"
+                        className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 hover:shadow-md hover:border-slate-250 transition-all duration-200 flex flex-col justify-between group relative shadow-2xs"
                       >
                         <button
                           onClick={() => toggleWishlist(product.id)}
@@ -890,10 +921,12 @@ export const Home: React.FC = () => {
                   })}
             </div>
           </section>
+          </div>
 
           {/* 6. Deals of the Day */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none">
-            <div className="bg-slate-900 rounded-[32px] p-6 md:p-10 border border-slate-800 text-white flex flex-col lg:flex-row items-center gap-10 shadow-lg relative overflow-hidden">
+          <div className="w-full bg-[#F5F7FA] py-6">
+            <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none">
+              <div className="bg-slate-900 rounded-[32px] p-6 md:p-10 border border-slate-800 text-white flex flex-col lg:flex-row items-center gap-10 shadow-lg relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(20,184,166,0.1),transparent)]" />
               
               {/* Countdown panel */}
@@ -941,7 +974,7 @@ export const Home: React.FC = () => {
                     return (
                       <SwiperSlide key={p.id}>
                         <div
-                          className="bg-white border border-slate-200/10 rounded-2xl p-4 flex flex-col justify-between relative group shadow-md text-slate-800 h-full"
+                          className="bg-white border border-slate-200/10 rounded-2xl p-3 md:p-4 flex flex-col justify-between relative group shadow-md text-slate-800 h-full"
                         >
                           {/* Sale badge */}
                           <div className="absolute top-3 right-3 bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider z-10 shadow-sm">
@@ -986,14 +1019,16 @@ export const Home: React.FC = () => {
               </div>
             </div>
           </section>
+          </div>
 
           {/* 7. New Arrivals */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none relative">
-            <div className="flex items-end justify-between mb-8">
-              <div className="text-left">
-                <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Fresh</h2>
-                <h3 className="text-xl font-extrabold text-slate-900 mt-1">New Arrivals</h3>
-              </div>
+          <div className="w-full bg-white border-y border-slate-100 py-8 md:py-10">
+            <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none relative">
+              <div className="flex items-end justify-between mb-4">
+                <div className="text-left">
+                  <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Fresh</h2>
+                  <h3 className="text-xl font-extrabold text-slate-900 mt-1">New Arrivals</h3>
+                </div>
               {/* Carousel navigation controls */}
               <div className="flex items-center gap-2">
                 <button
@@ -1036,7 +1071,7 @@ export const Home: React.FC = () => {
               {loading ? (
                 [...Array(4)].map((_, i) => (
                   <SwiperSlide key={i}>
-                    <div className="bg-white border border-slate-200/50 rounded-2xl p-4 flex flex-col gap-3 animate-pulse">
+                    <div className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 flex flex-col gap-3 animate-pulse">
                       <div className="aspect-square bg-slate-100 rounded-xl" />
                       <div className="skeleton h-4 rounded w-3/4" />
                       <div className="skeleton h-7 rounded w-full mt-2" />
@@ -1050,7 +1085,7 @@ export const Home: React.FC = () => {
                   return (
                     <SwiperSlide key={product.id} className="h-auto">
                       <div
-                        className="bg-white border border-slate-200/50 rounded-2xl p-4 hover:shadow-md hover:border-slate-250 transition-all duration-200 flex flex-col justify-between relative group shadow-2xs h-full"
+                        className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 hover:shadow-md hover:border-slate-250 transition-all duration-200 flex flex-col justify-between relative group shadow-2xs h-full"
                       >
                         {/* Rating Star Badge */}
                         <div className="absolute top-6 right-6 bg-white/95 backdrop-blur-xs px-2 py-0.5 rounded-full border border-slate-200/60 flex items-center gap-1 shadow-xs z-10">
@@ -1106,20 +1141,23 @@ export const Home: React.FC = () => {
               )}
             </Swiper>
           </section>
+          </div>
 
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none border-t border-slate-200/60 pt-16 relative">
-            <div id="helpcenter-section" className="absolute -top-10" />
-            <div id="returnspolicy-section" className="absolute -top-10" />
-            <div id="shippinginfo-section" className="absolute -top-10" />
-            <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-              <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Our Philosophy</h2>
-              <h3 className="text-2xl font-black text-slate-900">Redefining Shopping Aesthetics</h3>
-              <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+          {/* 8. Our Philosophy */}
+          <div className="w-full bg-[#F5F7FA] py-8 md:py-10">
+            <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none relative">
+              <div id="helpcenter-section" className="absolute -top-10" />
+              <div id="returnspolicy-section" className="absolute -top-10" />
+              <div id="shippinginfo-section" className="absolute -top-10" />
+              <div className="text-center max-w-2xl mx-auto space-y-2 mb-6">
+                <h2 className="text-xs uppercase tracking-widest text-[#0F6FFF] font-black">Our Philosophy</h2>
+                <h3 className="text-2xl font-black text-slate-900">Redefining Shopping Aesthetics</h3>
+                <p className="text-xs text-slate-500 font-semibold leading-relaxed">
                 At Sarathi Store, we believe products should be beautiful, functional, and reliable. We partner with elite creators to deliver certified quality without friction.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8 text-left">
+            <div className="grid md:grid-cols-3 gap-6 text-left">
               <div className="bg-white border border-slate-200/50 rounded-2xl p-6 shadow-2xs space-y-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#0F6FFF]">
                   <Shield size={20} />
@@ -1151,9 +1189,11 @@ export const Home: React.FC = () => {
               </div>
             </div>
           </section>
+          </div>
 
           {/* 9. Testimonials and Ratings */}
-          <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none bg-white rounded-3xl border border-slate-200/50 py-12 px-6 md:p-10 shadow-2xs">
+          <div className="w-full bg-white border-y border-slate-100 py-8 md:py-10">
+            <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none">
             <div className="grid md:grid-cols-3 gap-8 items-center">
               <div className="text-left space-y-2">
                 <div className="inline-flex items-center gap-1">
@@ -1204,10 +1244,11 @@ export const Home: React.FC = () => {
               </div>
             </div>
           </section>
+          </div>
 
           {/* Brands Showcase */}
-          <section className="w-full py-10 bg-slate-100/60 border-y border-slate-200/50 overflow-hidden select-none">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-6 text-center">
+          <div className="w-full bg-[#F5F7FA] border-y border-slate-150/40 py-6 overflow-hidden select-none">
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 mb-4 text-center">
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">
                 Premium Brands We Showcase
               </span>
@@ -1235,11 +1276,13 @@ export const Home: React.FC = () => {
                 <span className="text-xl font-black tracking-widest hover:text-[#0F6FFF] transition-colors cursor-default">CANON</span>
               </div>
             </div>
-          </section>
+          </div>
 
-          <section className="max-w-4xl mx-auto px-4 sm:px-6 select-none relative">
-            <div id="contactus-section" className="absolute -top-10" />
-            <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-[32px] p-8 md:p-12 text-center text-white space-y-6 relative overflow-hidden shadow-lg">
+          {/* Newsletter Form */}
+          <div className="w-full bg-white py-8 md:py-10">
+            <section className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 select-none relative">
+              <div id="contactus-section" className="absolute -top-10" />
+              <div className="max-w-4xl mx-auto bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-[32px] p-8 md:p-10 text-center text-white space-y-6 relative overflow-hidden shadow-lg">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(15,111,255,0.08),transparent)]" />
               <div className="max-w-md mx-auto space-y-2 relative z-10">
                 <h3 className="text-xl sm:text-2xl font-black">Join the Elite Circle</h3>
@@ -1280,7 +1323,7 @@ export const Home: React.FC = () => {
               )}
             </div>
           </section>
-
+          </div>
           </div>
         </div>
       )}
@@ -1352,7 +1395,7 @@ export const Home: React.FC = () => {
                           data-testid={`category-checkbox-${cat.toLowerCase().replace(/\s+/g, '-')}`}
                           checked={selectedCategory === cat}
                           onChange={() => {
-                            setSelectedCategory(cat)
+                            handleCategorySelect(cat)
                             setMobileFiltersOpen(false)
                           }}
                           className="w-4 h-4 border-slate-355 rounded text-[#0F6FFF] focus:ring-0 cursor-pointer"
@@ -1378,6 +1421,7 @@ export const Home: React.FC = () => {
                           onChange={() => {
                             setSortBy(opt.value)
                             setMobileFiltersOpen(false)
+                            scrollToElementWithOffset('products-section', 95)
                           }}
                           className="w-4 h-4 border-slate-355 text-[#0F6FFF] focus:ring-0 cursor-pointer"
                         />

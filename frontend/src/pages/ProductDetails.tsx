@@ -173,7 +173,7 @@ export const ProductDetails: React.FC = () => {
   ]
 
   return (
-    <div data-page="product-detail" className="max-w-6xl mx-auto px-4 sm:px-6 py-10 select-none bg-[#F8FAFC] min-h-screen">
+    <div data-page="product-detail" className="max-w-6xl mx-auto px-4 sm:px-6 py-10 select-none bg-[#F8FAFC] min-h-[60vh]">
       {/* Breadcrumb path */}
       <nav data-testid="pdp-breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-500 mb-6 flex-wrap font-medium">
         <Link to="/" className="hover:text-[#0F6FFF]">Home</Link>

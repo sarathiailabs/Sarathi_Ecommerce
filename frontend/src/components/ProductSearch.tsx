@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '../services/api'
 import { Link } from 'react-router-dom'
+import { scrollToElementWithOffset } from '../utils/scroll'
 
 interface Product {
   id: string
@@ -64,17 +65,20 @@ export const ProductSearch: React.FC = () => {
     const category = e.target.value
     setSelectedCategory(category)
     fetchProducts(searchQuery, category, sortBy)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const sort = e.target.value
     setSortBy(sort)
     fetchProducts(searchQuery, selectedCategory, sort)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     fetchProducts(searchQuery, selectedCategory, sortBy)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handlePriceChange = (type: 'min' | 'max', value: number) => {
@@ -83,6 +87,15 @@ export const ProductSearch: React.FC = () => {
     } else {
       setPriceRange([priceRange[0], Math.max(value, priceRange[0])])
     }
+  }
+
+  const handlePriceMouseUp = () => {
+    scrollToElementWithOffset('search-results-section', 95)
+  }
+
+  const handleRatingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setMinRating(Number(e.target.value))
+    scrollToElementWithOffset('search-results-section', 95)
   }
 
   return (
@@ -141,6 +154,8 @@ export const ProductSearch: React.FC = () => {
                   max="500"
                   value={priceRange[0]}
                   onChange={(e) => handlePriceChange('min', Number(e.target.value))}
+                  onMouseUp={handlePriceMouseUp}
+                  onTouchEnd={handlePriceMouseUp}
                   data-testid="search-page-price-min"
                   className="w-full"
                 />
@@ -153,6 +168,8 @@ export const ProductSearch: React.FC = () => {
                   max="500"
                   value={priceRange[1]}
                   onChange={(e) => handlePriceChange('max', Number(e.target.value))}
+                  onMouseUp={handlePriceMouseUp}
+                  onTouchEnd={handlePriceMouseUp}
                   data-testid="search-page-price-max"
                   className="w-full"
                 />
@@ -165,7 +182,7 @@ export const ProductSearch: React.FC = () => {
             <h3 className="font-semibold mb-2">Minimum Rating</h3>
             <select
               value={minRating}
-              onChange={(e) => setMinRating(Number(e.target.value))}
+              onChange={handleRatingChange}
               data-testid="search-page-rating-select"
               className="w-full px-3 py-2 border border-gray-300 rounded"
             >
@@ -195,7 +212,7 @@ export const ProductSearch: React.FC = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="lg:col-span-3">
+        <div id="search-results-section" className="lg:col-span-3">
           {loading ? (
             <div data-testid="search-loading-state" className="text-center py-8">Loading products...</div>
           ) : products.length === 0 ? (

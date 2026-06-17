@@ -1,5 +1,5 @@
 {
-  "name": "prathazon-backend",
+  "name": "sarathi-store-backend",
   "version": "3.0.0",
   "description": "Enterprise-grade Node.js + Express API for Prathazon Marketplace",
   "main": "src/app.js",

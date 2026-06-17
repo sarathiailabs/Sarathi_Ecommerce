@@ -72,7 +72,7 @@ export const Wishlist: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 select-none bg-[#F8FAFC] min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 select-none bg-[#F8FAFC] min-h-[60vh]">
       <div className="flex justify-between items-center mb-6 bg-white p-5 rounded-2xl border border-slate-200/50 shadow-xs">
         <div>
           <h1 className="text-base font-bold text-slate-800 uppercase">My Wishlist</h1>

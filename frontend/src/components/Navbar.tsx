@@ -111,7 +111,23 @@ export const Navbar: React.FC = () => {
             <div className="flex items-center justify-between h-16 gap-4">
 
               {/* LEFT: Brand Logo */}
-              <Link to="/" data-testid="navbar-logo" aria-label="Sarathi home" title="Go to homepage" className="flex items-center gap-2.5 group flex-shrink-0">
+              <Link
+                to="/"
+                onClick={() => {
+                  setSearchQuery('')
+                  window.dispatchEvent(new CustomEvent('reset-filters'))
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault()
+                  setSearchQuery('')
+                  window.dispatchEvent(new CustomEvent('reset-filters'))
+                  navigate('/')
+                }}
+                data-testid="navbar-logo"
+                aria-label="Sarathi home"
+                title="Go to homepage"
+                className="flex items-center gap-2.5 group flex-shrink-0 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+              >
                 <img
                   src="/sarathi-logo.jpg"
                   alt="Sarathi Logo"

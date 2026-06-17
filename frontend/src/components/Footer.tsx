@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
 
 const LINKS = {
@@ -25,6 +25,7 @@ const LINKS = {
 }
 
 export const Footer: React.FC = () => {
+  const navigate = useNavigate()
   return (
     <footer data-testid="main-footer" role="contentinfo" className="w-full bg-[#172337] text-[#878787] border-t border-slate-700/50 mt-12 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-14 pb-8">
@@ -56,7 +57,16 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 space-y-5">
-            <Link to="/" data-testid="footer-logo" aria-label="Sarathi home" className="flex items-center gap-2.5">
+            <Link
+              to="/"
+              onTouchEnd={(e) => {
+                e.preventDefault()
+                navigate('/')
+              }}
+              data-testid="footer-logo"
+              aria-label="Sarathi home"
+              className="flex items-center gap-2.5"
+            >
               <img
                 src="/sarathi-logo.jpg"
                 alt="Sarathi Logo"

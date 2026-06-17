@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { SearchProvider } from './context/SearchContext'
@@ -35,34 +35,97 @@ import { HelpPage } from './pages/HelpPage'
 import { ShippingPage } from './pages/ShippingPage'
 import { ContactPage } from './pages/ContactPage'
 
-const ScrollToHash = () => {
+import { scrollToElementWithOffset } from './utils/scroll'
+
+const ScrollToTop = () => {
   const { pathname, search, hash } = useLocation()
+
+  // Disable default browser scroll restoration
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+  }, [])
 
   useEffect(() => {
     if (hash) {
       const id = hash.replace('#', '')
       const timer = setTimeout(() => {
-        const element = document.getElementById(id)
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-        }
+        scrollToElementWithOffset(id, 95)
       }, 150)
       return () => clearTimeout(timer)
-    } else if (pathname === '/' || pathname === '/products') {
-      const timer = setTimeout(() => {
-        const id = pathname === '/products' ? 'products-section' : ''
-        if (id) {
-          const element = document.getElementById(id)
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' })
-          }
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        }
-      }, 150)
-      return () => clearTimeout(timer)
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
     }
   }, [pathname, search, hash])
+
+  return null
+}
+
+const TouchpadNavigation: React.FC = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    // 1. Touchscreen swipe detection (left-to-right swipe)
+    let touchStartX = 0
+    let touchStartY = 0
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX
+        touchStartY = e.touches[0].clientY
+      }
+    }
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (e.changedTouches.length === 1) {
+        const touchEndX = e.changedTouches[0].clientX
+        const touchEndY = e.changedTouches[0].clientY
+        
+        const diffX = touchEndX - touchStartX
+        const diffY = touchEndY - touchStartY
+
+        // Swipe right (left to right) to go back: diffX must be positive and significant
+        if (diffX > 150 && Math.abs(diffY) < 60) {
+          navigate(-1)
+        }
+      }
+    }
+
+    // 2. Trackpad / Touchpad horizontal swipe detection (via deltaX)
+    let accumX = 0
+    let lastWheel = 0
+
+    const handleWheel = (e: WheelEvent) => {
+      const now = Date.now()
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        if (now - lastWheel > 300) {
+          accumX = 0
+        }
+        lastWheel = now
+        accumX += e.deltaX
+
+        // Swiping right on a trackpad moves the content left (meaning deltaX is negative)
+        if (accumX < -120) {
+          accumX = 0
+          navigate(-1)
+        }
+      }
+    }
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true })
+    window.addEventListener('touchend', handleTouchEnd, { passive: true })
+    window.addEventListener('wheel', handleWheel, { passive: true })
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchend', handleTouchEnd)
+      window.removeEventListener('wheel', handleWheel)
+    }
+  }, [navigate])
 
   return null
 }
@@ -70,7 +133,8 @@ const ScrollToHash = () => {
 function App() {
   return (
     <BrowserRouter>
-      <ScrollToHash />
+      <ScrollToTop />
+      <TouchpadNavigation />
       <AuthProvider>
         <CartProvider>
           <SearchProvider>

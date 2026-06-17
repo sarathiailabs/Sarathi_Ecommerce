@@ -214,7 +214,7 @@ export const SellerDashboard: React.FC = () => {
     : '4.8'
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-24 pt-8 select-none">
+    <div className="min-h-[60vh] bg-[#F8FAFC] pb-14 pt-8 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Modern Header */}

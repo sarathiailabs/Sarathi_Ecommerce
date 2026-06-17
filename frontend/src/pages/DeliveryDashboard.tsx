@@ -102,7 +102,7 @@ export const DeliveryDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-24 pt-8 select-none">
+    <div className="min-h-[60vh] bg-[#F8FAFC] pb-14 pt-8 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-200 pb-6">

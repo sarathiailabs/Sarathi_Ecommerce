@@ -1,11 +1,11 @@
 services:
   backend:
-    image: prathazon_backend
+    image: sarathi_backend
     build:
       context: ./backend
       dockerfile: Dockerfile
 
-    container_name: prathazon_backend
+    container_name: sarathi_backend
 
     ports:
       - "8000:8000"
@@ -22,15 +22,15 @@ services:
     restart: unless-stopped
 
     networks:
-      - prathazon_net
+      - sarathi_store_net
 
   frontend:
-    image: prathazon_frontend
+    image: sarathi_frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
 
-    container_name: prathazon_frontend
+    container_name: sarathi_frontend
 
     ports:
       - "3000:3000"
@@ -41,8 +41,8 @@ services:
     restart: unless-stopped
 
     networks:
-      - prathazon_net
+      - sarathi_store_net
 
 networks:
-  prathazon_net:
+  sarathi_store_net:
     driver: bridge

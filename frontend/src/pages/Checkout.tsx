@@ -161,7 +161,7 @@ export const Checkout: React.FC = () => {
   // ── Order Success Screen ───────────────────────────────────────────────────
   if (createdOrder) {
     return (
-      <div data-testid="checkout-success-state" className="max-w-2xl mx-auto px-4 py-10 text-center space-y-6 bg-[#F8FAFC] min-h-screen">
+      <div data-testid="checkout-success-state" className="max-w-2xl mx-auto px-4 py-10 text-center space-y-6 bg-[#F8FAFC] min-h-[60vh]">
         {/* Animated check */}
         <div className="flex justify-center">
           <div className="w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs mx-auto animate-bounce-slow">
@@ -863,7 +863,7 @@ export const Checkout: React.FC = () => {
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <div data-testid="checkout-page" className="max-w-3xl mx-auto px-4 sm:px-6 py-10 select-none bg-[#F8FAFC] min-h-screen">
+    <div data-testid="checkout-page" className="max-w-3xl mx-auto px-4 sm:px-6 py-10 select-none bg-[#F8FAFC] min-h-[60vh]">
       {/* Page heading */}
       <div className="flex items-center gap-2.5 mb-6 bg-white p-4 rounded-2xl border border-slate-200/50 shadow-xs">
         <button

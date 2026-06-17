@@ -28,6 +28,23 @@ export const Login: React.FC = () => {
     setSubmitting(true)
     try {
       await login(email, password)
+      
+      // Redirect staff/admin users to their dashboards on login, regular customers to storefront homepage
+      const storedUser = localStorage.getItem('user')
+      if (storedUser) {
+        const userObj = JSON.parse(storedUser)
+        if (userObj.is_admin || userObj.role === 'admin') {
+          navigate('/admin/dashboard', { replace: true })
+          return
+        } else if (userObj.role === 'shop_owner') {
+          navigate('/seller/dashboard', { replace: true })
+          return
+        } else if (userObj.role === 'delivery_partner') {
+          navigate('/delivery/dashboard', { replace: true })
+          return
+        }
+      }
+      
       navigate(from, { replace: true })
     } catch (err: any) {
       setErrorMsg(err.response?.data?.detail || 'Invalid email or password.')
