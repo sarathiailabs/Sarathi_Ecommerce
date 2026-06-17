@@ -49,10 +49,10 @@ export const ResetPassword: React.FC = () => {
   }
 
   return (
-    <div data-page="reset-password" className="min-h-[calc(100vh-130px)] flex bg-[#F1F3F6] py-12 select-none justify-center items-center px-4">
+    <div data-page="reset-password" className="min-h-[calc(100vh-130px)] flex bg-[#F8FAFC] py-12 select-none justify-center items-center px-4">
       <div className="w-full max-w-4xl bg-white rounded-sm border border-slate-200 shadow-md flex overflow-hidden min-h-[500px]">
         {/* LEFT: Branding Panel (Blue Flipkart-like side panel) */}
-        <div className="brand-panel hidden md:flex flex-col w-[40%] bg-[#2874F0] text-white p-10 justify-between relative overflow-hidden">
+        <div className="brand-panel hidden md:flex flex-col w-[40%] bg-[#0F6FFF] text-white p-10 justify-between relative overflow-hidden">
           <div className="space-y-6">
             <Link to="/" className="inline-flex items-center gap-2">
               <img
@@ -112,7 +112,7 @@ export const ResetPassword: React.FC = () => {
                 </p>
               </div>
               <div className="pt-2">
-                <Link to="/login" className="inline-flex items-center justify-center gap-2 py-2.5 px-6 rounded-sm bg-[#FF9F00] text-white font-bold text-xs w-full uppercase hover:bg-[#ff9100]">
+                <Link to="/login" className="inline-flex items-center justify-center gap-2 py-2.5 px-6 rounded-sm bg-[#14B8A6] text-white font-bold text-xs w-full uppercase hover:bg-[#ff9100]">
                   Sign In Now
                 </Link>
               </div>
@@ -157,7 +157,7 @@ export const ResetPassword: React.FC = () => {
                     onChange={(e) => setToken(e.target.value)}
                     aria-describedby={error ? 'reset-password-error-alert' : undefined}
                     placeholder="Paste your reset token here"
-                    className="w-full px-3 py-2 border border-slate-350 bg-white rounded-sm text-xs font-mono text-slate-700 outline-none focus:border-[#2874F0]"
+                    className="w-full px-3 py-2 border border-slate-350 bg-white rounded-sm text-xs font-mono text-slate-700 outline-none focus:border-[#0F6FFF]"
                   />
                 </div>
 
@@ -178,7 +178,7 @@ export const ResetPassword: React.FC = () => {
                       onChange={(e) => setNewPassword(e.target.value)}
                       aria-describedby={error ? 'reset-password-error-alert' : undefined}
                       placeholder="Minimum 6 characters"
-                      className="w-full pl-9 pr-10 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
+                      className="w-full pl-9 pr-10 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF]"
                     />
                     <button
                       type="button"
@@ -212,7 +212,7 @@ export const ResetPassword: React.FC = () => {
                           ? 'border-red-400 focus:border-red-400'
                           : confirmPassword && newPassword === confirmPassword
                           ? 'border-emerald-500 focus:border-emerald-500'
-                          : 'border-slate-350 focus:border-[#2874F0]'
+                          : 'border-slate-350 focus:border-[#0F6FFF]'
                       }`}
                     />
                   </div>
@@ -224,7 +224,7 @@ export const ResetPassword: React.FC = () => {
                   type="submit"
                   disabled={submitting}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-sm bg-[#FF9F00] text-white text-xs font-bold hover:shadow-md hover:bg-[#ff9100] transition-all disabled:opacity-60 disabled:cursor-wait uppercase"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-sm bg-[#14B8A6] text-white text-xs font-bold hover:shadow-md hover:bg-[#ff9100] transition-all disabled:opacity-60 disabled:cursor-wait uppercase"
                 >
                   <ShieldCheck size={14} />
                   {submitting ? 'Updating Password...' : 'Reset Password'}
@@ -232,7 +232,7 @@ export const ResetPassword: React.FC = () => {
               </form>
 
               <div className="text-center mt-6">
-                <Link to="/login" className="text-xs text-slate-500 hover:text-[#2874F0] hover:underline font-bold transition-colors">
+                <Link to="/login" className="text-xs text-slate-500 hover:text-[#0F6FFF] hover:underline font-bold transition-colors">
                   Back to Sign In
                 </Link>
               </div>

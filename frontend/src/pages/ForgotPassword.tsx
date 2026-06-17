@@ -34,10 +34,10 @@ export const ForgotPassword: React.FC = () => {
   }
 
   return (
-    <div data-page="forgot-password" className="min-h-[calc(100vh-130px)] flex bg-[#F1F3F6] py-12 select-none justify-center items-center px-4">
+    <div data-page="forgot-password" className="min-h-[calc(100vh-130px)] flex bg-[#F8FAFC] py-12 select-none justify-center items-center px-4">
       <div className="w-full max-w-4xl bg-white rounded-sm border border-slate-200 shadow-md flex overflow-hidden min-h-[500px]">
         {/* LEFT: Branding Panel (Blue Flipkart-like side panel) */}
-        <div className="brand-panel hidden md:flex flex-col w-[40%] bg-[#2874F0] text-white p-10 justify-between relative overflow-hidden">
+        <div className="brand-panel hidden md:flex flex-col w-[40%] bg-[#0F6FFF] text-white p-10 justify-between relative overflow-hidden">
           <div className="space-y-6">
             <Link to="/" className="inline-flex items-center gap-2">
               <img
@@ -107,7 +107,7 @@ export const ForgotPassword: React.FC = () => {
                   <div className="mt-2">
                     <Link
                       to={`/reset-password?token=${devToken}`}
-                      className="text-xs text-[#2874F0] font-bold hover:underline"
+                      className="text-xs text-[#0F6FFF] font-bold hover:underline"
                     >
                       Click here to reset password using this token &rarr;
                     </Link>
@@ -117,7 +117,7 @@ export const ForgotPassword: React.FC = () => {
               )}
 
               <div className="pt-4">
-                <Link to="/login" className="inline-flex items-center gap-2 text-[#2874F0] font-bold text-xs hover:underline">
+                <Link to="/login" className="inline-flex items-center gap-2 text-[#0F6FFF] font-bold text-xs hover:underline">
                   <ArrowLeft size={14} /> Back to Sign In
                 </Link>
               </div>
@@ -163,7 +163,7 @@ export const ForgotPassword: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       aria-describedby={error ? 'forgot-password-error-alert' : undefined}
                       placeholder="enter email address"
-                      className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
+                      className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF]"
                     />
                   </div>
                 </div>
@@ -174,7 +174,7 @@ export const ForgotPassword: React.FC = () => {
                   type="submit"
                   disabled={submitting}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-sm bg-[#FF9F00] text-white text-xs font-bold hover:shadow-md hover:bg-[#ff9100] transition-all disabled:opacity-60 disabled:cursor-wait uppercase"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-sm bg-[#14B8A6] text-white text-xs font-bold hover:shadow-md hover:bg-[#ff9100] transition-all disabled:opacity-60 disabled:cursor-wait uppercase"
                 >
                   <Send size={13} />
                   {submitting ? 'Sending...' : 'Send Reset Instructions'}
@@ -185,7 +185,7 @@ export const ForgotPassword: React.FC = () => {
                 <Link
                   to="/login"
                   data-testid="forgot-password-back-to-login"
-                  className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-[#2874F0] hover:underline font-bold transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-[#0F6FFF] hover:underline font-bold transition-colors"
                 >
                   <ArrowLeft size={13} />
                   Back to Sign In

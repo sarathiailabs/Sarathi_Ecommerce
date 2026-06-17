@@ -74,7 +74,7 @@ export const Cart: React.FC = () => {
         <Link
           to="/"
           data-testid="cart-empty-browse-btn"
-          className="mt-6 px-6 py-2.5 bg-[#2874F0] hover:bg-[#1e5ecb] text-white text-xs font-bold rounded-sm uppercase tracking-wide flex items-center gap-1.5 shadow-xs transition-colors"
+          className="mt-6 px-6 py-2.5 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-xs font-bold rounded-sm uppercase tracking-wide flex items-center gap-1.5 shadow-xs transition-colors"
         >
           <ShoppingBag size={14} />
           <span>Browse Catalog</span>
@@ -84,10 +84,10 @@ export const Cart: React.FC = () => {
   }
 
   return (
-    <div data-testid="cart-page" className="max-w-7xl mx-auto px-4 sm:px-6 py-6 select-none bg-[#F1F3F6] min-h-screen">
+    <div data-page="cart" className="max-w-5xl mx-auto px-4 sm:px-6 py-10 select-none bg-[#F8FAFC] min-h-screen">
       
       {/* Header bar */}
-      <div className="flex items-center justify-between mb-4 bg-white p-4 rounded-sm border border-slate-200 shadow-xs">
+      <div className="flex items-center justify-between mb-6 bg-white p-5 rounded-2xl border border-slate-200/50 shadow-xs">
         <div>
           <h1 className="text-base font-bold text-slate-800 uppercase">Shopping Cart</h1>
           <p data-testid="cart-item-count" className="text-slate-400 text-xs font-semibold uppercase tracking-wider mt-0.5">
@@ -97,24 +97,24 @@ export const Cart: React.FC = () => {
         <Link
           to="/"
           data-testid="cart-continue-shopping"
-          className="flex items-center gap-1 text-xs font-bold text-[#2874F0] hover:underline uppercase"
+          className="flex items-center gap-1 text-xs font-bold text-[#0F6FFF] hover:underline uppercase"
         >
           <span>Continue Shopping</span>
           <ChevronRight size={14} />
         </Link>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* ===== LEFT: CART ITEMS ===== */}
-        <div className="w-full lg:flex-1 space-y-4">
+        <div className="w-full lg:flex-1 space-y-6">
           
           {/* Free Shipping Indicator */}
-          <div className="bg-white border border-slate-200 rounded-sm p-4 shadow-xs">
+          <div className="bg-white border border-slate-200/50 rounded-2xl p-5 shadow-xs">
             <div className="flex items-center gap-2 mb-2">
-              <Truck size={15} className="text-[#2874F0]" />
+              <Truck size={15} className="text-[#0F6FFF]" />
               {remainingForFreeShipping > 0 ? (
                 <span className="text-xs font-bold text-slate-600">
-                  Shop for <span className="text-[#2874F0]">₹{remainingForFreeShipping.toFixed(0)}</span> more to unlock <span className="text-emerald-600 font-extrabold">FREE shipping</span>
+                  Shop for <span className="text-[#0F6FFF]">₹{remainingForFreeShipping.toFixed(0)}</span> more to unlock <span className="text-emerald-600 font-extrabold">FREE shipping</span>
                 </span>
               ) : (
                 <span className="text-xs font-bold text-emerald-600">
@@ -124,14 +124,14 @@ export const Cart: React.FC = () => {
             </div>
             <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#388E3C] transition-all duration-500"
+                className="h-full bg-[#10B981] transition-all duration-500"
                 style={{ width: `${shippingProgress}%` }}
               />
             </div>
           </div>
 
           {/* Items list container */}
-          <div data-testid="cart-items-list" className="bg-white border border-slate-200 rounded-sm shadow-xs divide-y divide-slate-100">
+          <div data-testid="cart-items-list" className="bg-white border border-slate-200/50 rounded-2xl shadow-xs divide-y divide-slate-100 overflow-hidden">
             {cartItems.map((item) => (
               <div
                 key={item.id}
@@ -160,7 +160,7 @@ export const Cart: React.FC = () => {
                       <Link
                         to={`/product/${item.product_id}`}
                         data-testid={`cart-item-name-${item.product_id}`}
-                        className="font-semibold text-xs sm:text-sm text-slate-800 hover:text-[#2874F0] transition-colors line-clamp-2 leading-relaxed"
+                        className="font-semibold text-xs sm:text-sm text-slate-800 hover:text-[#0F6FFF] transition-colors line-clamp-2 leading-relaxed"
                       >
                         {item.product.name}
                       </Link>
@@ -183,7 +183,7 @@ export const Cart: React.FC = () => {
                     {/* Quantity Adjustment controls */}
                     <div
                       data-testid={`cart-quantity-control-${item.product_id}`}
-                      className="inline-flex items-center border border-slate-300 bg-slate-50 rounded-sm"
+                      className="inline-flex items-center border border-slate-200 bg-slate-50 rounded-xl overflow-hidden"
                     >
                       <button
                         onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
@@ -228,9 +228,9 @@ export const Cart: React.FC = () => {
           </div>
 
           {/* Coupon codes box */}
-          <div className="bg-white border border-slate-200 rounded-sm p-4 shadow-xs space-y-3">
+          <div className="bg-white border border-slate-200/50 rounded-2xl p-5 shadow-xs space-y-3">
             <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wide">
-              <Gift size={15} className="text-[#2874F0]" />
+              <Gift size={15} className="text-[#0F6FFF]" />
               <span>Have a Promo Coupon?</span>
             </div>
 
@@ -261,12 +261,12 @@ export const Cart: React.FC = () => {
                     aria-label="Promo coupon code"
                     aria-describedby={promoError ? 'promo-error-alert' : undefined}
                     placeholder="Enter Promo (e.g. SARATHI10)"
-                    className="flex-1 px-3 py-2 border border-slate-300 rounded-sm text-xs focus:outline-none focus:border-[#2874F0]"
+                    className="flex-1 px-3 py-2 border border-slate-250 rounded-xl text-xs focus:outline-none focus:border-[#0F6FFF]"
                   />
                   <button
                     onClick={handleApplyPromo}
                     data-testid="promo-apply-btn"
-                    className="px-4 py-2 bg-[#2874F0] hover:bg-[#1e5ecb] text-white text-xs font-bold rounded-sm uppercase tracking-wider transition-colors shadow-xs"
+                    className="px-4 py-2 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-xs font-bold rounded-xl uppercase tracking-wider transition-colors shadow-xs"
                   >
                     Apply
                   </button>
@@ -285,8 +285,8 @@ export const Cart: React.FC = () => {
 
         {/* ===== RIGHT: PRICE BREAKDOWN SUMMARY ===== */}
         <div className="w-full lg:w-[320px] flex-shrink-0">
-          <div className="bg-white border border-slate-200 rounded-sm shadow-xs divide-y divide-slate-100 sticky top-20">
-            <div className="px-4 py-3 bg-slate-50">
+          <div className="bg-white border border-slate-200/50 rounded-2xl shadow-xs divide-y divide-slate-100 sticky top-24 overflow-hidden">
+            <div className="px-4 py-3.5 bg-slate-50/60">
               <h2 className="font-bold text-slate-400 text-xs uppercase tracking-wider">Price Details</h2>
             </div>
 
@@ -314,7 +314,7 @@ export const Cart: React.FC = () => {
 
               <div className="flex justify-between items-center text-xs font-medium text-slate-600">
                 <span>Logistics Delivery Charges</span>
-                <span className={`font-semibold ${cartTotal >= FREE_SHIPPING_THRESHOLD ? 'text-[#388E3C]' : 'text-slate-850'}`}>
+                <span className={`font-semibold ${cartTotal >= FREE_SHIPPING_THRESHOLD ? 'text-[#10B981]' : 'text-slate-850'}`}>
                   {cartTotal >= FREE_SHIPPING_THRESHOLD ? 'FREE' : `₹${(49).toFixed(2)}`}
                 </span>
               </div>
@@ -322,13 +322,13 @@ export const Cart: React.FC = () => {
               {/* Total amount border */}
               <div className="border-t border-dashed border-slate-200 pt-3.5 flex justify-between items-center">
                 <span className="font-bold text-slate-800 text-sm uppercase">Total Amount</span>
-                <span className="text-lg font-black text-[#2874F0]">
+                <span className="text-lg font-black text-[#0F6FFF]">
                   ₹{grandTotal.toFixed(2)}
                 </span>
               </div>
 
               {appliedPromo && (
-                <p className="text-[10px] text-[#388E3C] font-bold text-right">
+                <p className="text-[10px] text-[#10B981] font-bold text-right">
                   Congrats! You saved ₹{discountAmount.toFixed(2)} with coupon {appliedPromo.code}
                 </p>
               )}
@@ -338,7 +338,7 @@ export const Cart: React.FC = () => {
                 onClick={() => navigate('/checkout')}
                 id="cart-checkout-btn"
                 data-testid="cart-checkout-btn"
-                className="w-full mt-2 py-3 bg-[#FF9F00] hover:bg-[#e68f00] text-white text-xs font-extrabold rounded-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5"
+                className="w-full mt-2 py-3 bg-[#14B8A6] hover:bg-[#e68f00] text-white text-xs font-extrabold rounded-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5"
               >
                 <span>Proceed to Checkout</span>
                 <ArrowRight size={14} />
@@ -352,7 +352,7 @@ export const Cart: React.FC = () => {
                   { icon: <RefreshCw size={13} />, label: 'Easy Returns' },
                 ].map((b) => (
                   <div key={b.label} className="flex flex-col items-center gap-1 text-slate-400 text-[8px] font-bold uppercase tracking-wider">
-                    <span className="text-[#2874F0]">{b.icon}</span>
+                    <span className="text-[#0F6FFF]">{b.icon}</span>
                     <span>{b.label}</span>
                   </div>
                 ))}

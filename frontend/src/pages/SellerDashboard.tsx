@@ -214,13 +214,13 @@ export const SellerDashboard: React.FC = () => {
     : '4.8'
 
   return (
-    <div className="min-h-screen bg-[#F1F3F6] pb-24 pt-8 select-none">
+    <div className="min-h-screen bg-[#F8FAFC] pb-24 pt-8 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Modern Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-200 pb-6">
           <div>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold bg-[#2874F0] text-white tracking-wider mb-2.5 uppercase">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold bg-[#0F6FFF] text-white tracking-wider mb-2.5 uppercase">
               <Store size={12} />
               Vendor Operations Console
             </span>
@@ -228,7 +228,7 @@ export const SellerDashboard: React.FC = () => {
               Seller Console
             </h1>
             <p className="text-xs font-semibold text-slate-500 mt-2">
-              Merchant: <span className="text-[#2874F0] font-bold">{user?.full_name || user?.email}</span>
+              Merchant: <span className="text-[#0F6FFF] font-bold">{user?.full_name || user?.email}</span>
             </p>
           </div>
 
@@ -236,7 +236,7 @@ export const SellerDashboard: React.FC = () => {
             <button
               onClick={() => setShowShopModal(true)}
               data-testid="seller-open-shop-btn"
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#FF9F00] hover:bg-[#ff9100] text-white rounded-sm text-xs font-bold uppercase tracking-wider shadow-sm transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 bg-[#14B8A6] hover:bg-[#ff9100] text-white rounded-sm text-xs font-bold uppercase tracking-wider shadow-sm transition-colors"
             >
               <Plus size={14} />
               Open New Shop
@@ -256,7 +256,7 @@ export const SellerDashboard: React.FC = () => {
         {/* SHOP REGISTER EMPTY STATE */}
         {!loading && shops.length === 0 ? (
           <div className="text-center py-16 bg-white border border-slate-200 rounded-sm shadow-sm max-w-2xl mx-auto px-6">
-            <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto text-[#2874F0] mb-6 shadow-xs">
+            <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto text-[#0F6FFF] mb-6 shadow-xs">
               <Store size={28} />
             </div>
             <h2 className="text-xl font-extrabold text-slate-800 uppercase tracking-tight mb-2">
@@ -267,7 +267,7 @@ export const SellerDashboard: React.FC = () => {
             </p>
             <button
               onClick={() => setShowShopModal(true)}
-              className="inline-flex items-center gap-1.5 px-6 py-3 bg-[#FF9F00] hover:bg-[#ff9100] text-white text-xs font-bold uppercase tracking-wider rounded-sm shadow-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-6 py-3 bg-[#14B8A6] hover:bg-[#ff9100] text-white text-xs font-bold uppercase tracking-wider rounded-sm shadow-sm transition-colors"
             >
               Open Your Shop Now
               <Plus size={16} />
@@ -286,7 +286,7 @@ export const SellerDashboard: React.FC = () => {
                     const shop = shops.find(s => s.id === e.target.value)
                     if (shop) handleShopChange(shop)
                   }}
-                  className="flex-1 px-3 py-1.5 bg-transparent text-xs font-bold text-slate-700 border border-slate-300 rounded-sm focus:outline-none focus:border-[#2874F0] cursor-pointer"
+                  className="flex-1 px-3 py-1.5 bg-transparent text-xs font-bold text-slate-700 border border-slate-300 rounded-sm focus:outline-none focus:border-[#0F6FFF] cursor-pointer"
                 >
                   {shops.map(s => (
                     <option key={s.id} value={s.id}>{s.name}</option>
@@ -312,7 +312,7 @@ export const SellerDashboard: React.FC = () => {
                   </div>
                   <div>
                     <h2 className="text-xl font-extrabold text-slate-800 uppercase tracking-tight leading-none">{activeShop.name}</h2>
-                    <p className="text-xs text-[#2874F0] font-bold mt-2 uppercase">{activeShop.description || 'Premium Certified Merchant Partner'}</p>
+                    <p className="text-xs text-[#0F6FFF] font-bold mt-2 uppercase">{activeShop.description || 'Premium Certified Merchant Partner'}</p>
                     <span className="inline-block text-[9px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 mt-2 rounded-sm border border-slate-200">SHOP ID: {activeShop.id}</span>
                   </div>
                 </div>
@@ -320,7 +320,7 @@ export const SellerDashboard: React.FC = () => {
                 <button
                   onClick={() => setShowProductModal(true)}
                   data-testid="seller-add-product-btn"
-                  className="flex items-center gap-1.5 px-4 py-2.5 bg-[#2874F0] hover:bg-[#1264e3] text-white rounded-sm text-xs font-bold uppercase tracking-wider shadow-sm self-start md:self-center transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2.5 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white rounded-sm text-xs font-bold uppercase tracking-wider shadow-sm self-start md:self-center transition-colors"
                 >
                   <Plus size={16} />
                   Add Catalog Listing
@@ -334,7 +334,7 @@ export const SellerDashboard: React.FC = () => {
               <div data-testid="seller-stat-listings" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Active Listings</span>
-                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0]">
+                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#0F6FFF]">
                     <Package size={14} />
                   </div>
                 </div>
@@ -367,7 +367,7 @@ export const SellerDashboard: React.FC = () => {
               <div data-testid="seller-stat-rating" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Store Rating</span>
-                  <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-[#FF9F00]">
+                  <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-[#14B8A6]">
                     <BarChart2 size={14} />
                   </div>
                 </div>
@@ -397,7 +397,7 @@ export const SellerDashboard: React.FC = () => {
                   <p className="text-slate-400 text-xs mb-5 font-semibold">List your first premium tech artifact now.</p>
                   <button
                     onClick={() => setShowProductModal(true)}
-                    className="px-4 py-2 bg-[#2874F0] hover:bg-[#1264e3] text-white text-[11px] font-bold uppercase rounded-sm transition-colors"
+                    className="px-4 py-2 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-[11px] font-bold uppercase rounded-sm transition-colors"
                   >
                     Add Product Listing
                   </button>
@@ -480,7 +480,7 @@ export const SellerDashboard: React.FC = () => {
               </button>
 
               <div className="mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0]">
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#0F6FFF]">
                   <Store size={18} />
                 </div>
                 <div>
@@ -500,7 +500,7 @@ export const SellerDashboard: React.FC = () => {
                     value={shopName}
                     onChange={(e) => setShopName(e.target.value)}
                     placeholder="e.g. Apex Tech Deck"
-                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
+                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#0F6FFF]"
                   />
                 </div>
 
@@ -513,7 +513,7 @@ export const SellerDashboard: React.FC = () => {
                     value={shopDesc}
                     onChange={(e) => setShopDesc(e.target.value)}
                     placeholder="Describe your premium items..."
-                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
+                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#0F6FFF]"
                   />
                 </div>
 
@@ -526,7 +526,7 @@ export const SellerDashboard: React.FC = () => {
                     value={shopLogo}
                     onChange={(e) => setShopLogo(e.target.value)}
                     placeholder="https://images.unsplash.com/..."
-                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
+                    className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#0F6FFF]"
                   />
                   <p className="text-[9px] text-slate-400 font-semibold">Leave empty for a cool default logo.</p>
                 </div>
@@ -535,7 +535,7 @@ export const SellerDashboard: React.FC = () => {
                   type="submit"
                   disabled={submitting}
                   data-testid="shop-submit-btn"
-                  className="w-full bg-[#FF9F00] hover:bg-[#ff9100] text-white py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors mt-2"
+                  className="w-full bg-[#14B8A6] hover:bg-[#ff9100] text-white py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors mt-2"
                 >
                   {submitting ? 'Registering...' : 'Open Vendor Store'}
                 </button>
@@ -567,7 +567,7 @@ export const SellerDashboard: React.FC = () => {
               </button>
 
               <div className="mb-6 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0]">
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#0F6FFF]">
                   <Plus size={18} />
                 </div>
                 <div>
@@ -588,7 +588,7 @@ export const SellerDashboard: React.FC = () => {
                       value={prodName}
                       onChange={(e) => setProdName(e.target.value)}
                       placeholder="e.g. Tactile Wireless Headset"
-                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#0F6FFF]"
                     />
                   </div>
 
@@ -599,7 +599,7 @@ export const SellerDashboard: React.FC = () => {
                       data-testid="prod-cat-select"
                       value={prodCat}
                       onChange={(e) => setProdCat(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#2874F0] cursor-pointer"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-700 focus:outline-none focus:border-[#0F6FFF] cursor-pointer"
                     >
                       {PRODUCT_CATEGORIES.map(cat => (
                         <option key={cat} value={cat}>{cat}</option>
@@ -618,7 +618,7 @@ export const SellerDashboard: React.FC = () => {
                       value={prodStock}
                       onChange={(e) => setProdStock(e.target.value)}
                       placeholder="e.g. 50"
-                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#0F6FFF]"
                     />
                   </div>
 
@@ -633,7 +633,7 @@ export const SellerDashboard: React.FC = () => {
                       value={prodPrice}
                       onChange={(e) => setProdPrice(e.target.value)}
                       placeholder="e.g. 1999"
-                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#0F6FFF]"
                     />
                   </div>
 
@@ -647,7 +647,7 @@ export const SellerDashboard: React.FC = () => {
                       value={prodDesc}
                       onChange={(e) => setProdDesc(e.target.value)}
                       placeholder="Provide rich specifications or features..."
-                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#0F6FFF]"
                     />
                   </div>
 
@@ -660,7 +660,7 @@ export const SellerDashboard: React.FC = () => {
                       value={prodImage}
                       onChange={(e) => setProdImage(e.target.value)}
                       placeholder="https://images.unsplash.com/..."
-                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#2874F0]"
+                      className="w-full px-3 py-2 border border-slate-300 bg-white rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#0F6FFF]"
                     />
                     
                     {/* Preset Picker */}
@@ -675,7 +675,7 @@ export const SellerDashboard: React.FC = () => {
                             data-testid={`prod-preset-${preset.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
                             className={`px-2 py-0.5 border text-[9px] font-bold rounded-sm transition-all ${
                               prodImage === preset.url
-                                ? 'bg-blue-50 border-[#2874F0] text-[#2874F0]'
+                                ? 'bg-blue-50 border-[#0F6FFF] text-[#0F6FFF]'
                                 : 'bg-white border-slate-200 text-slate-500 hover:border-slate-350'
                             }`}
                           >
@@ -691,7 +691,7 @@ export const SellerDashboard: React.FC = () => {
                   type="submit"
                   disabled={submitting}
                   data-testid="product-submit-btn"
-                  className="w-full bg-[#FF9F00] hover:bg-[#ff9100] text-white py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors mt-3"
+                  className="w-full bg-[#14B8A6] hover:bg-[#ff9100] text-white py-2.5 rounded-sm text-xs font-bold uppercase tracking-wider transition-colors mt-3"
                 >
                   {submitting ? 'Uploading Listing...' : 'Publish Product Listing'}
                 </button>

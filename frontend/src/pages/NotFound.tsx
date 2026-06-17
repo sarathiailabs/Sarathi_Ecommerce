@@ -10,7 +10,7 @@ export const NotFound: React.FC = () => {
     <div
       data-page="not-found"
       data-testid="not-found-page"
-      className="min-h-[calc(100vh-130px)] flex items-center justify-center px-6 py-16 bg-[#F1F3F6]"
+      className="min-h-[calc(100vh-130px)] flex items-center justify-center px-6 py-16 bg-[#F8FAFC]"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -22,12 +22,12 @@ export const NotFound: React.FC = () => {
         <div className="relative mb-8">
           <div
             data-testid="not-found-code"
-            className="text-[140px] font-extrabold text-[#2874F0]/10 leading-none select-none"
+            className="text-[140px] font-extrabold text-[#0F6FFF]/10 leading-none select-none"
           >
             404
           </div>
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0] shadow-xs">
+            <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center text-[#0F6FFF] shadow-xs">
               <Search size={32} />
             </div>
           </div>
@@ -51,7 +51,7 @@ export const NotFound: React.FC = () => {
           <Link
             to="/"
             data-testid="not-found-home-btn"
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-sm bg-[#2874F0] text-white font-bold text-xs shadow-xs hover:bg-[#1264e3] transition-all"
+            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-sm bg-[#0F6FFF] text-white font-bold text-xs shadow-xs hover:bg-[#0D5ED9] transition-all"
           >
             <Home size={14} />
             Go Home
@@ -80,7 +80,7 @@ export const NotFound: React.FC = () => {
                 key={link.to}
                 to={link.to}
                 data-testid={`not-found-quicklink-${link.label.toLowerCase().replace(/\s/g, '-')}`}
-                className="px-4 py-2 rounded-sm bg-white border border-slate-200 text-slate-600 text-xs font-bold hover:border-[#2874F0] hover:text-[#2874F0] transition-all shadow-xs"
+                className="px-4 py-2 rounded-sm bg-white border border-slate-200 text-slate-600 text-xs font-bold hover:border-[#0F6FFF] hover:text-[#0F6FFF] transition-all shadow-xs"
               >
                 {link.label}
               </Link>

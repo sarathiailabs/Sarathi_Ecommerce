@@ -167,22 +167,22 @@ export const ProductDetails: React.FC = () => {
   ]
 
   return (
-    <div data-page="product-detail" className="max-w-7xl mx-auto px-4 sm:px-6 py-6 select-none bg-[#F1F3F6] min-h-screen">
+    <div data-page="product-detail" className="max-w-6xl mx-auto px-4 sm:px-6 py-10 select-none bg-[#F8FAFC] min-h-screen">
       {/* Breadcrumb path */}
-      <nav data-testid="pdp-breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-500 mb-4 flex-wrap font-medium">
-        <Link to="/" className="hover:text-[#2874F0]">Home</Link>
+      <nav data-testid="pdp-breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-500 mb-6 flex-wrap font-medium">
+        <Link to="/" className="hover:text-[#0F6FFF]">Home</Link>
         <ChevronRight size={12} className="text-slate-400" />
         <span className="text-slate-600">{product.category}</span>
         <ChevronRight size={12} className="text-slate-400" />
-        <span className="text-slate-400 truncate max-w-xs">{product.name}</span>
+        <span className="text-slate-450 truncate max-w-xs">{product.name}</span>
       </nav>
 
       {/* Main product display split box */}
-      <div className="flex flex-col lg:flex-row gap-6 bg-white p-5 rounded-sm border border-slate-200 shadow-xs">
+      <div className="flex flex-col lg:flex-row gap-8 bg-white p-6 md:p-8 rounded-3xl border border-slate-200/50 shadow-xs">
         
         {/* ============ LEFT COLUMN: Image & Gallery ============ */}
         <div className="lg:w-2/5 flex flex-col items-center">
-          <div className="w-full relative aspect-square border border-slate-200 p-4 rounded-sm flex items-center justify-center bg-white overflow-hidden group">
+          <div className="w-full relative aspect-square border border-slate-200/60 p-4 rounded-2xl flex items-center justify-center bg-white overflow-hidden group">
             <img
               src={product.image_url}
               alt={product.name}
@@ -197,7 +197,7 @@ export const ProductDetails: React.FC = () => {
             {/* Out of stock overlay */}
             {product.stock === 0 && (
               <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
-                <span className="px-4 py-2 bg-red-500 text-white font-bold uppercase tracking-wider text-xs rounded-sm shadow-sm">
+                <span className="px-4 py-2 bg-red-500 text-white font-bold uppercase tracking-wider text-xs rounded-xl shadow-sm">
                   Out of Stock
                 </span>
               </div>
@@ -209,7 +209,7 @@ export const ProductDetails: React.FC = () => {
               data-testid="pdp-add-to-wishlist-btn"
               aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
               title={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-[#2874F0] hover:scale-105 transition-all"
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-[#0F6FFF] hover:scale-105 transition-all"
             >
               <Heart size={15} className={isWishlisted ? 'fill-red-500 text-red-500' : 'text-slate-400'} />
             </button>
@@ -223,10 +223,10 @@ export const ProductDetails: React.FC = () => {
               disabled={product.stock === 0 || adding}
               className={`flex-1 py-3 text-xs font-bold rounded-sm uppercase tracking-wider shadow-sm transition-colors flex items-center justify-center gap-1.5 ${
                 addedSuccess
-                  ? 'bg-[#388E3C] text-white'
+                  ? 'bg-[#10B981] text-white'
                   : product.stock === 0
                   ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
-                  : 'bg-[#FF9F00] hover:bg-[#e68f00] text-white'
+                  : 'bg-[#14B8A6] hover:bg-[#e68f00] text-white'
               }`}
             >
               <ShoppingCart size={14} />
@@ -237,7 +237,7 @@ export const ProductDetails: React.FC = () => {
               data-testid="pdp-buy-now-btn"
               onClick={handleBuyNow}
               disabled={product.stock === 0 || adding}
-              className="flex-1 py-3 text-xs font-bold rounded-sm uppercase tracking-wider bg-[#FB641B] hover:bg-[#e05310] text-white shadow-sm flex items-center justify-center gap-1.5 transition-colors"
+              className="flex-1 py-3 text-xs font-bold rounded-sm uppercase tracking-wider bg-[#14B8A6] hover:bg-[#e05310] text-white shadow-sm flex items-center justify-center gap-1.5 transition-colors"
             >
               <Zap size={14} />
               Buy Now
@@ -279,7 +279,7 @@ export const ProductDetails: React.FC = () => {
                   <span className="text-xs text-slate-400 line-through font-medium">
                     ₹{Math.round(originalPrice).toLocaleString('en-IN')}
                   </span>
-                  <span className="text-xs font-bold text-[#388E3C]">
+                  <span className="text-xs font-bold text-[#10B981]">
                     {discount}% off
                   </span>
                 </>
@@ -289,7 +289,7 @@ export const ProductDetails: React.FC = () => {
             {/* Stock indicator */}
             {product.stock > 0 ? (
               <div data-testid="pdp-stock-indicator" className="mt-3 flex items-center gap-2">
-                <span data-testid="pdp-product-stock" className={`text-xs font-bold ${product.stock <= 5 ? 'text-red-500' : 'text-[#388E3C]'}`}>
+                <span data-testid="pdp-product-stock" className={`text-xs font-bold ${product.stock <= 5 ? 'text-red-500' : 'text-[#10B981]'}`}>
                   {product.stock <= 5 ? `Hurry! Only ${product.stock} items left in stock` : 'Item Available in Stock'}
                 </span>
               </div>
@@ -302,10 +302,10 @@ export const ProductDetails: React.FC = () => {
 
           {/* Quantity selector */}
           {product.stock > 0 && (
-            <div data-testid="pdp-quantity-section" className="flex items-center gap-4 py-2 border-t border-b border-slate-100">
+            <div data-testid="pdp-quantity-section" className="flex items-center gap-4 py-3 border-t border-b border-slate-100">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wide">Quantity</span>
               <div className="flex items-center">
-                <div data-testid="pdp-quantity-control" className="flex items-center border border-slate-300 bg-slate-50 rounded-sm">
+                <div data-testid="pdp-quantity-control" className="flex items-center border border-slate-200 bg-slate-50 rounded-xl overflow-hidden">
                   <button
                     data-testid="pdp-qty-decrease"
                     onClick={() => adjustQuantity(-1)}
@@ -336,15 +336,15 @@ export const ProductDetails: React.FC = () => {
           {/* Support items */}
           <div className="grid grid-cols-3 gap-2 py-3 border-b border-slate-100 text-center">
             <div className="flex flex-col items-center gap-1">
-              <Truck size={16} className="text-[#2874F0]" />
+              <Truck size={16} className="text-[#0F6FFF]" />
               <span className="text-[10px] font-bold text-slate-700">Free Logistics</span>
             </div>
             <div className="flex flex-col items-center gap-1">
-              <ShieldCheck size={16} className="text-[#2874F0]" />
+              <ShieldCheck size={16} className="text-[#0F6FFF]" />
               <span className="text-[10px] font-bold text-slate-700">Secure Payments</span>
             </div>
             <div className="flex flex-col items-center gap-1">
-              <RefreshCw size={16} className="text-[#2874F0]" />
+              <RefreshCw size={16} className="text-[#0F6FFF]" />
               <span className="text-[10px] font-bold text-slate-700">30 Days Return</span>
             </div>
           </div>
@@ -360,7 +360,7 @@ export const ProductDetails: React.FC = () => {
       </div>
 
       {/* ============ TABS SECTION ============ */}
-      <div className="mt-6 bg-white p-5 border border-slate-200 rounded-sm shadow-xs">
+      <div className="mt-8 bg-white p-6 md:p-8 border border-slate-200/50 rounded-3xl shadow-xs">
         {/* Tab Header bar */}
         <div className="flex border-b border-slate-200 scrollable-tabs">
           {tabs.map((tab) => {
@@ -372,7 +372,7 @@ export const ProductDetails: React.FC = () => {
                 data-testid={`pdp-tab-${tab.id}`}
                 className={`flex items-center gap-1.5 px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-colors whitespace-nowrap ${
                   isSelected
-                    ? 'text-[#2874F0] border-[#2874F0]'
+                    ? 'text-[#0F6FFF] border-[#0F6FFF]'
                     : 'text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-50'
                 }`}
               >
@@ -395,7 +395,7 @@ export const ProductDetails: React.FC = () => {
           {activeTab === 'specs' && (
             <div className="max-w-xl">
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3">Specifications</h3>
-              <div data-testid="pdp-specs-table" className="border border-slate-200 rounded-sm overflow-hidden bg-white">
+              <div data-testid="pdp-specs-table" className="border border-slate-200 rounded-2xl overflow-hidden bg-white">
                 {SPEC_KEYS.map((key, i) => {
                   const values = ['Premium Grade Aluminum', '1 Year Brand Warranty', 'Made in India', '0.8 kg', 'Bluetooth 5.3 Connection', '36 Hours Battery']
                   return (
@@ -411,12 +411,12 @@ export const ProductDetails: React.FC = () => {
 
           {activeTab === 'reviews' && (
             <div className="space-y-6 max-w-3xl">
-              <div className="flex flex-col sm:flex-row gap-6 items-center bg-slate-50 p-4 rounded-sm border border-slate-200/50">
+              <div className="flex flex-col sm:flex-row gap-6 items-center bg-slate-50 p-5 rounded-2xl border border-slate-200/40">
                 <div className="text-center min-w-[120px]">
                   <div className="text-4xl font-black text-slate-800">{rating}</div>
                   <div className="flex justify-center gap-0.5 mt-1 mb-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={13} className={i < Math.floor(rating) ? 'text-[#FF9F00]' : 'text-slate-200'} fill={i < Math.floor(rating) ? '#FF9F00' : 'none'} />
+                      <Star key={i} size={13} className={i < Math.floor(rating) ? 'text-[#14B8A6]' : 'text-slate-200'} fill={i < Math.floor(rating) ? '#14B8A6' : 'none'} />
                     ))}
                   </div>
                   <div className="text-[10px] text-slate-400 font-bold uppercase">{reviewCount} ratings</div>
@@ -429,7 +429,7 @@ export const ProductDetails: React.FC = () => {
                         <span className="text-[10px] font-bold text-slate-500 w-3">{star}</span>
                         <Star size={10} className="text-slate-400" />
                         <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden">
-                          <div className="h-full bg-[#388E3C] rounded-full" style={{ width: `${pct}%` }} />
+                          <div className="h-full bg-[#10B981] rounded-full" style={{ width: `${pct}%` }} />
                         </div>
                         <span className="text-[9px] font-bold text-slate-400 w-6">{pct}%</span>
                       </div>

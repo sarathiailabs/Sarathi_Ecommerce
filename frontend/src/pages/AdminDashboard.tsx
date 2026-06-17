@@ -202,7 +202,7 @@ export const AdminDashboard: React.FC = () => {
             data-testid="admin-tab-analytics"
             className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-bold uppercase tracking-wider transition-all duration-150 ${
               activeTab === 'analytics'
-                ? 'bg-[#2874F0] text-white'
+                ? 'bg-[#0F6FFF] text-white'
                 : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
             }`}
           >
@@ -216,7 +216,7 @@ export const AdminDashboard: React.FC = () => {
             data-testid="admin-tab-inventory"
             className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-bold uppercase tracking-wider transition-all duration-150 ${
               activeTab === 'inventory'
-                ? 'bg-[#2874F0] text-white'
+                ? 'bg-[#0F6FFF] text-white'
                 : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
             }`}
           >
@@ -230,7 +230,7 @@ export const AdminDashboard: React.FC = () => {
             data-testid="admin-tab-orders"
             className={`flex items-center gap-2 px-4 py-2 rounded-sm text-xs font-bold uppercase tracking-wider transition-all duration-150 ${
               activeTab === 'orders'
-                ? 'bg-[#2874F0] text-white'
+                ? 'bg-[#0F6FFF] text-white'
                 : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
             }`}
           >
@@ -243,7 +243,7 @@ export const AdminDashboard: React.FC = () => {
       {/* Main Section */}
       {loading ? (
         <div data-testid="admin-loading-indicator" className="bg-white border border-slate-200 rounded-sm p-8 flex items-center justify-center min-h-[300px] shadow-xs">
-          <RefreshCw className="animate-spin text-[#2874F0]" size={32} />
+          <RefreshCw className="animate-spin text-[#0F6FFF]" size={32} />
         </div>
       ) : activeTab === 'analytics' ? (
         <AdminAnalytics orders={orders} products={products} />
@@ -251,7 +251,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold text-slate-800 uppercase tracking-tight flex items-center gap-2">
-              <Package size={18} className="text-[#2874F0]" />
+              <Package size={18} className="text-[#0F6FFF]" />
               Products List ({products.length})
             </h2>
             <button
@@ -328,7 +328,7 @@ export const AdminDashboard: React.FC = () => {
       ) : (
         <div className="space-y-6">
           <h2 className="text-lg font-bold text-slate-800 uppercase tracking-tight flex items-center gap-2">
-            <OrderIcon size={18} className="text-[#2874F0]" />
+            <OrderIcon size={18} className="text-[#0F6FFF]" />
             Global Customer Orders ({orders.length})
           </h2>
 
@@ -353,7 +353,7 @@ export const AdminDashboard: React.FC = () => {
                       </div>
                       <div>
                         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Amount Charged:</span>
-                        <div className="text-[#FB641B] font-bold mt-1 text-sm">₹{order.total_amount.toFixed(2)}</div>
+                        <div className="text-[#14B8A6] font-bold mt-1 text-sm">₹{order.total_amount.toFixed(2)}</div>
                       </div>
                     </div>
 
@@ -365,7 +365,7 @@ export const AdminDashboard: React.FC = () => {
                            value={order.status}
                            data-testid={`admin-order-status-select-${order.id}`}
                            onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
-                           className="bg-white text-xs font-bold uppercase tracking-wider border border-slate-200 rounded-sm py-1.5 px-3 text-slate-700 focus:outline-none focus:border-[#2874F0] appearance-none cursor-pointer pr-8 shadow-xs"
+                           className="bg-white text-xs font-bold uppercase tracking-wider border border-slate-200 rounded-sm py-1.5 px-3 text-slate-700 focus:outline-none focus:border-[#0F6FFF] appearance-none cursor-pointer pr-8 shadow-xs"
                         >
                           <option value="Pending">Pending</option>
                           <option value="Shipped">Shipped</option>
@@ -427,7 +427,7 @@ export const AdminDashboard: React.FC = () => {
                   value={newProduct.name}
                   onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
                   placeholder="e.g. Wireless Headset"
-                  className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                  className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                 />
               </div>
 
@@ -441,7 +441,7 @@ export const AdminDashboard: React.FC = () => {
                   onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
                   placeholder="Product features and specs..."
                   rows={3}
-                  className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all resize-none"
+                  className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all resize-none"
                 />
               </div>
 
@@ -457,7 +457,7 @@ export const AdminDashboard: React.FC = () => {
                     value={newProduct.price}
                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
                     placeholder="99.99"
-                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                   />
                 </div>
                 <div className="space-y-1">
@@ -470,7 +470,7 @@ export const AdminDashboard: React.FC = () => {
                     value={newProduct.stock}
                     onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
                     placeholder="100"
-                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                   />
                 </div>
               </div>
@@ -486,7 +486,7 @@ export const AdminDashboard: React.FC = () => {
                     value={newProduct.category}
                     onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
                     placeholder="Electronics, Home, etc."
-                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                   />
                 </div>
                 <div className="space-y-1">
@@ -498,7 +498,7 @@ export const AdminDashboard: React.FC = () => {
                     value={newProduct.image_url}
                     onChange={(e) => setNewProduct({ ...newProduct, image_url: e.target.value })}
                     placeholder="Unsplash image link..."
-                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                   />
                 </div>
               </div>
@@ -546,7 +546,7 @@ export const AdminDashboard: React.FC = () => {
                   data-testid="edit-product-name"
                   value={editingProduct.name}
                   onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
-                  className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                  className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                 />
               </div>
 
@@ -559,7 +559,7 @@ export const AdminDashboard: React.FC = () => {
                   value={editingProduct.description}
                   onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all resize-none"
+                  className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all resize-none"
                 />
               </div>
 
@@ -574,7 +574,7 @@ export const AdminDashboard: React.FC = () => {
                     data-testid="edit-product-price"
                     value={editingProduct.price}
                     onChange={(e) => setEditingProduct({ ...editingProduct, price: Number(e.target.value) })}
-                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                   />
                 </div>
                 <div className="space-y-1">
@@ -586,7 +586,7 @@ export const AdminDashboard: React.FC = () => {
                     data-testid="edit-product-stock"
                     value={editingProduct.stock}
                     onChange={(e) => setEditingProduct({ ...editingProduct, stock: Number(e.target.value) })}
-                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                   />
                 </div>
               </div>
@@ -601,7 +601,7 @@ export const AdminDashboard: React.FC = () => {
                     data-testid="edit-product-category"
                     value={editingProduct.category}
                     onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}
-                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                   />
                 </div>
                 <div className="space-y-1">
@@ -612,7 +612,7 @@ export const AdminDashboard: React.FC = () => {
                     data-testid="edit-product-image"
                     value={editingProduct.image_url}
                     onChange={(e) => setEditingProduct({ ...editingProduct, image_url: e.target.value })}
-                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0] transition-all"
+                    className="w-full px-4 py-2 bg-white border border-slate-200 rounded-sm text-sm text-slate-700 font-semibold focus:outline-none focus:border-[#0F6FFF] focus:ring-1 focus:ring-[#0F6FFF] transition-all"
                   />
                 </div>
               </div>

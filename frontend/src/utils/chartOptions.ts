@@ -47,7 +47,7 @@ export const getRevenueChartOptions = (data: RevenueDataPoint[]): EChartsOption 
           <div style="font-family: sans-serif; padding: 2px;">
             <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">${param.name}</div>
             <div style="font-size: 12px; color: #1e293b; font-weight: 700;">
-              Revenue: <span style="color: #2874F0;">${formatCurrency(Number(param.value))}</span>
+              Revenue: <span style="color: #0F6FFF;">${formatCurrency(Number(param.value))}</span>
             </div>
           </div>
         `
@@ -132,7 +132,7 @@ export const getRevenueChartOptions = (data: RevenueDataPoint[]): EChartsOption 
         smooth: true,
         showSymbol: false,
         lineStyle: {
-          color: '#2874F0',
+          color: '#0F6FFF',
           width: 3
         },
         areaStyle: {
@@ -155,9 +155,9 @@ export const getRevenueChartOptions = (data: RevenueDataPoint[]): EChartsOption 
 
 export const getCategoryChartOptions = (data: CategoryDataPoint[]): EChartsOption => {
   const PIE_COLORS = [
-    '#2874F0', // brand blue
-    '#FF9F00', // yellow
-    '#FB641B', // orange
+    '#0F6FFF', // brand blue
+    '#14B8A6', // yellow
+    '#14B8A6', // orange
     '#10b981', // emerald green
     '#a855f7', // purple
     '#64748b'  // slate
@@ -173,7 +173,7 @@ export const getCategoryChartOptions = (data: CategoryDataPoint[]): EChartsOptio
         return `
           <div style="font-family: sans-serif; padding: 4px;">
             <div style="font-size: 12px; color: #1e293b; font-weight: 700;">
-              ${params.marker} ${params.name}: <span style="color: #2874F0;">${formatCurrency(Number(params.value))}</span> (${params.percent}%)
+              ${params.marker} ${params.name}: <span style="color: #0F6FFF;">${formatCurrency(Number(params.value))}</span> (${params.percent}%)
             </div>
           </div>
         `
@@ -256,7 +256,7 @@ export const getOrderStatusChartOptions = (data: OrderStatusDataPoint[]): EChart
         return `
           <div style="font-family: sans-serif; padding: 2px;">
             <div style="font-size: 12px; color: #1e293b; font-weight: 700;">
-              ${param.name}: <span style="color: #2874F0;">${param.value} orders</span>
+              ${param.name}: <span style="color: #0F6FFF;">${param.value} orders</span>
             </div>
           </div>
         `
@@ -302,8 +302,8 @@ export const getOrderStatusChartOptions = (data: OrderStatusDataPoint[]): EChart
         type: 'bar',
         barMaxWidth: 50,
         data: data.map(item => {
-          let color = '#2874F0'
-          if (item.status === 'Pending') color = '#FF9F00'
+          let color = '#0F6FFF'
+          if (item.status === 'Pending') color = '#14B8A6'
           else if (item.status === 'Shipped') color = '#a855f7'
           else if (item.status === 'Delivered') color = '#10b981'
           else if (item.status === 'Processing') color = '#3b82f6'

@@ -86,7 +86,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
     <motion.div
       layout
       data-testid={`order-card-${order.id}`}
-      className="bg-white border border-slate-200 rounded-sm shadow-xs overflow-hidden hover:shadow-sm transition-all"
+      className="bg-white border border-slate-200/50 rounded-2xl shadow-xs overflow-hidden hover:shadow-sm transition-all duration-200"
     >
       {/* Header */}
       <div
@@ -96,7 +96,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
       >
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className={`w-10 h-10 rounded-sm ${config.bg} ${config.border} flex items-center justify-center ${config.color}`}>
+            <div className={`w-10 h-10 rounded-xl ${config.bg} ${config.border} flex items-center justify-center ${config.color}`}>
               {config.icon}
             </div>
             <div>
@@ -106,7 +106,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
                 </span>
                 <span
                   data-testid={`order-status-badge-${order.id}`}
-                  className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-sm text-[10px] font-bold uppercase ${config.bg} ${config.color} ${config.border}`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] font-bold uppercase ${config.bg} ${config.color} ${config.border}`}
                 >
                   {config.icon}
                   {config.label}
@@ -114,7 +114,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
               </div>
               <div className="flex items-center gap-3 mt-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                 <span className="flex items-center gap-1">
-                  <Calendar size={11} className="text-[#FB641B]" />
+                  <Calendar size={11} className="text-[#14B8A6]" />
                   {date.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </span>
                 <span>·</span>
@@ -149,7 +149,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
                     <div className="flex flex-col items-center gap-1">
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-all duration-300 border ${
                         isActive
-                          ? `${stepConfig.bg} ${stepConfig.color} ${isCurrent ? 'scale-110 shadow-sm border-[#2874F0]' : 'border-slate-350'}`
+                          ? `${stepConfig.bg} ${stepConfig.color} ${isCurrent ? 'scale-110 shadow-sm border-[#0F6FFF]' : 'border-slate-350'}`
                           : 'bg-white text-slate-300 border-slate-200'
                       }`}>
                         {stepConfig.icon}
@@ -161,7 +161,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
                     {i < TIMELINE_STEPS.length - 1 && (
                       <div className="flex-1 h-1 mx-2 rounded-full overflow-hidden bg-slate-100 border border-slate-200/55">
                         <div
-                          className="h-full rounded-full transition-all duration-700 bg-[#2874F0]"
+                          className="h-full rounded-full transition-all duration-700 bg-[#0F6FFF]"
                           style={{ width: i < progress ? '100%' : '0%' }}
                         />
                       </div>
@@ -188,11 +188,11 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
               {order.items.map((item) => (
                 <div key={item.id} data-testid={`order-item-row-${item.id}`} className="px-6 py-4 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-sm overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center shadow-xs">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center shadow-xs">
                       <img
                         src={item.product.image_url}
                         alt={item.product.name}
-                        className="object-cover w-full h-full"
+                        className="object-contain max-h-full max-w-full p-1"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
                           e.currentTarget.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80';
@@ -220,14 +220,14 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
                 </span>
                 <div className="flex gap-4 flex-shrink-0">
                   {order.status.toLowerCase() === 'delivered' && (
-                    <button className="text-xs font-bold uppercase tracking-wider text-[#FF9F00] hover:text-[#e68f00] hover:underline flex items-center gap-1 transition-colors">
-                      <Star size={12} className="fill-[#FF9F00] text-[#FF9F00]" />
+                    <button className="text-xs font-bold uppercase tracking-wider text-[#14B8A6] hover:text-[#e68f00] hover:underline flex items-center gap-1 transition-colors">
+                      <Star size={12} className="fill-[#14B8A6] text-[#14B8A6]" />
                       Review
                     </button>
                   )}
                   <Link
                     to="/"
-                    className="text-xs font-bold uppercase tracking-wider text-[#FB641B] hover:text-[#e05310] hover:underline flex items-center gap-1 transition-colors"
+                    className="text-xs font-bold uppercase tracking-wider text-[#14B8A6] hover:text-[#e05310] hover:underline flex items-center gap-1 transition-colors"
                   >
                     Reorder
                     <ArrowRight size={12} />
@@ -284,9 +284,9 @@ export const Orders: React.FC = () => {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-4 animate-pulse">
-        <div className="skeleton h-8 w-48 rounded-sm" />
+        <div className="skeleton h-8 w-48 rounded-xl" />
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="skeleton h-36 rounded-sm" />
+          <div key={i} className="skeleton h-36 rounded-2xl" />
         ))}
       </div>
     )
@@ -306,9 +306,9 @@ export const Orders: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center py-20 bg-white border border-slate-200 rounded-sm shadow-xs space-y-6 max-w-lg mx-auto mt-10 px-6"
+          className="text-center py-20 bg-white border border-slate-200/50 rounded-2xl shadow-xs space-y-6 max-w-lg mx-auto mt-10 px-6"
         >
-          <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto text-[#2874F0] shadow-xs">
+          <div className="w-16 h-16 rounded-full bg-blue-50/50 flex items-center justify-center mx-auto text-[#0F6FFF] shadow-xs">
             <ShoppingBag size={28} />
           </div>
           <div className="space-y-2">
@@ -317,7 +317,7 @@ export const Orders: React.FC = () => {
               You haven't placed any orders. Start exploring our catalog!
             </p>
           </div>
-          <Link to="/" className="btn-primary inline-flex text-xs px-6 py-2.5 font-bold uppercase tracking-wider gap-1.5">
+          <Link to="/" className="btn-primary inline-flex text-xs px-6 py-2.5 font-bold uppercase tracking-wider gap-1.5 rounded-xl shadow-xs">
             Browse Catalog
             <ChevronRight size={14} />
           </Link>
@@ -326,7 +326,7 @@ export const Orders: React.FC = () => {
         <>
           {/* Filters */}
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="relative flex-1 bg-white border border-slate-200 rounded-sm shadow-xs overflow-hidden">
+            <div className="relative flex-1 bg-white border border-slate-200/50 rounded-xl shadow-xs overflow-hidden focus-within:border-[#0F6FFF] transition-all">
               <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
               <input
                 type="text"
@@ -346,10 +346,10 @@ export const Orders: React.FC = () => {
                     key={status}
                     data-testid={`orders-filter-${status}`}
                     onClick={() => setFilterStatus(status)}
-                    className={`px-4 py-2.5 rounded-sm border text-xs font-bold uppercase tracking-wider transition-all duration-150 ${
+                    className={`px-4 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-wider transition-all duration-150 ${
                       isSelected
-                        ? 'bg-[#2874F0] text-white border-[#2874F0]'
-                        : 'bg-white text-slate-650 border-slate-200 hover:bg-slate-50'
+                        ? 'bg-[#0F6FFF] text-white border-[#0F6FFF] shadow-xs'
+                        : 'bg-white text-slate-650 border-slate-200 hover:border-slate-350 hover:bg-slate-50'
                     }`}
                   >
                     {status === 'all'

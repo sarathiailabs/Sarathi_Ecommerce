@@ -137,14 +137,14 @@ export const AIAssistant: React.FC = () => {
           onClick={() => setIsOpen(true)}
           data-testid="ai-assistant-toggle-btn"
           aria-label="Open AI Assistant"
-          className={`relative p-4 rounded-full bg-[#2874F0] hover:bg-[#1264e3] text-white shadow-xl shadow-blue-500/10 hover:shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center border border-white/10 ${
+          className={`relative p-4 rounded-full bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white shadow-xl shadow-blue-500/10 hover:shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center border border-white/10 ${
             pulse ? 'animate-bounce-soft' : ''
           }`}
         >
           {pulse && (
             <span className="absolute -top-1 -right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF9F00] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FF9F00]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#14B8A6] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#14B8A6]"></span>
             </span>
           )}
           <MessageSquare size={24} />
@@ -158,7 +158,7 @@ export const AIAssistant: React.FC = () => {
           className="w-[calc(100vw-32px)] sm:w-[400px] h-[550px] max-h-[calc(100vh-140px)] sm:max-h-[calc(100vh-180px)] rounded-2xl border border-slate-200 bg-white shadow-2xl flex flex-col justify-between overflow-hidden animate-slide-in-bottom shadow-blue-500/10"
         >
           {/* Header */}
-          <div className="bg-[#2874F0] px-5 py-4 border-b border-blue-600/15 flex items-center justify-between shadow-xs">
+          <div className="bg-[#0F6FFF] px-5 py-4 border-b border-blue-600/15 flex items-center justify-between shadow-xs">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-xl bg-white/10 text-white border border-white/20">
                 <Bot size={16} className="text-white" />
@@ -204,7 +204,7 @@ export const AIAssistant: React.FC = () => {
                 >
                   {/* Left avatar for bot */}
                   {!isUser && (
-                    <div className="w-7 h-7 rounded-full bg-[#2874F0]/10 border border-[#2874F0]/20 flex items-center justify-center text-[#2874F0] flex-shrink-0">
+                    <div className="w-7 h-7 rounded-full bg-[#0F6FFF]/10 border border-[#0F6FFF]/20 flex items-center justify-center text-[#0F6FFF] flex-shrink-0">
                       <Bot size={14} />
                     </div>
                   )}
@@ -214,7 +214,7 @@ export const AIAssistant: React.FC = () => {
                     data-testid={`ai-msg-bubble-${i}`}
                     className={`max-w-[78%] px-4 py-3 rounded-2xl text-sm break-words ${
                       isUser
-                        ? 'bg-[#2874F0] text-white rounded-tr-none shadow-xs'
+                        ? 'bg-[#0F6FFF] text-white rounded-tr-none shadow-xs'
                         : 'bg-white border border-slate-200 text-slate-800 rounded-tl-none shadow-xs'
                     }`}
                   >
@@ -234,13 +234,13 @@ export const AIAssistant: React.FC = () => {
             {/* Typing Indicator */}
             {loading && (
               <div data-testid="ai-assistant-typing-indicator" className="flex gap-2.5 justify-start animate-pulse">
-                <div className="w-7 h-7 rounded-full bg-[#2874F0]/10 border border-[#2874F0]/20 flex items-center justify-center text-[#2874F0] flex-shrink-0">
+                <div className="w-7 h-7 rounded-full bg-[#0F6FFF]/10 border border-[#0F6FFF]/20 flex items-center justify-center text-[#0F6FFF] flex-shrink-0">
                   <Bot size={14} />
                 </div>
                 <div className="bg-white border border-slate-200 px-4 py-3 rounded-2xl rounded-tl-none flex items-center gap-1 shadow-xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2874F0] animate-bounce delay-75"></span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2874F0] animate-bounce delay-150"></span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2874F0] animate-bounce delay-300"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#0F6FFF] animate-bounce delay-75"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#0F6FFF] animate-bounce delay-150"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#0F6FFF] animate-bounce delay-300"></span>
                 </div>
               </div>
             )}
@@ -253,28 +253,28 @@ export const AIAssistant: React.FC = () => {
             <button
               onClick={() => handleSuggestion('What headphones do you sell?')}
               data-testid="ai-suggestion-headphones"
-              className="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-[10px] font-semibold text-slate-600 hover:text-[#2874F0] transition-all shadow-xs"
+              className="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-[10px] font-semibold text-slate-600 hover:text-[#0F6FFF] transition-all shadow-xs"
             >
               🎧 Sound Pro info
             </button>
             <button
               onClick={() => handleSuggestion('Recommend the best products for fitness')}
               data-testid="ai-suggestion-fitness"
-              className="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-[10px] font-semibold text-slate-600 hover:text-[#2874F0] transition-all shadow-xs"
+              className="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-[10px] font-semibold text-slate-600 hover:text-[#0F6FFF] transition-all shadow-xs"
             >
               ⌚ Smart Watch specs
             </button>
             <button
               onClick={() => handleSuggestion('Suggest products to buy for my office setup')}
               data-testid="ai-suggestion-office"
-              className="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-[10px] font-semibold text-slate-600 hover:text-[#2874F0] transition-all shadow-xs"
+              className="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-[10px] font-semibold text-slate-600 hover:text-[#0F6FFF] transition-all shadow-xs"
             >
               🪑 Workspace comfort
             </button>
             <button
               onClick={() => handleSuggestion('What is in stock?')}
               data-testid="ai-suggestion-inventory"
-              className="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-[10px] font-semibold text-slate-600 hover:text-[#2874F0] transition-all shadow-xs"
+              className="px-3 py-1.5 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-[10px] font-semibold text-slate-600 hover:text-[#0F6FFF] transition-all shadow-xs"
             >
               📦 Current Inventory
             </button>
@@ -298,14 +298,14 @@ export const AIAssistant: React.FC = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Type your message here..."
                 disabled={loading}
-                className="flex-grow px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-[#2874F0] transition-all"
+                className="flex-grow px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-[#0F6FFF] transition-all"
               />
               <button
                 type="submit"
                 data-testid="ai-assistant-send-btn"
                 aria-label="Send message"
                 disabled={!message.trim() || loading}
-                className="p-2.5 rounded-full bg-[#2874F0] hover:bg-[#1264e3] text-white disabled:bg-slate-100 disabled:text-slate-400 transition-all flex items-center justify-center flex-shrink-0 shadow-xs hover:scale-105 active:scale-95"
+                className="p-2.5 rounded-full bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white disabled:bg-slate-100 disabled:text-slate-400 transition-all flex items-center justify-center flex-shrink-0 shadow-xs hover:scale-105 active:scale-95"
               >
                 <Send size={14} />
               </button>

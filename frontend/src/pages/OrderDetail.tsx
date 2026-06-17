@@ -97,7 +97,7 @@ export const OrderDetail: React.FC = () => {
         <AlertTriangle size={48} className="text-amber-500 mx-auto mb-4" />
         <h2 className="text-xl font-bold text-slate-800 mb-2">Order Not Found</h2>
         <p className="text-slate-500 text-sm mb-6">{error}</p>
-        <Link to="/orders" className="text-amber-600 font-bold text-sm hover:underline flex items-center gap-1 justify-center">
+        <Link to="/orders" className="text-[#0F6FFF] font-bold text-sm hover:underline flex items-center gap-1 justify-center">
           <ArrowLeft size={14} /> Back to Orders
         </Link>
       </div>
@@ -111,20 +111,20 @@ export const OrderDetail: React.FC = () => {
   const canCancel = ['Pending', 'Processing'].includes(order.status)
 
   return (
-    <div data-page="order-detail" data-testid="order-detail-page" className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-6">
+    <div data-page="order-detail" data-testid="order-detail-page" className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-6 bg-[#F8FAFC]">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex items-center justify-between flex-wrap gap-4 bg-white p-5 rounded-2xl border border-slate-200/50 shadow-xs">
         <div>
-          <Link to="/orders" data-testid="order-detail-back-link" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-amber-600 transition-colors font-semibold mb-2">
+          <Link to="/orders" data-testid="order-detail-back-link" className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#0F6FFF] transition-colors font-semibold mb-2">
             <ArrowLeft size={14} /> All Orders
           </Link>
-          <h1 className="text-2xl font-extrabold text-slate-900">Order Detail</h1>
+          <h1 className="text-xl font-extrabold text-slate-900">Order Detail</h1>
           <p data-testid="order-detail-id" className="text-xs text-slate-400 font-mono mt-1">{order.id}</p>
         </div>
         <div className="flex items-center gap-3">
           <span
             data-testid="order-detail-status-badge"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold ${statusConfig.color} ${statusConfig.bg}`}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold ${statusConfig.color} ${statusConfig.bg}`}
           >
             {statusConfig.icon}
             {statusConfig.label}
@@ -134,7 +134,7 @@ export const OrderDetail: React.FC = () => {
               data-testid="order-detail-cancel-btn"
               onClick={handleCancel}
               disabled={cancelling}
-              className="px-4 py-2 rounded-xl border-2 border-red-200 bg-red-50 text-red-600 text-xs font-bold hover:bg-red-100 transition-colors disabled:opacity-60"
+              className="px-4 py-2 rounded-xl border border-red-200 bg-red-50 text-red-650 text-xs font-bold hover:bg-red-100 transition-colors disabled:opacity-60"
             >
               {cancelling ? 'Cancelling...' : 'Cancel Order'}
             </button>
@@ -148,14 +148,14 @@ export const OrderDetail: React.FC = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           data-testid="order-timeline"
-          className="bg-white border-2 border-slate-100 rounded-3xl p-6 shadow-sm"
+          className="bg-white border border-slate-200/50 rounded-3xl p-6 shadow-xs"
         >
           <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-6">Order Progress</h2>
           <div className="flex items-center justify-between relative">
             {/* Progress bar */}
             <div className="absolute top-5 left-0 right-0 h-0.5 bg-slate-100 z-0" />
             <div
-              className="absolute top-5 left-0 h-0.5 bg-amber-400 z-0 transition-all duration-700"
+              className="absolute top-5 left-0 h-0.5 bg-[#0F6FFF] z-0 transition-all duration-700"
               style={{ width: `${Math.max(0, (stepIndex / (TIMELINE_STEPS.length - 1)) * 100)}%` }}
             />
             {TIMELINE_STEPS.map((step, i) => {
@@ -168,11 +168,11 @@ export const OrderDetail: React.FC = () => {
                   className="flex flex-col items-center gap-2 z-10"
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                    done ? 'bg-amber-400 border-amber-400 text-white' : 'bg-white border-slate-200 text-slate-300'
-                  } ${active ? 'ring-4 ring-amber-400/20 scale-110' : ''}`}>
+                    done ? 'bg-[#0F6FFF] border-[#0F6FFF] text-white shadow-xs' : 'bg-white border-slate-250 text-slate-350'
+                  } ${active ? 'ring-4 ring-blue-500/20 scale-110' : ''}`}>
                     {STATUS_CONFIG[step]?.icon}
                   </div>
-                  <span className={`text-[10px] font-bold uppercase tracking-wider ${done ? 'text-amber-600' : 'text-slate-300'}`}>
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${done ? 'text-[#0F6FFF]' : 'text-slate-350'}`}>
                     {step}
                   </span>
                 </div>
@@ -185,9 +185,9 @@ export const OrderDetail: React.FC = () => {
       <div className="grid sm:grid-cols-2 gap-4">
         {/* Shipping Info */}
         {order.shipping_address && (
-          <div data-testid="order-detail-shipping" className="bg-white border-2 border-slate-100 rounded-3xl p-5 shadow-sm">
+          <div data-testid="order-detail-shipping" className="bg-white border border-slate-200/50 rounded-3xl p-5 shadow-xs">
             <div className="flex items-center gap-2 mb-3">
-              <MapPin size={16} className="text-amber-500" />
+              <MapPin size={16} className="text-[#0F6FFF]" />
               <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Shipping Address</h3>
             </div>
             <p data-testid="order-detail-customer-name" className="text-sm font-bold text-slate-800">{order.customer_name}</p>
@@ -201,23 +201,23 @@ export const OrderDetail: React.FC = () => {
         )}
 
         {/* Payment Info */}
-        <div data-testid="order-detail-payment" className="bg-white border-2 border-slate-100 rounded-3xl p-5 shadow-sm">
+        <div data-testid="order-detail-payment" className="bg-white border border-slate-200/50 rounded-3xl p-5 shadow-xs">
           <div className="flex items-center gap-2 mb-3">
-            <CreditCard size={16} className="text-amber-500" />
+            <CreditCard size={16} className="text-[#0F6FFF]" />
             <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Payment</h3>
           </div>
           <p className="text-sm font-bold text-slate-800 capitalize">{order.payment_method || 'Card'}</p>
           <p className="text-xs text-slate-500 mt-1">
             Placed on {new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
-          <p data-testid="order-detail-total" className="text-lg font-black text-amber-600 mt-3">
+          <p data-testid="order-detail-total" className="text-lg font-black text-[#14B8A6] mt-3">
             ₹{Number(order.total_amount).toLocaleString('en-IN')}
           </p>
         </div>
       </div>
 
       {/* Items */}
-      <div data-testid="order-detail-items-list" className="bg-white border-2 border-slate-100 rounded-3xl p-6 shadow-sm">
+      <div data-testid="order-detail-items-list" className="bg-white border border-slate-200/50 rounded-3xl p-6 shadow-xs">
         <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-5">
           Items ({order.items.length})
         </h2>
@@ -226,25 +226,27 @@ export const OrderDetail: React.FC = () => {
             <div
               key={item.id}
               data-testid={`order-detail-item-${item.id}`}
-              className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100"
+              className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50/50 border border-slate-100"
             >
               {item.product?.image_url && (
-                <img
-                  src={item.product.image_url}
-                  alt={item.product.name}
-                  className="w-14 h-14 rounded-xl object-cover bg-white border border-slate-200 flex-shrink-0"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80';
-                  }}
-                />
+                <div className="w-14 h-14 rounded-xl overflow-hidden bg-white border border-slate-250 flex-shrink-0 flex items-center justify-center p-1">
+                  <img
+                    src={item.product.image_url}
+                    alt={item.product.name}
+                    className="object-contain max-h-full max-w-full"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80';
+                    }}
+                  />
+                </div>
               )}
               <div className="flex-1 min-w-0">
                 {item.product ? (
                   <Link
                     to={`/product/${item.product_id}`}
                     data-testid={`order-detail-item-name-${item.id}`}
-                    className="text-sm font-bold text-slate-800 hover:text-amber-600 transition-colors line-clamp-1"
+                    className="text-sm font-bold text-slate-800 hover:text-[#0F6FFF] transition-colors line-clamp-1"
                   >
                     {item.product.name}
                   </Link>
@@ -253,7 +255,7 @@ export const OrderDetail: React.FC = () => {
                     Product #{item.product_id.slice(0, 8)}
                   </p>
                 )}
-                <p className="text-xs text-slate-500 mt-0.5">Qty: {item.quantity} × ₹{Number(item.price).toLocaleString('en-IN')}</p>
+                <p className="text-xs text-slate-550 mt-0.5">Qty: {item.quantity} × ₹{Number(item.price).toLocaleString('en-IN')}</p>
               </div>
               <p data-testid={`order-detail-item-subtotal-${item.id}`} className="text-sm font-black text-slate-800 flex-shrink-0">
                 ₹{(Number(item.price) * item.quantity).toLocaleString('en-IN')}

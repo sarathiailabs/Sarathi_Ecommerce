@@ -46,9 +46,9 @@ interface AdminAnalyticsProps {
 }
 
 const PIE_COLORS = [
-  '#2874F0', // brand blue
-  '#FF9F00', // yellow
-  '#FB641B', // orange
+  '#0F6FFF', // brand blue
+  '#14B8A6', // yellow
+  '#14B8A6', // orange
   '#10b981', // emerald green
   '#a855f7', // purple
   '#64748b'  // slate
@@ -356,7 +356,7 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
       {/* 📅 FILTER CONTROLS */}
       <div className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-blue-50 text-[#2874F0] rounded-sm">
+          <div className="p-2 bg-blue-50 text-[#0F6FFF] rounded-sm">
             <Calendar size={18} />
           </div>
           <div>
@@ -370,7 +370,7 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
             <select
               value={timeframe}
               onChange={(e) => setTimeframe(e.target.value)}
-              className="bg-white text-xs font-bold uppercase tracking-wider border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#2874F0] appearance-none cursor-pointer pr-8 w-full sm:w-48 shadow-xs"
+              className="bg-white text-xs font-bold uppercase tracking-wider border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#0F6FFF] appearance-none cursor-pointer pr-8 w-full sm:w-48 shadow-xs"
             >
               <option value="today">Today</option>
               <option value="7days">Last 7 Days</option>
@@ -390,14 +390,14 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
                 type="date"
                 value={customStartDate}
                 onChange={(e) => setCustomStartDate(e.target.value)}
-                className="bg-white text-xs font-bold border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#2874F0] w-full sm:w-auto shadow-xs"
+                className="bg-white text-xs font-bold border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#0F6FFF] w-full sm:w-auto shadow-xs"
               />
               <span className="text-xs font-bold text-slate-400 uppercase">to</span>
               <input
                 type="date"
                 value={customEndDate}
                 onChange={(e) => setCustomEndDate(e.target.value)}
-                className="bg-white text-xs font-bold border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#2874F0] w-full sm:w-auto shadow-xs"
+                className="bg-white text-xs font-bold border border-slate-200 rounded-sm py-2 px-3 text-slate-700 focus:outline-none focus:border-[#0F6FFF] w-full sm:w-auto shadow-xs"
               />
             </div>
           )}
@@ -418,7 +418,7 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
                 +14.5% from last month
               </p>
             </div>
-            <div className="p-3.5 rounded-sm bg-blue-50 text-[#2874F0] group-hover:scale-110 transition-transform shadow-xs">
+            <div className="p-3.5 rounded-sm bg-blue-50 text-[#0F6FFF] group-hover:scale-110 transition-transform shadow-xs">
               <DollarSign size={20} />
             </div>
           </div>
@@ -430,9 +430,9 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
             <div className="space-y-2">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Sales</span>
               <h3 className="text-2xl font-bold text-slate-800 leading-tight">{totalSales}</h3>
-              <p className="text-[10px] text-[#FB641B] font-bold uppercase tracking-wider">Volume processed</p>
+              <p className="text-[10px] text-[#14B8A6] font-bold uppercase tracking-wider">Volume processed</p>
             </div>
-            <div className="p-3.5 rounded-sm bg-orange-50 text-[#FB641B] group-hover:scale-110 transition-transform shadow-xs">
+            <div className="p-3.5 rounded-sm bg-orange-50 text-[#14B8A6] group-hover:scale-110 transition-transform shadow-xs">
               <ShoppingBag size={20} />
             </div>
           </div>
@@ -444,9 +444,9 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
             <div className="space-y-2">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Avg. Order Value</span>
               <h3 className="text-2xl font-bold text-slate-800 leading-tight">₹{averageOrderValue.toFixed(2)}</h3>
-              <p className="text-[10px] text-[#2874F0] font-bold uppercase tracking-wider">Average cart value</p>
+              <p className="text-[10px] text-[#0F6FFF] font-bold uppercase tracking-wider">Average cart value</p>
             </div>
-            <div className="p-3.5 rounded-sm bg-blue-50 text-[#2874F0] group-hover:scale-110 transition-transform shadow-xs">
+            <div className="p-3.5 rounded-sm bg-blue-50 text-[#0F6FFF] group-hover:scale-110 transition-transform shadow-xs">
               <TrendingUp size={20} />
             </div>
           </div>
@@ -566,7 +566,7 @@ export const AdminAnalytics: React.FC<AdminAnalyticsProps> = ({ orders, products
           </div>
 
           <div className="flex flex-col items-center justify-center py-4 space-y-2">
-            <span className="text-5xl font-extrabold text-[#2874F0] leading-none">
+            <span className="text-5xl font-extrabold text-[#0F6FFF] leading-none">
               {filteredOrders.length > 0 
                 ? `${Math.round((filteredOrders.filter(o => o.status === 'Delivered').length / filteredOrders.length) * 100)}%` 
                 : '100%'}

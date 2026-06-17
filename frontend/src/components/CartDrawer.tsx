@@ -70,12 +70,12 @@ export const CartDrawer: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Shopping Cart Drawer"
-            className="fixed top-0 right-0 h-screen w-full sm:w-[420px] bg-[#F1F3F6] border-l border-slate-200 shadow-2xl z-50 flex flex-col justify-between"
+            className="fixed top-0 right-0 h-screen w-full sm:w-[420px] bg-[#F8FAFC] border-l border-slate-200 shadow-2xl z-50 flex flex-col justify-between"
           >
             {/* Drawer Header */}
             <div className="p-4 border-b border-slate-200 bg-white flex items-center justify-between shadow-xs">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-full bg-[#2874F0]/10 text-[#2874F0] flex items-center justify-center">
+                <div className="w-9 h-9 rounded-full bg-[#0F6FFF]/10 text-[#0F6FFF] flex items-center justify-center">
                   <ShoppingCart size={16} />
                 </div>
                 <div>
@@ -105,7 +105,7 @@ export const CartDrawer: React.FC = () => {
                   <button
                     onClick={() => setCartDrawerOpen(false)}
                     data-testid="cart-drawer-close-empty-btn"
-                    className="px-5 py-2.5 bg-[#2874F0] hover:bg-[#1e5ecb] text-white text-xs font-bold rounded-sm uppercase tracking-wide transition-colors"
+                    className="px-5 py-2.5 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-xs font-bold rounded-sm uppercase tracking-wide transition-colors"
                   >
                     Continue Shopping
                   </button>
@@ -221,7 +221,7 @@ export const CartDrawer: React.FC = () => {
                     to="/checkout"
                     onClick={() => setCartDrawerOpen(false)}
                     data-testid="cart-drawer-checkout-btn"
-                    className="flex-1 py-2.5 bg-[#FB641B] hover:bg-[#e05310] text-white text-xs font-bold rounded-sm uppercase tracking-wide text-center flex items-center justify-center gap-1 transition-colors shadow-xs"
+                    className="flex-1 py-2.5 bg-[#14B8A6] hover:bg-[#e05310] text-white text-xs font-bold rounded-sm uppercase tracking-wide text-center flex items-center justify-center gap-1 transition-colors shadow-xs"
                   >
                     Checkout
                     <ArrowRight size={13} />

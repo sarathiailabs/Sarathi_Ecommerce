@@ -7,36 +7,42 @@ export default {
   theme: {
     extend: {
       colors: {
-        // High-end premium amber-gold and orange marketplace colors
+        // Cobalt Blue and Teal SaaS marketplace colors
         primary: {
-          50: '#f0f5ff',
-          100: '#dce8ff',
-          200: '#c1d7ff',
-          300: '#97beff',
-          400: '#649cff',
-          500: '#2874F0',
-          550: '#2874F0',
-          600: '#1e5ecb',
-          700: '#184bab',
-          800: '#183f8c',
-          900: '#193674',
-          955: '#112149',
-          950: '#112149',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#0F6FFF', // Primary Cobalt Blue
+          550: '#0F6FFF',
+          600: '#0D5ED9', // Hover blue
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          950: '#172554',
         },
         accent: {
-          50: '#fff9eb',
-          100: '#ffeed1',
-          200: '#ffdba0',
-          300: '#ffc166',
-          400: '#ffa62b',
-          500: '#FF9F00',
-          600: '#db8200',
-          700: '#b46400',
-          800: '#904e03',
-          900: '#764006',
-          950: '#442100',
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#14B8A6', // Secondary/Accent Teal
+          600: '#0D9488', // Hover teal
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a',
+          950: '#042f2e',
         }
       },
+      borderRadius: {
+        'sm': '12px',
+        'md': '16px',
+        'lg': '20px',
+        'xl': '24px',
+        '2xl': '32px',
+      }
     },
   },
   plugins: [],

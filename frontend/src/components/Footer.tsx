@@ -52,7 +52,7 @@ export const Footer: React.FC = () => {
               aria-label="Newsletter email"
               className="px-3 py-2 text-xs text-slate-800 bg-white rounded-sm focus:outline-none placeholder-slate-400 sm:w-64 flex-1 border border-slate-300"
             />
-            <button data-testid="newsletter-subscribe-btn" type="submit" title="Subscribe to our newsletter" className="px-5 py-2.5 bg-[#FF9F00] hover:bg-[#e68f00] text-white text-xs font-bold rounded-sm flex items-center gap-1.5 transition-colors">
+            <button data-testid="newsletter-subscribe-btn" type="submit" title="Subscribe to our newsletter" className="px-5 py-2.5 bg-[#14B8A6] hover:bg-[#e68f00] text-white text-xs font-bold rounded-sm flex items-center gap-1.5 transition-colors">
               Subscribe
               <ArrowRight size={13} />
             </button>
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
               />
               <div>
                 <div className="text-base font-extrabold text-white tracking-tight">Sarathi Store</div>
-                <div className="text-[9px] text-[#FF9F00] font-semibold tracking-wider uppercase -mt-0.5">Powered by Sarathi AI Labs</div>
+                <div className="text-[9px] text-[#14B8A6] font-semibold tracking-wider uppercase -mt-0.5">Powered by Sarathi AI Labs</div>
               </div>
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
@@ -79,15 +79,15 @@ export const Footer: React.FC = () => {
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-xs text-slate-400">
-                <Mail size={12} className="text-[#FF9F00]/70" />
+                <Mail size={12} className="text-[#14B8A6]/70" />
                 support@sarathi.ai
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-400">
-                <Phone size={12} className="text-[#FF9F00]/70" />
+                <Phone size={12} className="text-[#14B8A6]/70" />
                 +91 80 4321 9876
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-400">
-                <MapPin size={12} className="text-[#FF9F00]/70" />
+                <MapPin size={12} className="text-[#14B8A6]/70" />
                 Bengaluru, Karnataka, India
               </div>
             </div>
@@ -128,7 +128,7 @@ export const Footer: React.FC = () => {
                 data-testid={`social-link-${s.label.toLowerCase()}`}
                 aria-label={s.label}
                 title={`Follow us on ${s.label}`}
-                className="w-8 h-8 rounded-full bg-[#213147] hover:bg-[#FF9F00] flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+                className="w-8 h-8 rounded-full bg-[#213147] hover:bg-[#14B8A6] flex items-center justify-center text-slate-400 hover:text-white transition-colors"
               >
                 {s.icon}
               </a>

@@ -102,12 +102,12 @@ export const DeliveryDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F1F3F6] pb-24 pt-8 select-none">
+    <div className="min-h-screen bg-[#F8FAFC] pb-24 pt-8 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-slate-200 pb-6">
           <div>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold bg-[#FF9F00] text-white tracking-wider mb-2.5 uppercase">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[10px] font-bold bg-[#14B8A6] text-white tracking-wider mb-2.5 uppercase">
               <Truck size={12} className="animate-bounce" />
               Carrier Operations Gate
             </span>
@@ -115,7 +115,7 @@ export const DeliveryDashboard: React.FC = () => {
               Carrier Dashboard
             </h1>
             <p className="text-xs font-semibold text-slate-500 mt-2">
-              Authorized Delivery Partner: <span className="text-[#2874F0] font-bold">{user?.full_name || user?.email}</span>
+              Authorized Delivery Partner: <span className="text-[#0F6FFF] font-bold">{user?.full_name || user?.email}</span>
             </p>
           </div>
 
@@ -146,7 +146,7 @@ export const DeliveryDashboard: React.FC = () => {
           <div data-testid="delivery-stat-available" className="bg-white border border-slate-200 rounded-sm p-4 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-center justify-between mb-3">
               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Available Loads</span>
-              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#2874F0]">
+              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#0F6FFF]">
                 <ClipboardList size={14} />
               </div>
             </div>
@@ -187,7 +187,7 @@ export const DeliveryDashboard: React.FC = () => {
             data-testid="delivery-tab-active"
             className={`px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
               activeTab === 'my_active'
-                ? 'border-[#2874F0] text-[#2874F0] font-extrabold'
+                ? 'border-[#0F6FFF] text-[#0F6FFF] font-extrabold'
                 : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
@@ -201,7 +201,7 @@ export const DeliveryDashboard: React.FC = () => {
             data-testid="delivery-tab-available"
             className={`px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
               activeTab === 'available'
-                ? 'border-[#2874F0] text-[#2874F0] font-extrabold'
+                ? 'border-[#0F6FFF] text-[#0F6FFF] font-extrabold'
                 : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
@@ -215,7 +215,7 @@ export const DeliveryDashboard: React.FC = () => {
             data-testid="delivery-tab-completed"
             className={`px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
               activeTab === 'my_history'
-                ? 'border-[#2874F0] text-[#2874F0] font-extrabold'
+                ? 'border-[#0F6FFF] text-[#0F6FFF] font-extrabold'
                 : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
@@ -246,7 +246,7 @@ export const DeliveryDashboard: React.FC = () => {
                     <p className="text-slate-400 text-xs mb-6 font-semibold">Head over to the Available Jobs Pool to claim some delivery tasks!</p>
                     <button
                       onClick={() => setActiveTab('available')}
-                      className="px-5 py-2.5 bg-[#2874F0] hover:bg-[#1264e3] text-white text-xs font-bold uppercase rounded-sm shadow-xs transition-colors"
+                      className="px-5 py-2.5 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-xs font-bold uppercase rounded-sm shadow-xs transition-colors"
                     >
                       Browse Available Jobs
                     </button>
@@ -285,7 +285,7 @@ export const DeliveryDashboard: React.FC = () => {
                                   onClick={() => handleStatusUpdate(delivery.id, 'picked_up')}
                                   disabled={updatingId === delivery.id}
                                   data-testid={`delivery-btn-pickup-${delivery.id}`}
-                                  className="px-4 py-2 bg-[#FF9F00] hover:bg-[#ff9100] text-white text-[10px] font-bold uppercase rounded-sm shadow-xs transition-colors"
+                                  className="px-4 py-2 bg-[#14B8A6] hover:bg-[#ff9100] text-white text-[10px] font-bold uppercase rounded-sm shadow-xs transition-colors"
                                 >
                                   Mark as Picked Up
                                 </button>
@@ -296,7 +296,7 @@ export const DeliveryDashboard: React.FC = () => {
                                   onClick={() => handleStatusUpdate(delivery.id, 'in_transit')}
                                   disabled={updatingId === delivery.id}
                                   data-testid={`delivery-btn-transit-${delivery.id}`}
-                                  className="px-4 py-2 bg-[#FF9F00] hover:bg-[#ff9100] text-white text-[10px] font-bold uppercase rounded-sm shadow-xs transition-colors"
+                                  className="px-4 py-2 bg-[#14B8A6] hover:bg-[#ff9100] text-white text-[10px] font-bold uppercase rounded-sm shadow-xs transition-colors"
                                 >
                                   Mark as In Transit
                                 </button>
@@ -328,7 +328,7 @@ export const DeliveryDashboard: React.FC = () => {
                             </div>
 
                             <div className="flex items-start gap-2.5">
-                              <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-[#2874F0] mt-0.5 border border-slate-100 flex-shrink-0">
+                              <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-[#0F6FFF] mt-0.5 border border-slate-100 flex-shrink-0">
                                 <User size={13} />
                               </div>
                               <div>
@@ -397,7 +397,7 @@ export const DeliveryDashboard: React.FC = () => {
                               onClick={() => handleClaim(delivery.id)}
                               disabled={claimingId === delivery.id}
                               data-testid={`delivery-btn-claim-${delivery.id}`}
-                              className="px-4 py-2 bg-[#FF9F00] hover:bg-[#ff9100] text-white text-xs font-bold uppercase tracking-wider rounded-sm shadow-xs flex items-center gap-1.5 self-start lg:self-center transition-colors"
+                              className="px-4 py-2 bg-[#14B8A6] hover:bg-[#ff9100] text-white text-xs font-bold uppercase tracking-wider rounded-sm shadow-xs flex items-center gap-1.5 self-start lg:self-center transition-colors"
                             >
                               <Truck size={14} />
                               {claimingId === delivery.id ? 'Claiming Load...' : 'Claim Job (₹150)'}
@@ -414,7 +414,7 @@ export const DeliveryDashboard: React.FC = () => {
                             <div className="bg-slate-50 border border-slate-200 rounded-sm p-4">
                               <span className="text-[9px] font-bold uppercase text-slate-400 tracking-wider block mb-1">Delivery Destination</span>
                               <p className="text-xs font-bold text-slate-700 uppercase">{recipient}</p>
-                              <p data-testid={`delivery-available-dest-${delivery.id}`} className="text-xs font-bold text-[#2874F0] mt-0.5">{destination}</p>
+                              <p data-testid={`delivery-available-dest-${delivery.id}`} className="text-xs font-bold text-[#0F6FFF] mt-0.5">{destination}</p>
                             </div>
                           </div>
                         </div>

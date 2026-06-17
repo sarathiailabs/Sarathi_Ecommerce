@@ -39,10 +39,10 @@ export const Login: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false)
 
   return (
-    <div data-page="login" data-testid="login-page" className="min-h-[calc(100vh-130px)] flex bg-[#F1F3F6] py-12 select-none justify-center items-center">
+    <div data-page="login" data-testid="login-page" className="min-h-[calc(100vh-130px)] flex bg-[#F8FAFC] py-12 select-none justify-center items-center">
       <div className="w-full max-w-4xl bg-white rounded-sm border border-slate-200 shadow-md flex overflow-hidden min-h-[500px]">
         {/* LEFT: Branding Panel (Blue Flipkart-like side panel) */}
-        <div className="brand-panel hidden md:flex flex-col w-[40%] bg-[#2874F0] text-white p-10 justify-between relative overflow-hidden">
+        <div className="brand-panel hidden md:flex flex-col w-[40%] bg-[#0F6FFF] text-white p-10 justify-between relative overflow-hidden">
           <div className="space-y-6">
             <Link to="/" className="inline-flex items-center gap-2">
               <img
@@ -89,7 +89,7 @@ export const Login: React.FC = () => {
             <h1 className="text-xl font-extrabold text-slate-800" data-testid="login-heading">Sign In</h1>
             <p className="text-slate-400 text-xs font-semibold mt-1">
               New to Sarathi Store?{' '}
-              <Link to="/register" data-testid="login-register-link" className="text-[#2874F0] hover:underline">
+              <Link to="/register" data-testid="login-register-link" className="text-[#0F6FFF] hover:underline">
                 Create a free account
               </Link>
             </p>
@@ -132,7 +132,7 @@ export const Login: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   aria-describedby={errorMsg ? 'login-error-alert' : undefined}
                   placeholder="enter email address"
-                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
+                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF]"
                 />
               </div>
             </div>
@@ -145,7 +145,7 @@ export const Login: React.FC = () => {
                 <Link
                   to="/forgot-password"
                   data-testid="login-forgot-password-link"
-                  className="text-[10px] text-[#2874F0] hover:underline font-bold"
+                  className="text-[10px] text-[#0F6FFF] hover:underline font-bold"
                 >
                   Forgot?
                 </Link>
@@ -163,7 +163,7 @@ export const Login: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   aria-describedby={errorMsg ? 'login-error-alert' : undefined}
                   placeholder="enter password"
-                  className="w-full pl-9 pr-9 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
+                  className="w-full pl-9 pr-9 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF]"
                 />
                 <button
                   type="button"
@@ -185,7 +185,7 @@ export const Login: React.FC = () => {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 rounded-sm border-slate-300 text-[#2874F0] focus:ring-0 cursor-pointer"
+                className="w-4 h-4 rounded-sm border-slate-300 text-[#0F6FFF] focus:ring-0 cursor-pointer"
               />
               <label htmlFor="remember-me" className="text-[11px] font-semibold text-slate-500 cursor-pointer select-none">
                 Remember me
@@ -197,7 +197,7 @@ export const Login: React.FC = () => {
               data-testid="login-submit-btn"
               type="submit"
               disabled={submitting}
-              className="w-full py-2.5 bg-[#FF9F00] hover:bg-[#e68f00] text-white text-xs font-bold rounded-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 bg-[#14B8A6] hover:bg-[#e68f00] text-white text-xs font-bold rounded-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5"
             >
               <LogIn size={13} />
               <span>{submitting ? 'Signing in...' : 'Login'}</span>

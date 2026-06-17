@@ -79,9 +79,9 @@ export const Register: React.FC = () => {
 
   if (success) {
     return (
-      <div data-testid="register-success-state" className="min-h-[calc(100vh-130px)] flex items-center justify-center px-6 bg-[#F1F3F6] select-none">
+      <div data-testid="register-success-state" className="min-h-[calc(100vh-130px)] flex items-center justify-center px-6 bg-[#F8FAFC] select-none">
         <div className="max-w-md w-full text-center space-y-5 bg-white p-8 rounded-sm border border-slate-200 shadow-md">
-          <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-[#388E3C] shadow-sm">
+          <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-[#10B981] shadow-sm">
             <CheckCircle size={32} />
           </div>
           <div>
@@ -90,7 +90,7 @@ export const Register: React.FC = () => {
               Welcome to Sarathi Store, {fullName}! Redirecting to login page...
             </p>
           </div>
-          <Link to="/login" data-testid="register-login-btn" className="w-full py-2.5 bg-[#2874F0] hover:bg-[#1e5ecb] text-white text-xs font-bold rounded-sm uppercase tracking-wider block transition-colors shadow-xs">
+          <Link to="/login" data-testid="register-login-btn" className="w-full py-2.5 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-xs font-bold rounded-sm uppercase tracking-wider block transition-colors shadow-xs">
             Sign In Now
           </Link>
         </div>
@@ -99,10 +99,10 @@ export const Register: React.FC = () => {
   }
 
   return (
-    <div data-page="register" className="min-h-[calc(100vh-130px)] flex bg-[#F1F3F6] py-8 select-none justify-center items-center">
+    <div data-page="register" className="min-h-[calc(100vh-130px)] flex bg-[#F8FAFC] py-8 select-none justify-center items-center">
       <div className="w-full max-w-4xl bg-white rounded-sm border border-slate-200 shadow-md flex overflow-hidden min-h-[580px]">
         {/* LEFT: Perks Panel (Flipkart Blue) */}
-        <div className="brand-panel hidden md:flex flex-col w-[38%] bg-[#2874F0] text-white p-10 justify-between relative overflow-hidden">
+        <div className="brand-panel hidden md:flex flex-col w-[38%] bg-[#0F6FFF] text-white p-10 justify-between relative overflow-hidden">
           <div className="space-y-6">
             <Link to="/" className="inline-flex items-center gap-2">
               <img
@@ -146,7 +146,7 @@ export const Register: React.FC = () => {
             <h1 className="text-xl font-extrabold text-slate-800">Create Account</h1>
             <p className="text-slate-400 text-xs font-semibold mt-1">
               Already registered?{' '}
-              <Link to="/login" className="text-[#2874F0] hover:underline font-bold">
+              <Link to="/login" className="text-[#0F6FFF] hover:underline font-bold">
                 Sign in instead
               </Link>
             </p>
@@ -184,7 +184,7 @@ export const Register: React.FC = () => {
                   onChange={(e) => setFullName(e.target.value)}
                   aria-describedby={errorMsg ? 'register-error-alert' : undefined}
                   placeholder="enter full name"
-                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
+                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF]"
                 />
               </div>
             </div>
@@ -203,7 +203,7 @@ export const Register: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   aria-describedby={errorMsg ? 'register-error-alert' : undefined}
                   placeholder="enter email address"
-                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
+                  className="w-full pl-9 pr-4 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF]"
                 />
               </div>
             </div>
@@ -218,7 +218,7 @@ export const Register: React.FC = () => {
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   aria-describedby={errorMsg ? 'register-error-alert' : undefined}
-                  className="w-full px-3 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 focus:outline-none focus:border-[#2874F0] appearance-none cursor-pointer pr-10"
+                  className="w-full px-3 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 focus:outline-none focus:border-[#0F6FFF] appearance-none cursor-pointer pr-10"
                 >
                   <option value="customer">Customer / Buyer</option>
                   <option value="shop_owner">Shop Owner / Seller</option>
@@ -243,7 +243,7 @@ export const Register: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="create password"
-                  className="w-full pl-9 pr-9 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0]"
+                  className="w-full pl-9 pr-9 py-2 border border-slate-350 bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF]"
                 />
                 <button
                   type="button"
@@ -296,7 +296,7 @@ export const Register: React.FC = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="re-enter password"
-                  className={`w-full pl-9 pr-9 py-2 border bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#2874F0] ${
+                  className={`w-full pl-9 pr-9 py-2 border bg-white rounded-sm text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0F6FFF] ${
                     confirmPassword && password !== confirmPassword ? 'border-red-500 focus:border-red-650' :
                     confirmPassword && password === confirmPassword ? 'border-emerald-500 focus:border-emerald-600' : 'border-slate-350'
                   }`}
@@ -316,7 +316,7 @@ export const Register: React.FC = () => {
               data-testid="register-submit-btn"
               type="submit"
               disabled={submitting}
-              className="w-full py-2.5 bg-[#FF9F00] hover:bg-[#e68f00] text-white text-xs font-bold rounded-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 bg-[#14B8A6] hover:bg-[#e68f00] text-white text-xs font-bold rounded-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5"
             >
               <UserPlus size={13} />
               <span>{submitting ? 'Creating Account...' : 'Register'}</span>

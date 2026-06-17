@@ -26,111 +26,79 @@ export const HeroSlider: React.FC = () => {
   const goTo = (index: number) => swiperRef.current?.slideToLoop(index)
 
   return (
-    <section className="relative w-full px-4 sm:px-6 lg:px-8 py-3" aria-label="Featured promotions">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative w-full overflow-hidden rounded-b-[36px] md:rounded-b-[48px] shadow-2xl border-b border-slate-800/80" aria-label="Featured promotions">
+      <div className="relative group/slider w-full">
+        <Swiper
+          modules={[Autoplay, Navigation, Pagination, EffectFade, A11y]}
+          effect="fade"
+          fadeEffect={{ crossFade: true }}
+          loop={true}
+          speed={1000}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          pagination={{ clickable: true }}
+          a11y={{ prevSlideMessage: 'Previous slide', nextSlideMessage: 'Next slide' }}
+          onSwiper={(swiper) => { swiperRef.current = swiper }}
+          onSlideChange={handleSlideChange}
+          className="hero-swiper w-full"
+          style={{ height: 'clamp(500px, 60vh, 650px)' }}
+        >
+          {heroSlides.map((slide, idx) => (
+            <SwiperSlide key={slide.id}>
+              <HeroSlideCard slide={slide} isActive={activeIndex === idx} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-        {/* Slider Container */}
-        <div className="relative group/slider">
+        {/* Custom Navigation Arrows */}
+        <button
+          onClick={goPrev}
+          aria-label="Previous slide"
+          className="
+            absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-20
+            w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white
+            border border-white/10 flex items-center justify-center
+            shadow-2xl backdrop-blur-md opacity-0 group-hover/slider:opacity-100
+            transition-all duration-300 hover:scale-105 active:scale-95
+          "
+        >
+          <ChevronLeft size={20} className="text-white" />
+        </button>
 
-          {/* Outer shadow/border card */}
-          <div className="relative rounded-sm overflow-hidden border border-slate-200 shadow-sm bg-white">
-            <Swiper
-              modules={[Autoplay, Navigation, Pagination, EffectFade, A11y]}
-              effect="fade"
-              fadeEffect={{ crossFade: true }}
-              loop={true}
-              speed={800}
-              autoplay={{
-                delay: 4500,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-              }}
-              pagination={{ clickable: false }}
-              a11y={{ prevSlideMessage: 'Previous slide', nextSlideMessage: 'Next slide' }}
-              onSwiper={(swiper) => { swiperRef.current = swiper }}
-              onSlideChange={handleSlideChange}
-              className="hero-swiper w-full"
-              style={{ height: 'clamp(280px, 40vw, 360px)' }}
-            >
-              {heroSlides.map((slide, idx) => (
-                <SwiperSlide key={slide.id}>
-                  <HeroSlideCard slide={slide} isActive={activeIndex === idx} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+        <button
+          onClick={goNext}
+          aria-label="Next slide"
+          className="
+            absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-20
+            w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white
+            border border-white/10 flex items-center justify-center
+            shadow-2xl backdrop-blur-md opacity-0 group-hover/slider:opacity-100
+            transition-all duration-300 hover:scale-105 active:scale-95
+          "
+        >
+          <ChevronRight size={20} className="text-white" />
+        </button>
 
-            {/* Custom Navigation Arrows */}
-            <button
-              onClick={goPrev}
-              aria-label="Previous slide"
-              className="
-                absolute left-2 top-1/2 -translate-y-1/2 z-20
-                w-9 h-14 bg-white/90 hover:bg-white text-slate-800
-                border border-slate-200 flex items-center justify-center
-                shadow-md opacity-0 group-hover/slider:opacity-100
-                transition-all duration-200 rounded-r-md
-              "
-            >
-              <ChevronLeft size={16} />
-            </button>
-
-            <button
-              onClick={goNext}
-              aria-label="Next slide"
-              className="
-                absolute right-2 top-1/2 -translate-y-1/2 z-20
-                w-9 h-14 bg-white/90 hover:bg-white text-slate-800
-                border border-slate-200 flex items-center justify-center
-                shadow-md opacity-0 group-hover/slider:opacity-100
-                transition-all duration-200 rounded-l-md
-              "
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-
-          {/* Dot Pagination */}
-          <div className="flex items-center justify-center gap-1.5 mt-3" role="tablist" aria-label="Slide navigation">
-            {heroSlides.map((slide, idx) => (
-              <button
-                key={slide.id}
-                role="tab"
-                aria-selected={activeIndex === idx}
-                aria-label={`Go to slide ${idx + 1}`}
-                onClick={() => goTo(idx)}
-                className={`
-                  rounded-full transition-all duration-300
-                  ${activeIndex === idx
-                    ? 'w-6 h-2 bg-[#2874F0]'
-                    : 'w-2 h-2 bg-slate-300 hover:bg-slate-400'
-                  }
-                `}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Thumbnail/Labels row */}
-        <div className="hidden lg:grid grid-cols-4 gap-3 mt-3">
+        {/* Custom Dot Pagination Indicators */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-2.5" role="tablist" aria-label="Slide navigation">
           {heroSlides.map((slide, idx) => (
             <button
               key={slide.id}
+              role="tab"
+              aria-selected={activeIndex === idx}
+              aria-label={`Go to slide ${idx + 1}`}
               onClick={() => goTo(idx)}
               className={`
-                p-2 rounded-sm border text-left transition-colors duration-150
+                rounded-full transition-all duration-300 h-2.5
                 ${activeIndex === idx
-                  ? 'bg-blue-50/50 border-[#2874F0] shadow-xs'
-                  : 'bg-white border-slate-200 hover:bg-slate-50'
+                  ? 'w-8 bg-[#0F6FFF]'
+                  : 'w-2.5 bg-white/30 hover:bg-white/50'
                 }
               `}
-            >
-              <span className={`block text-[10px] font-bold ${activeIndex === idx ? 'text-[#2874F0]' : 'text-slate-400'}`}>
-                {slide.badge}
-              </span>
-              <span className={`block text-xs font-semibold truncate ${activeIndex === idx ? 'text-[#2874F0]' : 'text-slate-700'}`}>
-                {slide.title} {slide.titleHighlight}
-              </span>
-            </button>
+            />
           ))}
         </div>
       </div>
