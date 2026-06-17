@@ -6,7 +6,7 @@ import {
   Cpu, Laptop, Headphones, Watch, Gamepad2, Camera,
   Home as HomeIcon, Smartphone, Sparkles, Package,
   ChevronDown, ChevronUp, Filter, ChevronLeft, ChevronRight,
-  Send, Quote, CheckCircle2, Tag, Tv, Shirt
+  Send, Quote, CheckCircle2, Tag, Tv, Shirt, BookOpen, Apple, PenTool, ShoppingBag
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -121,7 +121,11 @@ export const Home: React.FC = () => {
       if (urlCat.toLowerCase() === 'deals') {
         setSelectedCategory('Deals')
       } else {
-        const matched = categories.find(c => c.toLowerCase() === urlCat.toLowerCase())
+        const matched = categories.find(c => {
+          const normDb = c.toLowerCase().replace(/[^a-z0-9]/g, '')
+          const normUrl = urlCat.toLowerCase().replace(/[^a-z0-9]/g, '')
+          return normDb === normUrl
+        })
         if (matched) setSelectedCategory(matched)
       }
     } else {
@@ -149,6 +153,12 @@ export const Home: React.FC = () => {
     }
     fetchProducts()
   }, [])
+
+  useEffect(() => {
+    if (products.length > 0) {
+      console.log(`[TEMP LOG] Rendered Image URL for first product "${products[0].name}": ${products[0].image_url}`);
+    }
+  }, [products])
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -222,7 +232,7 @@ export const Home: React.FC = () => {
   const filteredProducts = products
     .filter(p => {
       if (selectedCategory === 'All') return true
-      if (selectedCategory === 'Deals') return p.id.charCodeAt(0) % 3 !== 0
+      if (selectedCategory === 'Deals') return (p.original_price && Number(p.price) < Number(p.original_price)) || p.is_featured
       return p.category === selectedCategory
     })
     .filter(p => !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.description?.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -282,15 +292,25 @@ export const Home: React.FC = () => {
   const getCategoryMeta = (cat: string) => {
     switch (cat.toLowerCase()) {
       case 'electronics':
-        return { icon: <Cpu size={22} className="text-[#0F6FFF]" />, title: 'Electronics', subtitle: 'Computers & Hardware' }
-      case 'mobiles':
-        return { icon: <Smartphone size={22} className="text-[#0F6FFF]" />, title: 'Mobiles', subtitle: 'Phones & Devices' }
-      case 'appliances':
-        return { icon: <Tv size={22} className="text-[#0F6FFF]" />, title: 'Appliances', subtitle: 'Home Automation' }
+        return { icon: <Cpu size={22} className="text-[#0F6FFF]" />, title: 'Electronics', subtitle: 'Smartphones & Laptops' }
+      case 'home & kitchen':
+        return { icon: <HomeIcon size={22} className="text-[#0F6FFF]" />, title: 'Home & Kitchen', subtitle: 'Furniture & Appliances' }
+      case 'fashion':
+        return { icon: <Shirt size={22} className="text-[#0F6FFF]" />, title: 'Fashion', subtitle: 'Clothing & Footwear' }
+      case 'beauty':
+        return { icon: <Sparkles size={22} className="text-[#0F6FFF]" />, title: 'Beauty', subtitle: 'Skincare & Grooming' }
+      case 'sports & fitness':
+        return { icon: <TrendingUp size={22} className="text-[#0F6FFF]" />, title: 'Sports & Fitness', subtitle: 'Equipment & Yoga' }
+      case 'books':
+        return { icon: <BookOpen size={22} className="text-[#0F6FFF]" />, title: 'Books', subtitle: 'Fiction & Academic' }
+      case 'grocery':
+        return { icon: <Apple size={22} className="text-[#0F6FFF]" />, title: 'Grocery', subtitle: 'Snacks & Beverages' }
+      case 'office & stationery':
+        return { icon: <PenTool size={22} className="text-[#0F6FFF]" />, title: 'Office & Stationery', subtitle: 'Printers & Stationery' }
       case 'deals':
         return { icon: <Sparkles size={22} className="text-[#14B8A6]" />, title: 'Deals', subtitle: 'Hot Promotions' }
       default:
-        return { icon: <Shirt size={22} className="text-[#0F6FFF]" />, title: cat, subtitle: 'Elite Collections' }
+        return { icon: <ShoppingBag size={22} className="text-[#0F6FFF]" />, title: cat, subtitle: 'Curated Collections' }
     }
   }
 
@@ -545,13 +565,14 @@ export const Home: React.FC = () => {
           </div>
         </section>
       ) : (
-        <div className="space-y-16 md:space-y-24 pb-20 relative">
+        <div className="relative">
           <div id="signin-section" className="absolute top-0" />
           <div id="createaccount-section" className="absolute top-0" />
           <div id="myorders-section" className="absolute top-0" />
           <div id="cart-section" className="absolute top-0" />
-          {/* 1. Hero Section */}
-          <HeroSlider />
+          <div className="space-y-16 md:space-y-24 pb-20">
+            {/* 1. Hero Section */}
+            <HeroSlider />
 
           {/* 2. Featured Categories */}
           <section className="max-w-6xl mx-auto px-4 sm:px-6 select-none relative">
@@ -578,17 +599,37 @@ export const Home: React.FC = () => {
                       bgImage = 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80'
                       gradient = 'from-blue-950/40 to-slate-950/85'
                       break
-                    case 'mobiles':
-                      bgImage = 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80'
-                      gradient = 'from-cyan-950/40 to-slate-950/85'
+                    case 'home & kitchen':
+                      bgImage = 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=400&q=80'
+                      gradient = 'from-orange-950/40 to-slate-950/85'
                       break
-                    case 'appliances':
-                      bgImage = 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80'
-                      gradient = 'from-purple-950/40 to-slate-950/85'
+                    case 'fashion':
+                      bgImage = 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=400&q=80'
+                      gradient = 'from-pink-950/40 to-slate-950/85'
+                      break
+                    case 'beauty':
+                      bgImage = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=400&q=80'
+                      gradient = 'from-rose-950/40 to-slate-950/85'
+                      break
+                    case 'sports & fitness':
+                      bgImage = 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=400&q=80'
+                      gradient = 'from-emerald-950/40 to-slate-950/85'
+                      break
+                    case 'books':
+                      bgImage = 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=400&q=80'
+                      gradient = 'from-amber-950/40 to-slate-950/85'
+                      break
+                    case 'grocery':
+                      bgImage = 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=400&q=80'
+                      gradient = 'from-green-950/40 to-slate-950/85'
+                      break
+                    case 'office & stationery':
+                      bgImage = 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=400&q=80'
+                      gradient = 'from-slate-900/40 to-slate-950/85'
                       break
                     case 'deals':
                       bgImage = 'https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?auto=format&fit=crop&w=400&q=80'
-                      gradient = 'from-amber-950/40 to-slate-950/85'
+                      gradient = 'from-cyan-950/40 to-slate-950/85'
                       break
                   }
 
@@ -1240,7 +1281,7 @@ export const Home: React.FC = () => {
             </div>
           </section>
 
-
+          </div>
         </div>
       )}
 

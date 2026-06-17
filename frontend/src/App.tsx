@@ -9,7 +9,6 @@ import { Navbar } from './components/Navbar'
 import { Footer } from './components/Footer'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { AdminRoute } from './components/AdminRoute'
-import { AIAssistant } from './components/AIAssistant'
 import { CartDrawer } from './components/CartDrawer'
 import { Wishlist } from './components/Wishlist'
 import { Returns } from './components/Returns'
@@ -133,7 +132,6 @@ function App() {
               </Routes>
             </main>
             <Footer />
-            <AIAssistant />
             <CartDrawer />
           </div>
           </SearchProvider>

@@ -1,6 +1,8 @@
 import shopService from '../services/shopService.js';
 import supabase from '../db/supabase.js';
 import { AppError } from '../middleware/error.js';
+import { clearProductCache } from './productController.js';
+
 
 export const shopController = {
   async openShop(req, res, next) {
@@ -82,6 +84,7 @@ export const shopController = {
         is_active
       }, req.user);
 
+      clearProductCache();
       res.status(201).json(product);
     } catch (error) {
       next(error);

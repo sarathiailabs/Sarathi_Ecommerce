@@ -20,7 +20,6 @@ import returnsRouter from './routes/returns.js';
 import adminRouter from './routes/admin.js';
 import healthRouter from './routes/health.js';
 import testRouter from './routes/testUtils.js';
-import aiRouter from './routes/ai.js';
 
 const app = express();
 
@@ -59,7 +58,6 @@ app.use('/api/coupons', couponsRouter);
 app.use('/api/returns', returnsRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/test', testRouter);
-app.use('/api/ai', aiRouter);
 
 // ── Centralized Error Handler ──────────────────────────────────────────────
 app.use(errorHandler);

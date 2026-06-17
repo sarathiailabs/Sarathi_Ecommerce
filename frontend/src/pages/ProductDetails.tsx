@@ -73,6 +73,12 @@ export const ProductDetails: React.FC = () => {
     fetchProductAndWishlist()
   }, [id, navigate, isAuthenticated])
 
+  useEffect(() => {
+    if (product) {
+      console.log(`[TEMP LOG] Rendered Image URL for product "${product.name}": ${product.image_url}`);
+    }
+  }, [product])
+
   const handleToggleWishlist = async () => {
     if (!isAuthenticated) {
       showToast('Please sign in to add items to your wishlist', true)

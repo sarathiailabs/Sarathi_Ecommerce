@@ -10,6 +10,8 @@ export interface Product {
   stock: number
   image_url: string
   category: string
+  original_price?: number
+  is_featured?: boolean
 }
 
 export interface CartItem {

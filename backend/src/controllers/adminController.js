@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import supabase from '../db/supabase.js';
 import { AppError } from '../middleware/error.js';
+import { clearProductCache } from './productController.js';
 
 export const adminController = {
   async createProduct(req, res, next) {
@@ -59,6 +60,7 @@ export const adminController = {
         return next(new AppError(500, `Error creating product listing: ${error.message}`));
       }
 
+      clearProductCache();
       res.status(201).json(product);
     } catch (error) {
       next(error);
@@ -93,6 +95,7 @@ export const adminController = {
         return next(new AppError(500, `Error updating product details: ${updateErr.message}`));
       }
 
+      clearProductCache();
       res.status(200).json(updated);
     } catch (error) {
       next(error);
@@ -122,6 +125,7 @@ export const adminController = {
         return next(new AppError(500, `Error deleting product: ${deleteErr.message}`));
       }
 
+      clearProductCache();
       res.status(204).send();
     } catch (error) {
       next(error);

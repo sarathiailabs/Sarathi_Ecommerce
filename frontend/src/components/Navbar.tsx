@@ -21,6 +21,8 @@ const CATEGORY_ITEMS = [
   { label: 'Sports & Fitness', href: '/?category=Sports%20%26%20Fitness' },
   { label: 'Beauty', href: '/?category=Beauty' },
   { label: 'Books', href: '/?category=Books' },
+  { label: 'Grocery', href: '/?category=Grocery' },
+  { label: 'Office & Stationery', href: '/?category=Office%20%26%20Stationery' },
   { label: 'Deals', href: '/?category=deals' },
 ]
 
