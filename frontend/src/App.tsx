@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import React, { useEffect, lazy, Suspense } from 'react'
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { SearchProvider } from './context/SearchContext'
@@ -14,26 +14,24 @@ import { Wishlist } from './components/Wishlist'
 import { Returns } from './components/Returns'
 import { ProductSearch } from './components/ProductSearch'
 
-// Pages — Core
-import { Home } from './pages/Home'
-import { ProductDetails } from './pages/ProductDetails'
-import { Cart } from './pages/Cart'
-import { Orders } from './pages/Orders'
-import { Login } from './pages/Login'
-import { Register } from './pages/Register'
-import { AdminDashboard } from './pages/AdminDashboard'
-import { Checkout } from './pages/Checkout'
-import { DeliveryDashboard } from './pages/DeliveryDashboard'
-import { SellerDashboard } from './pages/SellerDashboard'
-
-// Pages — Phase 1 New
-import { ForgotPassword } from './pages/ForgotPassword'
-import { ResetPassword } from './pages/ResetPassword'
-import { OrderDetail } from './pages/OrderDetail'
-import { NotFound } from './pages/NotFound'
-import { HelpPage } from './pages/HelpPage'
-import { ShippingPage } from './pages/ShippingPage'
-import { ContactPage } from './pages/ContactPage'
+// Pages — Lazy Loaded
+const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })))
+const ProductDetails = lazy(() => import('./pages/ProductDetails').then(m => ({ default: m.ProductDetails })))
+const Cart = lazy(() => import('./pages/Cart').then(m => ({ default: m.Cart })))
+const Orders = lazy(() => import('./pages/Orders').then(m => ({ default: m.Orders })))
+const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })))
+const Register = lazy(() => import('./pages/Register').then(m => ({ default: m.Register })))
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })))
+const Checkout = lazy(() => import('./pages/Checkout').then(m => ({ default: m.Checkout })))
+const DeliveryDashboard = lazy(() => import('./pages/DeliveryDashboard').then(m => ({ default: m.DeliveryDashboard })))
+const SellerDashboard = lazy(() => import('./pages/SellerDashboard').then(m => ({ default: m.SellerDashboard })))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword').then(m => ({ default: m.ForgotPassword })))
+const ResetPassword = lazy(() => import('./pages/ResetPassword').then(m => ({ default: m.ResetPassword })))
+const OrderDetail = lazy(() => import('./pages/OrderDetail').then(m => ({ default: m.OrderDetail })))
+const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })))
+const HelpPage = lazy(() => import('./pages/HelpPage').then(m => ({ default: m.HelpPage })))
+const ShippingPage = lazy(() => import('./pages/ShippingPage').then(m => ({ default: m.ShippingPage })))
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })))
 
 import { scrollToElementWithOffset } from './utils/scroll'
 
@@ -130,6 +128,12 @@ const TouchpadNavigation: React.FC = () => {
   return null
 }
 
+const LoadingFallback = () => (
+  <div className="min-h-[60vh] flex items-center justify-center bg-[#F8FAFC]">
+    <div className="w-10 h-10 border-4 border-[#0F6FFF]/20 border-t-[#0F6FFF] rounded-full animate-spin" />
+  </div>
+)
+
 function App() {
   return (
     <BrowserRouter>
@@ -141,59 +145,61 @@ function App() {
           <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className="flex-grow">
-              <Routes>
-                {/* ── Public routes ─────────────────────────────── */}
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<Home />} />
-                <Route path="/product/:id" element={<ProductDetails />} />
-                <Route path="/search" element={<ProductSearch />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/help" element={<HelpPage />} />
-                <Route path="/shipping" element={<ShippingPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/404" element={<NotFound />} />
+              <Suspense fallback={<LoadingFallback />}>
+                <Routes>
+                  {/* ── Public routes ─────────────────────────────── */}
+                  <Route path="/" element={<Home />} />
+                  <Route path="/products" element={<Home />} />
+                  <Route path="/product/:id" element={<ProductDetails />} />
+                  <Route path="/search" element={<ProductSearch />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/help" element={<HelpPage />} />
+                  <Route path="/shipping" element={<ShippingPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/404" element={<NotFound />} />
 
-                {/* ── Customer routes ────────────────────────────── */}
-                <Route path="/cart" element={
-                  <ProtectedRoute><Cart /></ProtectedRoute>
-                } />
-                <Route path="/checkout" element={
-                  <ProtectedRoute><Checkout /></ProtectedRoute>
-                } />
-                <Route path="/orders" element={
-                  <ProtectedRoute><Orders /></ProtectedRoute>
-                } />
-                <Route path="/orders/:id" element={
-                  <ProtectedRoute><OrderDetail /></ProtectedRoute>
-                } />
-                <Route path="/wishlist" element={
-                  <ProtectedRoute><Wishlist /></ProtectedRoute>
-                } />
-                <Route path="/returns" element={
-                  <ProtectedRoute><Returns /></ProtectedRoute>
-                } />
+                  {/* ── Customer routes ────────────────────────────── */}
+                  <Route path="/cart" element={
+                    <ProtectedRoute><Cart /></ProtectedRoute>
+                  } />
+                  <Route path="/checkout" element={
+                    <ProtectedRoute><Checkout /></ProtectedRoute>
+                  } />
+                  <Route path="/orders" element={
+                    <ProtectedRoute><Orders /></ProtectedRoute>
+                  } />
+                  <Route path="/orders/:id" element={
+                    <ProtectedRoute><OrderDetail /></ProtectedRoute>
+                  } />
+                  <Route path="/wishlist" element={
+                    <ProtectedRoute><Wishlist /></ProtectedRoute>
+                  } />
+                  <Route path="/returns" element={
+                    <ProtectedRoute><Returns /></ProtectedRoute>
+                  } />
 
-                {/* ── Delivery Partner routes ────────────────────── */}
-                <Route path="/delivery/dashboard" element={
-                  <ProtectedRoute><DeliveryDashboard /></ProtectedRoute>
-                } />
+                  {/* ── Delivery Partner routes ────────────────────── */}
+                  <Route path="/delivery/dashboard" element={
+                    <ProtectedRoute><DeliveryDashboard /></ProtectedRoute>
+                  } />
 
-                {/* ── Shop Owner routes ──────────────────────────── */}
-                <Route path="/seller/dashboard" element={
-                  <ProtectedRoute><SellerDashboard /></ProtectedRoute>
-                } />
+                  {/* ── Shop Owner routes ──────────────────────────── */}
+                  <Route path="/seller/dashboard" element={
+                    <ProtectedRoute><SellerDashboard /></ProtectedRoute>
+                  } />
 
-                {/* ── Admin routes ───────────────────────────────── */}
-                <Route path="/admin/dashboard" element={
-                  <AdminRoute><AdminDashboard /></AdminRoute>
-                } />
+                  {/* ── Admin routes ───────────────────────────────── */}
+                  <Route path="/admin/dashboard" element={
+                    <AdminRoute><AdminDashboard /></AdminRoute>
+                  } />
 
-                {/* ── 404 fallback ───────────────────────────────── */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+                  {/* ── 404 fallback ───────────────────────────────── */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
             </main>
             <Footer />
             <CartDrawer />

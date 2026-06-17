@@ -2,11 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import {
   ShoppingCart, Search, X, SlidersHorizontal,
-  Star, Heart, TrendingUp, Shield, Truck, Headset,
-  Cpu, Laptop, Headphones, Watch, Gamepad2, Camera,
-  Home as HomeIcon, Smartphone, Sparkles, Package,
-  ChevronDown, ChevronUp, Filter, ChevronLeft, ChevronRight,
-  Send, Quote, CheckCircle2, Tag, Tv, Shirt, BookOpen, Apple, PenTool, ShoppingBag
+  Star, Heart, Cpu, Home as HomeIcon, Sparkles,
+  ChevronLeft, ChevronRight, Send, Shirt, BookOpen,
+  Apple, PenTool, ShoppingBag, TrendingUp, Shield,
+  Truck, Headset, Quote, CheckCircle2
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -169,11 +168,7 @@ export const Home: React.FC = () => {
     fetchProducts()
   }, [])
 
-  useEffect(() => {
-    if (products.length > 0) {
-      console.log(`[TEMP LOG] Rendered Image URL for first product "${products[0].name}": ${products[0].image_url}`);
-    }
-  }, [products])
+
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -419,7 +414,7 @@ export const Home: React.FC = () => {
 
             {/* Products Grid */}
             {loading ? (
-              <div data-testid="product-loading-skeleton" data-loading="true" className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+              <div data-testid="product-loading-skeleton" data-loading="true" className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 flex flex-col gap-3">
                     <div className="aspect-square skeleton rounded-xl" />
@@ -454,7 +449,7 @@ export const Home: React.FC = () => {
                 animate="show"
                 data-testid="products-grid"
                 data-loading="false"
-                className="grid grid-cols-2 lg:grid-cols-3 gap-6"
+                className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6"
               >
                 <AnimatePresence>
                   {filteredProducts.map((product) => {
@@ -860,7 +855,7 @@ export const Home: React.FC = () => {
                 <h3 className="text-xl font-extrabold text-slate-900 mt-1">Recommended for You</h3>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
               {loading
                 ? [...Array(4)].map((_, i) => (
                     <div key={i} className="bg-white border border-slate-200/50 rounded-2xl p-3 md:p-4 flex flex-col gap-3 animate-pulse">
@@ -911,10 +906,11 @@ export const Home: React.FC = () => {
                           <button
                             onClick={() => handleAddToCart(product.id)}
                             disabled={product.stock === 0 || addingId === product.id}
-                            className="px-3 py-1 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-[10px] font-bold rounded-lg uppercase tracking-wider transition-all"
+                            className="px-3.5 py-1.5 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-[10px] font-bold rounded-xl uppercase tracking-wider transition-all shadow-xs active:scale-95 disabled:opacity-50"
                           >
                             Add
                           </button>
+
                         </div>
                       </div>
                     )
@@ -1006,10 +1002,12 @@ export const Home: React.FC = () => {
                             <span className="text-sm font-black text-slate-900">₹{p.price.toLocaleString('en-IN')}</span>
                             <button
                               onClick={() => handleAddToCart(p.id)}
-                              className="px-3 py-1.5 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-[9px] font-extrabold rounded-lg uppercase tracking-wider transition-colors shadow-xs"
+                              disabled={p.stock === 0 || addingId === p.id}
+                              className="px-3.5 py-1.5 bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white text-[10px] font-bold rounded-xl uppercase tracking-wider transition-all shadow-xs active:scale-95 disabled:opacity-50"
                             >
                               Buy
                             </button>
+
                           </div>
                         </div>
                       </SwiperSlide>

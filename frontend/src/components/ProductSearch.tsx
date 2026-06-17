@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import api from '../services/api'
 import { Link } from 'react-router-dom'
+import { Search } from 'lucide-react'
 import { scrollToElementWithOffset } from '../utils/scroll'
+
 
 interface Product {
   id: string
@@ -99,13 +101,13 @@ export const ProductSearch: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-4xl font-bold mb-8">Search Products</h1>
+    <div className="max-w-[1440px] mx-auto py-10 px-4 sm:px-6 lg:px-8 bg-[#F8FAFC]">
+      <h1 className="text-2xl font-black text-slate-800 mb-8 uppercase tracking-tight">Search Products</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Filters Sidebar */}
-        <div className="lg:col-span-1 bg-gray-100 p-6 rounded-lg h-fit">
-          <h2 className="text-xl font-bold mb-4">Filters</h2>
+        <div className="lg:col-span-1 bg-white border border-slate-200/50 p-6 rounded-2xl shadow-2xs h-fit">
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-wider mb-5">Filters</h2>
 
           {/* Search Box */}
           <form onSubmit={handleSearchSubmit} className="mb-6">
@@ -115,12 +117,12 @@ export const ProductSearch: React.FC = () => {
               value={searchQuery}
               onChange={handleSearch}
               data-testid="search-page-input"
-              className="w-full px-3 py-2 border border-gray-300 rounded mb-2"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-[#0F6FFF] focus:bg-white transition-all mb-2"
             />
             <button
               type="submit"
               data-testid="search-page-submit-btn"
-              className="w-full bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700"
+              className="w-full bg-[#0F6FFF] hover:bg-[#0D5ED9] text-white px-3 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs active:scale-95"
             >
               Search
             </button>
@@ -128,12 +130,12 @@ export const ProductSearch: React.FC = () => {
 
           {/* Category Filter */}
           <div className="mb-6">
-            <h3 className="font-semibold mb-2">Category</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Category</h3>
             <select
               value={selectedCategory}
               onChange={handleCategoryChange}
               data-testid="search-page-category-select"
-              className="w-full px-3 py-2 border border-gray-300 rounded"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-[#0F6FFF] focus:bg-white transition-all"
             >
               <option value="">All Categories</option>
               {categories.map((cat) => (
@@ -144,10 +146,10 @@ export const ProductSearch: React.FC = () => {
 
           {/* Price Range Filter */}
           <div className="mb-6">
-            <h3 className="font-semibold mb-2">Price Range</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Price Range</h3>
             <div className="space-y-2">
               <div>
-                <label className="text-sm text-gray-600">Min: ${priceRange[0]}</label>
+                <label className="text-[11px] text-slate-400 font-bold uppercase">Min: ₹{priceRange[0]}</label>
                 <input
                   type="range"
                   min="0"
@@ -157,11 +159,11 @@ export const ProductSearch: React.FC = () => {
                   onMouseUp={handlePriceMouseUp}
                   onTouchEnd={handlePriceMouseUp}
                   data-testid="search-page-price-min"
-                  className="w-full"
+                  className="w-full accent-[#0F6FFF] cursor-pointer"
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600">Max: ${priceRange[1]}</label>
+                <label className="text-[11px] text-slate-400 font-bold uppercase">Max: ₹{priceRange[1]}</label>
                 <input
                   type="range"
                   min="0"
@@ -171,7 +173,7 @@ export const ProductSearch: React.FC = () => {
                   onMouseUp={handlePriceMouseUp}
                   onTouchEnd={handlePriceMouseUp}
                   data-testid="search-page-price-max"
-                  className="w-full"
+                  className="w-full accent-[#0F6FFF] cursor-pointer"
                 />
               </div>
             </div>
@@ -179,12 +181,12 @@ export const ProductSearch: React.FC = () => {
 
           {/* Rating Filter */}
           <div className="mb-6">
-            <h3 className="font-semibold mb-2">Minimum Rating</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Minimum Rating</h3>
             <select
               value={minRating}
               onChange={handleRatingChange}
               data-testid="search-page-rating-select"
-              className="w-full px-3 py-2 border border-gray-300 rounded"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-[#0F6FFF] focus:bg-white transition-all"
             >
               <option value={0}>All Ratings</option>
               <option value={3}>3★ & Up</option>
@@ -195,12 +197,12 @@ export const ProductSearch: React.FC = () => {
 
           {/* Sort By */}
           <div>
-            <h3 className="font-semibold mb-2">Sort By</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Sort By</h3>
             <select
               value={sortBy}
               onChange={handleSortChange}
               data-testid="search-page-sort-select"
-              className="w-full px-3 py-2 border border-gray-300 rounded"
+              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-[#0F6FFF] focus:bg-white transition-all"
             >
               <option value="newest">Newest</option>
               <option value="price-low">Price: Low to High</option>
@@ -214,51 +216,76 @@ export const ProductSearch: React.FC = () => {
         {/* Products Grid */}
         <div id="search-results-section" className="lg:col-span-3">
           {loading ? (
-            <div data-testid="search-loading-state" className="text-center py-8">Loading products...</div>
+            <div data-testid="search-loading-state" className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-white border border-slate-200/60 rounded-3xl p-3 md:p-4 flex flex-col justify-between h-full">
+                  <div className="w-full h-48 skeleton rounded-2xl mb-4" />
+                  <div className="flex-grow flex flex-col justify-between">
+                    <div>
+                      <div className="skeleton h-4 rounded w-3/4 mb-2" />
+                      <div className="skeleton h-3 rounded w-1/3 mb-2" />
+                      <div className="skeleton h-3 rounded w-1/4" />
+                    </div>
+                    <div className="mt-4">
+                      <div className="skeleton h-5 rounded w-1/2 mb-4" />
+                      <div className="w-full skeleton h-9 rounded-xl" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : products.length === 0 ? (
-            <div data-testid="search-empty-state" className="text-center py-8 text-gray-600">
-              No products found matching your criteria
+            <div data-testid="search-empty-state" className="text-center py-16 bg-white border border-slate-200/50 rounded-2xl shadow-xs">
+              <Search size={32} className="text-slate-350 mx-auto mb-3" />
+              <h3 className="text-base font-bold text-slate-700 mb-1">No products found</h3>
+              <p className="text-slate-400 text-xs">No products found matching your criteria.</p>
             </div>
           ) : (
             <div data-testid="search-results-grid" className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {products.map((product) => (
                 <Link key={product.id} to={`/product/${product.id}`}>
-                  <div data-testid={`search-product-card-${product.id}`} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition">
-                    <img
-                      src={product.image_url}
-                      alt={product.name}
-                      className="w-full h-48 object-cover hover:opacity-75 transition"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80';
-                      }}
-                    />
-                    <div className="p-4">
-                      <h3 className="font-semibold truncate">{product.name}</h3>
-                      {product.brand && (
-                        <p className="text-sm text-gray-600">{product.brand}</p>
-                      )}
-                      <div className="flex items-center gap-2 my-2">
-                        <span className="text-yellow-400">
-                          {'★'.repeat(Math.floor(product.rating))}
-                        </span>
-                        <span className="text-sm text-gray-600">
-                          ({product.review_count})
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-xl font-bold text-blue-600">
-                          ${product.price.toFixed(2)}
-                        </span>
-                        {product.original_price && (
-                          <span className="text-sm text-gray-500 line-through">
-                            ${product.original_price.toFixed(2)}
-                          </span>
+                  <div data-testid={`search-product-card-${product.id}`} className="bg-white border border-slate-200/60 rounded-3xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 p-3 md:p-4 flex flex-col justify-between h-full group relative">
+                    <div className="relative w-full h-48 bg-slate-50/50 flex items-center justify-center rounded-2xl overflow-hidden p-2 border border-slate-100/55 mb-4">
+                      <img
+                        src={product.image_url}
+                        alt={product.name}
+                        className="object-contain max-h-full max-w-full group-hover:scale-102 transition-transform duration-300"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=500&q=80';
+                        }}
+                      />
+                    </div>
+                    <div className="flex-grow flex flex-col justify-between">
+                      <div>
+                        <h3 className="font-bold text-slate-800 text-sm hover:text-[#0F6FFF] transition-colors line-clamp-2 leading-snug">{product.name}</h3>
+                        {product.brand && (
+                          <p className="text-[10px] text-slate-450 font-bold uppercase tracking-wider mt-1">{product.brand}</p>
                         )}
+                        <div className="flex items-center gap-1.5 mt-1.5">
+                          <span className="rating-badge text-[10px]">
+                            {product.rating.toFixed(1)} ★
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-semibold">
+                            ({product.review_count})
+                          </span>
+                        </div>
                       </div>
-                      <button className="w-full bg-blue-100 text-blue-600 px-3 py-2 rounded hover:bg-blue-200 transition text-sm">
-                        View Details
-                      </button>
+                      <div className="mt-4">
+                        <div className="flex items-baseline gap-1.5 mb-4">
+                          <span className="text-sm font-extrabold text-slate-900">
+                            ₹{product.price.toLocaleString('en-IN')}
+                          </span>
+                          {product.original_price && (
+                            <span className="text-[10px] text-slate-400 line-through font-medium">
+                              ₹{Math.round(product.original_price).toLocaleString('en-IN')}
+                            </span>
+                          )}
+                        </div>
+                        <button className="w-full bg-[#0F6FFF]/10 hover:bg-[#0F6FFF]/20 text-[#0F6FFF] py-2.5 text-xs font-bold rounded-xl tracking-wide uppercase transition-colors flex items-center justify-center active:scale-[0.99]">
+                          View Details
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -270,3 +297,4 @@ export const ProductSearch: React.FC = () => {
     </div>
   )
 }
+
