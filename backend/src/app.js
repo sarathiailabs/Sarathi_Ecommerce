@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import settings from './config/settings.js';
 import trackingMiddleware from './middleware/tracking.js';
 import { errorHandler } from './middleware/error.js';
@@ -58,6 +60,22 @@ app.use('/api/coupons', couponsRouter);
 app.use('/api/returns', returnsRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/test', testRouter);
+
+// ── Serve Frontend Static Files (Option A) ──────────────────────────────
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const distPath = path.join(__dirname, '../../frontend/dist');
+
+// Serve the static assets folder
+app.use(express.static(distPath));
+
+// Fallback to React's index.html for all non-API paths (client-side routing)
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api') || req.path.startsWith('/health')) {
+    return next();
+  }
+  res.sendFile(path.join(distPath, 'index.html'));
+});
 
 // ── Centralized Error Handler ──────────────────────────────────────────────
 app.use(errorHandler);
