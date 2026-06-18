@@ -64,7 +64,7 @@ app.use('/api/test', testRouter);
 // ── Serve Frontend Static Files (Option A) ──────────────────────────────
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const distPath = path.join(__dirname, '../../frontend/dist');
+const distPath = path.join(__dirname, '../public');
 
 // Serve the static assets folder
 app.use(express.static(distPath));
@@ -97,6 +97,15 @@ app.listen(PORT, async () => {
       console.error('[LIFESPAN] Database seeding error on startup:', e.message);
     }
   }
+});
+
+// ── Process-level Error Handling ───────────────────────────────────────────
+process.on('uncaughtException', (err) => {
+  console.error('[UNCAUGHT EXCEPTION]', err.stack || err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[UNHANDLED REJECTION]', reason);
 });
 
 export default app;
