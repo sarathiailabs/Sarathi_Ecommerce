@@ -757,6 +757,8 @@ export async function seedData() {
           category: product.category,
           subcategory: product.subcategory || null,
           brand: product.brand || null,
+          weight: product.weight || null,
+          dimensions: product.dimensions || null,
           rating: product.rating || 0.0,
           review_count: product.review_count || 0,
           is_featured: product.is_featured || false,

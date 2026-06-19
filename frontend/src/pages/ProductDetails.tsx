@@ -25,7 +25,203 @@ const MOCK_REVIEWS = [
   { author: 'Amit K.', rating: 5, date: '3 weeks ago', text: 'Best purchase of the year! Works flawlessly and looks even better in person. 10/10 would buy again.', verified: false },
 ]
 
-const SPEC_KEYS = ['Material', 'Warranty', 'Country of Origin', 'Weight', 'Connectivity', 'Battery Life']
+interface SpecItem {
+  key: string
+  value: string
+}
+
+const getSpecifications = (product: Product): SpecItem[] => {
+  const specs: SpecItem[] = []
+  const category = (product.category || '').toLowerCase()
+  const name = (product.name || '').toLowerCase()
+
+  // Helper safely getting values
+  const brandVal = product.brand || 'N/A'
+  const weightVal = product.weight ? `${product.weight} kg` : 'N/A'
+  const dimVal = product.dimensions || 'N/A'
+
+  // 1. Grocery Category (with special Tea rules)
+  if (category === 'grocery') {
+    const isTea = name.includes('tea') || name.includes('tulsi')
+    if (isTea) {
+      specs.push({ key: 'Ingredients', value: name.includes('green') ? 'Certified Organic Green Tea Leaves, Rama Tulsi, Krishna Tulsi, Vana Tulsi' : 'Assam Black Tea Leaves, 15% Long Leaves' })
+      specs.push({ key: 'Net Quantity', value: name.includes('1kg') ? '1 kg' : '25 Tea Bags (50g)' })
+      specs.push({ key: 'Flavor', value: name.includes('green') ? 'Classic Green Tea & Holy Basil (Tulsi)' : 'Rich & Aromatic Black Tea' })
+      specs.push({ key: 'Storage Instructions', value: 'Store in a cool, dry place in an airtight container away from strong odors.' })
+      specs.push({ key: 'Shelf Life', value: '12 Months from packaging date' })
+      specs.push({ key: 'Brand', value: brandVal })
+    } else {
+      specs.push({ key: 'Weight', value: name.includes('500g') ? '500g' : name.includes('110g') ? '110g' : weightVal })
+      specs.push({ key: 'Ingredients', value: name.includes('almond') ? '100% Raw Premium California Almonds' : 'Dehydrated Potatoes, Vegetable Oil, Corn Flour, Wheat Starch, Sour Cream & Onion Seasonings' })
+      specs.push({ key: 'Nutritional Info', value: name.includes('almond') ? 'Per 100g: Energy 607 kcal, Protein 21.2g, Fiber 12.2g, Fats 49.9g' : 'Per 100g: Energy 520 kcal, Protein 4.2g, Carbs 61g, Fats 29g' })
+      specs.push({ key: 'Expiry Date', value: '6 Months from packaging date' })
+      specs.push({ key: 'Storage Instructions', value: 'Store in a cool, dry place. Keep airtight after opening.' })
+      specs.push({ key: 'Brand', value: brandVal })
+    }
+  }
+  // 2. Electronics Category
+  else if (category === 'electronics') {
+    specs.push({ key: 'Brand', value: brandVal })
+    specs.push({ key: 'Model', value: product.name.split('(')[0].trim() })
+    
+    let battery = 'N/A'
+    if (name.includes('iphone') || name.includes('galaxy') || name.includes('phone')) {
+      battery = name.includes('iphone') ? '4422 mAh (Up to 29 hours video playback)' : '5000 mAh (Up to 30 hours video playback)'
+    } else if (name.includes('macbook') || name.includes('laptop') || name.includes('zephyrus')) {
+      battery = name.includes('macbook') ? 'Integrated 52.6-watt-hour lithium-polymer (Up to 18 hours)' : 'Integrated 76-Whr 4-cell Lithium-ion (Up to 8 hours)'
+    } else if (name.includes('headphones') || name.includes('airpods') || name.includes('xm5') || name.includes('audio')) {
+      battery = name.includes('headphones') || name.includes('xm5') ? 'Rechargeable battery (Up to 30 hours with ANC)' : 'Up to 6 hours listening time (Up to 30 hours with case)'
+    } else if (name.includes('watch') || name.includes('series')) {
+      battery = 'Rechargeable lithium-ion battery (Up to 18 hours normal use)'
+    } else if (name.includes('camera') || name.includes('alpha')) {
+      battery = 'NP-FZ100 Rechargeable Battery (Approx. 520 shots)'
+    }
+    specs.push({ key: 'Battery', value: battery })
+
+    let connectivity = 'N/A'
+    if (name.includes('phone') || name.includes('laptop') || name.includes('zephyrus')) {
+      connectivity = '5G, Wi-Fi 6E/7, Bluetooth 5.3, USB-C'
+    } else if (name.includes('headphones') || name.includes('airpods') || name.includes('audio') || name.includes('watch')) {
+      connectivity = 'Bluetooth 5.3, NFC, Wireless charging'
+    } else if (name.includes('camera') || name.includes('alpha')) {
+      connectivity = 'Wi-Fi, Bluetooth, Micro HDMI, USB-C'
+    } else if (name.includes('printer')) {
+      connectivity = 'Wi-Fi Direct, USB 2.0, Mobile printing (AirPrint)'
+    }
+    specs.push({ key: 'Connectivity', value: connectivity })
+    specs.push({ key: 'Dimensions', value: dimVal })
+    specs.push({ key: 'Warranty', value: '1 Year Brand Warranty' })
+  }
+  // 3. Clothing / Fashion Category
+  else if (category === 'fashion') {
+    let material = '100% Premium Cotton'
+    if (name.includes('jeans')) material = '98% Cotton, 2% Elastane (Stretch Denim)'
+    else if (name.includes('dress')) material = '100% Flowy Satin Polyester'
+    else if (name.includes('suit')) material = '100% Premium Printed Cotton'
+    
+    let fit = 'Regular Fit'
+    if (name.includes('jeans') || name.includes('511')) fit = 'Slim Fit'
+    else if (name.includes('dress')) fit = 'Flowy Wrap Fit'
+    else if (name.includes('anarkali') || name.includes('biba')) fit = 'Anarkali flared fit'
+
+    specs.push({ key: 'Material', value: material })
+    specs.push({ key: 'Size', value: 'S, M, L, XL, XXL' })
+    specs.push({ key: 'Fit', value: fit })
+    specs.push({ key: 'Wash Care', value: name.includes('dress') || name.includes('anarkali') ? 'Gentle Hand Wash / Dry Clean recommended' : 'Machine wash warm, tumble dry low' })
+    specs.push({ key: 'Color', value: name.includes('jeans') ? 'Dark Indigo / Blue' : name.includes('polo') ? 'Solid Pique White' : name.includes('dress') ? 'Emerald Satin / Cowl neckline' : 'Printed Multi-color' })
+    specs.push({ key: 'Brand', value: brandVal })
+  }
+  // 4. Books Category
+  else if (category === 'books') {
+    let author = 'N/A'
+    if (name.includes('alchemist')) author = 'Paulo Coelho'
+    else if (name.includes('sapiens')) author = 'Yuval Noah Harari'
+    else if (name.includes('habits')) author = 'James Clear'
+    else if (name.includes('algorithms')) author = 'Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein'
+    
+    specs.push({ key: 'Author', value: author })
+    specs.push({ key: 'Publisher', value: brandVal })
+    specs.push({ key: 'Language', value: 'English' })
+    specs.push({ key: 'Format', value: 'Paperback (Standard Edition)' })
+    
+    let pages = 'N/A'
+    if (name.includes('alchemist')) pages = '163'
+    else if (name.includes('sapiens')) pages = '512'
+    else if (name.includes('habits')) pages = '320'
+    else if (name.includes('algorithms')) pages = '1312'
+    specs.push({ key: 'Page Count', value: pages })
+  }
+  // 5. Home & Kitchen
+  else if (category === 'home & kitchen' || category === 'home' || category === 'kitchen') {
+    specs.push({ key: 'Brand', value: brandVal })
+    
+    let material = 'Mixed Material'
+    if (name.includes('vacuum')) material = 'ABS Polycarbonate & Aluminum Wand'
+    else if (name.includes('fryer')) material = 'BPA-free Food Grade Plastic & Stainless Steel'
+    else if (name.includes('sofa')) material = 'Premium Solid Wood Frame, Foam Padding & Chenille Fabric'
+    else if (name.includes('chair')) material = 'Breathable Mesh Back, Alloy Steel Support & High Density Foam'
+    else if (name.includes('vase')) material = 'Handcrafted Glazed Ceramic'
+    
+    specs.push({ key: 'Material', value: material })
+    specs.push({ key: 'Dimensions', value: dimVal })
+    specs.push({ key: 'Weight', value: weightVal })
+    
+    let warranty = 'N/A'
+    if (name.includes('vacuum') || name.includes('fryer')) warranty = '2 Years Brand Warranty'
+    else if (name.includes('chair')) warranty = '3 Years Brand Warranty'
+    else if (name.includes('sofa')) warranty = '1 Year Frame Warranty'
+    
+    specs.push({ key: 'Warranty', value: warranty })
+    specs.push({ key: 'Country of Origin', value: 'India' })
+  }
+  // 6. Beauty
+  else if (category === 'beauty') {
+    specs.push({ key: 'Brand', value: brandVal })
+    
+    let type = 'Personal Care'
+    if (name.includes('cleanser')) type = 'Skincare (Facial Cleanser)'
+    else if (name.includes('serum')) type = 'Skincare (Facial Serum)'
+    else if (name.includes('shampoo')) type = 'Haircare (Restructuring Shampoo)'
+    else if (name.includes('trimmer')) type = 'Grooming (Beard Trimmer)'
+    specs.push({ key: 'Type', value: type })
+
+    let volume = '1 Unit'
+    if (name.includes('cleanser')) volume = '236 ml'
+    else if (name.includes('serum')) volume = '30 ml'
+    else if (name.includes('shampoo')) volume = '300 ml'
+    specs.push({ key: 'Volume / Pack', value: volume })
+
+    let ingredients = 'N/A'
+    if (name.includes('cleanser')) ingredients = 'Ceramides 1, 3, 6-II, Hyaluronic Acid, Glycerin'
+    else if (name.includes('serum')) ingredients = 'Niacinamide 10%, Zinc PCA 1%, Aqua, Phenoxyethanol'
+    else if (name.includes('shampoo')) ingredients = 'Gold Quinoa Protein, Hydrolyzed Wheat Protein, Citric Acid'
+    else if (name.includes('trimmer')) ingredients = 'Stainless steel self-sharpening blades'
+    specs.push({ key: 'Key Ingredients / Features', value: ingredients })
+
+    specs.push({ key: 'Skin / Hair Type', value: name.includes('shampoo') ? 'Dry, Damaged Hair' : name.includes('cleanser') ? 'Normal to Dry, Sensitive Skin' : name.includes('serum') ? 'All Skin Types, Blemish-Prone Skin' : 'All Skin/Hair Types' })
+    specs.push({ key: 'Warranty', value: name.includes('trimmer') ? '2 Years Brand Warranty' : 'N/A' })
+  }
+  // 7. Sports & Fitness
+  else if (category === 'sports & fitness' || category === 'sports') {
+    specs.push({ key: 'Brand', value: brandVal })
+    
+    let material = 'N/A'
+    if (name.includes('dumbbells')) material = 'Cast Iron Core, Heavy-duty Rubber Coating'
+    else if (name.includes('mat')) material = 'Eco-friendly TPE (Thermal Plastic Elastomer)'
+    else if (name.includes('football')) material = 'Synthetic Rubber casing, Latex Bladder'
+    else if (name.includes('treadmill')) material = 'Alloy Steel, PVC Non-slip belt & Electronics'
+    specs.push({ key: 'Material', value: material })
+
+    specs.push({ key: 'Weight / Load', value: name.includes('dumbbells') ? '10 kg (5kg x 2)' : name.includes('treadmill') ? 'Max User Weight: 100 kg' : weightVal })
+    specs.push({ key: 'Dimensions', value: dimVal })
+    specs.push({ key: 'Ideal Use', value: name.includes('mat') ? 'Yoga, Pilates, Floor Exercises' : name.includes('football') ? 'Outdoor Training & Matches' : name.includes('dumbbells') ? 'Strength & Resistance Training' : 'Cardio Running & Walking' })
+    specs.push({ key: 'Warranty', value: name.includes('treadmill') ? '1 Year Brand Warranty' : 'N/A' })
+  }
+  // 8. Stationery / Office & Stationery
+  else if (category.includes('stationery') || category.includes('office')) {
+    specs.push({ key: 'Brand', value: brandVal })
+    
+    let material = 'Premium Stationery'
+    if (name.includes('pens') || name.includes('pen')) material = name.includes('fountain') ? 'Stainless Steel Nib & Matte Metal body' : 'Plastic body with Japanese waterproof ink'
+    else if (name.includes('notebook')) material = 'Elemental Chlorine-Free Paper, Spiral bound'
+    else if (name.includes('printer')) material = 'High-grade ABS Plastic / Electronics'
+    specs.push({ key: 'Material', value: material })
+
+    specs.push({ key: 'Dimensions', value: dimVal })
+    specs.push({ key: 'Pack Size / Pages', value: name.includes('notebook') ? '300 Pages (6-Subject)' : name.includes('pens') ? 'Pack of 10' : '1 Unit' })
+    specs.push({ key: 'Weight', value: weightVal })
+  }
+  // Default fallback (similar to original)
+  else {
+    specs.push({ key: 'Brand', value: brandVal })
+    specs.push({ key: 'Warranty', value: '1 Year Brand Warranty' })
+    specs.push({ key: 'Country of Origin', value: 'India' })
+    specs.push({ key: 'Weight', value: weightVal })
+    specs.push({ key: 'Dimensions', value: dimVal })
+  }
+
+  return specs
+}
 
 type TabType = 'description' | 'specs' | 'reviews'
 
@@ -397,12 +593,11 @@ export const ProductDetails: React.FC = () => {
             <div className="max-w-xl">
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3">Specifications</h3>
               <div data-testid="pdp-specs-table" className="border border-slate-200 rounded-2xl overflow-hidden bg-white">
-                {SPEC_KEYS.map((key, i) => {
-                  const values = ['Premium Grade Aluminum', '1 Year Brand Warranty', 'Made in India', '0.8 kg', 'Bluetooth 5.3 Connection', '36 Hours Battery']
+                {getSpecifications(product).map((item, i) => {
                   return (
-                    <div key={key} data-testid={`pdp-spec-row-${key.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className={`grid grid-cols-2 py-2.5 px-4 text-xs ${i % 2 === 0 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-100 last:border-0`}>
-                      <span className="font-bold text-slate-400">{key}</span>
-                      <span className="font-semibold text-slate-700">{values[i]}</span>
+                    <div key={item.key} data-testid={`pdp-spec-row-${item.key.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className={`grid grid-cols-2 py-2.5 px-4 text-xs ${i % 2 === 0 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-100 last:border-0`}>
+                      <span className="font-bold text-slate-400">{item.key}</span>
+                      <span className="font-semibold text-slate-700">{item.value}</span>
                     </div>
                   )
                 })}
