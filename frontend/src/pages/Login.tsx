@@ -244,11 +244,7 @@ export const Login: React.FC = () => {
                   <td className="py-1 select-all">customer@novacart.com</td>
                   <td className="py-1 select-all">customer123</td>
                 </tr>
-                <tr data-testid="demo-row-admin" className="border-b border-slate-100/30">
-                  <td className="py-1">Admin</td>
-                  <td className="py-1 select-all">admin@novacart.com</td>
-                  <td className="py-1 select-all">admin123</td>
-                </tr>
+
                 <tr data-testid="demo-row-seller" className="border-b border-slate-100/30">
                   <td className="py-1">Seller</td>
                   <td className="py-1 select-all">seller@novacart.com</td>
