@@ -673,7 +673,7 @@ export async function seedData() {
         })
         .select('*')
         .single();
-      
+
       if (error) {
         console.error(`Error seeding admin: ${error.message}`);
       } else {
@@ -696,7 +696,7 @@ export async function seedData() {
     if (!existingCust) {
       console.log(`Seeding user: ${customer.email}...`);
       const hashedPassword = await bcrypt.hash(customer.password, 10);
-      
+
       const role = customer.role || 'customer';
       const phoneDigits = Array.from({ length: 10 }, () => Math.floor(Math.random() * 10)).join('');
       const postalDigits = Array.from({ length: 6 }, () => Math.floor(Math.random() * 10)).join('');
@@ -728,7 +728,7 @@ export async function seedData() {
         userObj = newUser;
       }
     }
-    
+
     if (userObj && (userObj.role === 'customer')) {
       seededCustomers.push(userObj);
     }
@@ -759,6 +759,7 @@ export async function seedData() {
           brand: product.brand || null,
           weight: product.weight || null,
           dimensions: product.dimensions || null,
+          specifications: product.specifications || [],
           rating: product.rating || 0.0,
           review_count: product.review_count || 0,
           is_featured: product.is_featured || false,
@@ -791,10 +792,10 @@ export async function seedData() {
     console.log('Adding sample product reviews...');
     for (const product of seededProducts.slice(0, 10)) {
       const numReviews = Math.floor(Math.random() * 4) + 2; // 2 to 5 reviews
-      
+
       // Shuffle customers so a customer doesn't review same product twice
       const shuffledCust = [...seededCustomers].sort(() => 0.5 - Math.random());
-      
+
       for (let r = 0; r < Math.min(numReviews, shuffledCust.length); r++) {
         const reviewText = REVIEW_TEXTS[Math.floor(Math.random() * REVIEW_TEXTS.length)];
         await supabase
@@ -821,7 +822,7 @@ export async function seedData() {
   if (seededCustomers.length > 0 && seededProducts.length > 0) {
     console.log('Seeding mock historical order data...');
     let ordersCreated = 0;
-    
+
     for (let i = 0; i < 60; i++) {
       const daysAgo = Math.floor(Math.random() * 31);
       const hoursAgo = Math.floor(Math.random() * 24);
@@ -833,12 +834,12 @@ export async function seedData() {
 
       const customer = seededCustomers[Math.floor(Math.random() * seededCustomers.length)];
       const orderId = uuidv4();
-      
+
       // Select random products (1 to 4)
       const numItems = Math.floor(Math.random() * 4) + 1;
       const shuffledProds = [...seededProducts].sort(() => 0.5 - Math.random());
       const selectedProducts = shuffledProds.slice(0, numItems);
-      
+
       let totalVal = 0.0;
       const orderItems = [];
 
@@ -846,7 +847,7 @@ export async function seedData() {
         const qty = Math.floor(Math.random() * 3) + 1;
         const subtotal = prod.price * qty;
         totalVal += subtotal;
-        
+
         orderItems.push({
           id: uuidv4(),
           order_id: orderId,
@@ -887,7 +888,7 @@ export async function seedData() {
         ordersCreated++;
       }
     }
-    
+
     console.log(`Successfully generated ${ordersCreated} historical orders.`);
   }
 
