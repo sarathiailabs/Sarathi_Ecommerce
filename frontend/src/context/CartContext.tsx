@@ -16,7 +16,9 @@ export interface Product {
   dimensions?: string | null
   original_price?: number
   is_featured?: boolean
+  specifications?: { key: string; value: string }[] | null
 }
+
 
 export interface CartItem {
   id: string
