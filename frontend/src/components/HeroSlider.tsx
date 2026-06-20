@@ -43,7 +43,7 @@ export const HeroSlider: React.FC = () => {
           a11y={{ prevSlideMessage: 'Previous slide', nextSlideMessage: 'Next slide' }}
           onSwiper={(swiper) => { swiperRef.current = swiper }}
           onSlideChange={handleSlideChange}
-          className="hero-swiper w-full h-[320px] md:h-[450px] lg:h-[600px]"
+          className="hero-swiper w-full h-[340px] sm:h-[400px] md:h-[450px] lg:h-[600px]"
         >
           {heroSlides.map((slide, idx) => (
             <SwiperSlide key={slide.id}>
@@ -57,9 +57,10 @@ export const HeroSlider: React.FC = () => {
           onClick={goPrev}
           aria-label="Previous slide"
           className="
+            hidden sm:flex
             absolute left-4 top-1/2 -translate-y-1/2 z-20
             w-11 h-11 rounded-full bg-white/45 hover:bg-white/70 text-slate-800
-            border border-white/40 flex items-center justify-center
+            border border-white/40 items-center justify-center
             shadow-lg backdrop-blur-md opacity-0 group-hover/slider:opacity-100
             transition-all duration-300 hover:scale-105 active:scale-95
           "
@@ -71,9 +72,10 @@ export const HeroSlider: React.FC = () => {
           onClick={goNext}
           aria-label="Next slide"
           className="
+            hidden sm:flex
             absolute right-4 top-1/2 -translate-y-1/2 z-20
             w-11 h-11 rounded-full bg-white/45 hover:bg-white/70 text-slate-800
-            border border-white/40 flex items-center justify-center
+            border border-white/40 items-center justify-center
             shadow-lg backdrop-blur-md opacity-0 group-hover/slider:opacity-100
             transition-all duration-300 hover:scale-105 active:scale-95
           "
@@ -82,7 +84,19 @@ export const HeroSlider: React.FC = () => {
         </button>
  
         {/* Custom Dot Pagination Indicators in a Floating Glassmorphic Pill */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-2 bg-slate-900/10 backdrop-blur-md px-4 py-2 rounded-full shadow-md" role="tablist" aria-label="Slide navigation">
+        <div 
+          className="
+            absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 
+            flex items-center justify-center gap-1.5 sm:gap-2 
+            bg-transparent sm:bg-white/70 
+            border-0 sm:border sm:border-slate-200/40 
+            backdrop-blur-none sm:backdrop-blur-md 
+            px-0 sm:px-3.5 py-0 sm:py-1.5 
+            shadow-none sm:shadow-md rounded-full
+          " 
+          role="tablist" 
+          aria-label="Slide navigation"
+        >
           {heroSlides.map((slide, idx) => (
             <button
               key={slide.id}
@@ -93,8 +107,8 @@ export const HeroSlider: React.FC = () => {
               className={`
                 rounded-full transition-all duration-300
                 ${activeIndex === idx
-                  ? 'w-6 h-2 bg-[#0F6FFF]'
-                  : 'w-2 h-2 bg-slate-900/30 hover:bg-slate-900/50'
+                  ? 'w-4 h-1.5 sm:w-6 sm:h-2 bg-[#0F6FFF]'
+                  : 'w-1.5 h-1.5 sm:w-2 sm:h-2 bg-slate-950/20 sm:bg-slate-900/30 hover:bg-slate-900/50'
                 }
               `}
             />

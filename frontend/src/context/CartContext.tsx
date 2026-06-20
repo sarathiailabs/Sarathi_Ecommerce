@@ -10,6 +10,10 @@ export interface Product {
   stock: number
   image_url: string
   category: string
+  subcategory?: string | null
+  brand?: string | null
+  weight?: number | null
+  dimensions?: string | null
   original_price?: number
   is_featured?: boolean
 }

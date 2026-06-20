@@ -25,7 +25,34 @@ const MOCK_REVIEWS = [
   { author: 'Amit K.', rating: 5, date: '3 weeks ago', text: 'Best purchase of the year! Works flawlessly and looks even better in person. 10/10 would buy again.', verified: false },
 ]
 
-const SPEC_KEYS = ['Material', 'Warranty', 'Country of Origin', 'Weight', 'Connectivity', 'Battery Life']
+interface SpecItem {
+  key: string
+  value: string
+}
+
+/**
+ * Returns specifications for a product.
+ * - Primary source: `product.specifications` from the database (JSONB column).
+ * - Fallback: basic specs derived from existing product fields for products
+ *   that don't have specifications populated yet.
+ */
+const getProductSpecs = (product: Product): SpecItem[] => {
+  // Use database-stored specifications if available
+  if (product.specifications && Array.isArray(product.specifications) && product.specifications.length > 0) {
+    return product.specifications
+  }
+
+  // Fallback: build basic specs from existing product fields
+  const fallbackSpecs: SpecItem[] = []
+  if (product.brand) fallbackSpecs.push({ key: 'Brand', value: product.brand })
+  if (product.category) fallbackSpecs.push({ key: 'Category', value: product.category })
+  if (product.weight) fallbackSpecs.push({ key: 'Weight', value: `${product.weight} kg` })
+  if (product.dimensions) fallbackSpecs.push({ key: 'Dimensions', value: product.dimensions })
+  fallbackSpecs.push({ key: 'Warranty', value: '1 Year Brand Warranty' })
+  fallbackSpecs.push({ key: 'Country of Origin', value: 'India' })
+
+  return fallbackSpecs
+}
 
 type TabType = 'description' | 'specs' | 'reviews'
 
@@ -180,7 +207,7 @@ export const ProductDetails: React.FC = () => {
 
       {/* Main product display split box */}
       <div className="flex flex-col lg:flex-row gap-8 bg-white p-6 md:p-8 rounded-3xl border border-slate-200/50 shadow-xs">
-        
+
         {/* ============ LEFT COLUMN: Image & Gallery ============ */}
         <div className="lg:w-2/5 flex flex-col items-center">
           <div className="w-full relative aspect-square border border-slate-200/60 p-4 rounded-2xl flex items-center justify-center bg-white overflow-hidden group">
@@ -222,13 +249,12 @@ export const ProductDetails: React.FC = () => {
               data-testid="pdp-add-to-cart-btn"
               onClick={handleAddToCart}
               disabled={product.stock === 0 || adding}
-              className={`flex-1 py-3 text-xs font-bold rounded-sm uppercase tracking-wider shadow-sm transition-colors flex items-center justify-center gap-1.5 ${
-                addedSuccess
+              className={`flex-1 py-3 text-xs font-bold rounded-sm uppercase tracking-wider shadow-sm transition-colors flex items-center justify-center gap-1.5 ${addedSuccess
                   ? 'bg-[#10B981] text-white'
                   : product.stock === 0
-                  ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
-                  : 'bg-[#14B8A6] hover:bg-[#e68f00] text-white'
-              }`}
+                    ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed'
+                    : 'bg-[#14B8A6] hover:bg-[#e68f00] text-white'
+                }`}
             >
               <ShoppingCart size={14} />
               {addedSuccess ? 'Added to Cart' : adding ? 'Adding...' : 'Add to Cart'}
@@ -252,7 +278,7 @@ export const ProductDetails: React.FC = () => {
             <h1 data-testid="pdp-product-name" className="text-base sm:text-lg font-semibold text-slate-800 leading-snug">
               {product.name}
             </h1>
-            
+
             {/* Rating summary */}
             <div data-testid="pdp-rating-row" className="flex items-center gap-2 mt-2 flex-wrap text-xs font-semibold">
               <span data-testid="pdp-product-rating" className="rating-badge">
@@ -286,7 +312,7 @@ export const ProductDetails: React.FC = () => {
                 </>
               )}
             </div>
-            
+
             {/* Stock indicator */}
             {product.stock > 0 ? (
               <div data-testid="pdp-stock-indicator" className="mt-3 flex items-center gap-2">
@@ -371,11 +397,10 @@ export const ProductDetails: React.FC = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 data-testid={`pdp-tab-${tab.id}`}
-                className={`flex items-center gap-1.5 px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-colors whitespace-nowrap ${
-                  isSelected
+                className={`flex items-center gap-1.5 px-5 py-3 text-xs font-bold uppercase tracking-wider border-b-2 transition-colors whitespace-nowrap ${isSelected
                     ? 'text-[#0F6FFF] border-[#0F6FFF]'
                     : 'text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 {tab.icon}
                 {tab.label}
@@ -397,12 +422,11 @@ export const ProductDetails: React.FC = () => {
             <div className="max-w-xl">
               <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-3">Specifications</h3>
               <div data-testid="pdp-specs-table" className="border border-slate-200 rounded-2xl overflow-hidden bg-white">
-                {SPEC_KEYS.map((key, i) => {
-                  const values = ['Premium Grade Aluminum', '1 Year Brand Warranty', 'Made in India', '0.8 kg', 'Bluetooth 5.3 Connection', '36 Hours Battery']
+                {getProductSpecs(product).map((item, i) => {
                   return (
-                    <div key={key} data-testid={`pdp-spec-row-${key.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className={`grid grid-cols-2 py-2.5 px-4 text-xs ${i % 2 === 0 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-100 last:border-0`}>
-                      <span className="font-bold text-slate-400">{key}</span>
-                      <span className="font-semibold text-slate-700">{values[i]}</span>
+                    <div key={item.key} data-testid={`pdp-spec-row-${item.key.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className={`grid grid-cols-2 py-2.5 px-4 text-xs ${i % 2 === 0 ? 'bg-slate-50' : 'bg-white'} border-b border-slate-100 last:border-0`}>
+                      <span className="font-bold text-slate-400">{item.key}</span>
+                      <span className="font-semibold text-slate-700">{item.value}</span>
                     </div>
                   )
                 })}
@@ -471,11 +495,10 @@ export const ProductDetails: React.FC = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
-            className={`fixed bottom-6 left-6 z-50 flex items-center gap-2 px-4 py-3 rounded-sm border shadow-lg max-w-xs ${
-              toastMsg.isError
+            className={`fixed bottom-6 left-6 z-50 flex items-center gap-2 px-4 py-3 rounded-sm border shadow-lg max-w-xs ${toastMsg.isError
                 ? 'border-red-200 bg-red-50 text-red-800'
                 : 'border-blue-200 bg-blue-50 text-blue-900'
-            }`}
+              }`}
           >
             {toastMsg.isError ? '⚠️' : '✅'}
             <span className="text-xs font-semibold">{toastMsg.text}</span>

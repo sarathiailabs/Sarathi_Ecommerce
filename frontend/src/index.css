@@ -449,10 +449,13 @@
 }
 
 /* Premium Icon focus highlight */
-.relative:focus-within svg {
-  color: #d97706 !important; /* amber-600 active brand color */
-  transform: translateY(-50%) scale(1.05);
+.relative > svg.absolute {
   transition: all 0.2s ease;
+}
+
+.relative:focus-within > svg.absolute {
+  color: #0F6FFF !important; /* premium blue brand color */
+  transform: translateY(-50%) scale(1.05);
 }
 
 /* ========================================
